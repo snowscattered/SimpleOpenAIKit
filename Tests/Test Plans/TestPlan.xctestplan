@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "B92D2E4B-8352-4F43-80A1-F2FF43EB8661",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "SimpleOpenAIKitTests",
+        "name" : "SimpleOpenAIKitTests"
+      }
+    }
+  ],
+  "version" : 1
+}

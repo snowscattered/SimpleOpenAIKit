@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "2CF24B75-B3F1-4B65-A64A-1F2BF47CCE87",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "performanceAntipatternCheckerEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "SimpleOpenAIKitTests",
+        "name" : "SimpleOpenAIKitTests"
+      }
+    }
+  ],
+  "version" : 1
+}
