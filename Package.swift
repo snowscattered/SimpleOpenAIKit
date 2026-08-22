@@ -38,7 +38,10 @@ let package = Package(
         ),
         .testTarget(
             name: "SimpleCodableMacroTests",
-            dependencies: ["SimpleCodableMacro"],
+            dependencies: [
+                "SimpleCodableMacro",
+                "SimpleCodableMacroPlugin"
+            ],
         ),
         
         // MARK: SimpleOpenAIKit
