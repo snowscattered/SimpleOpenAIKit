@@ -14,6 +14,7 @@ public struct CustomMessage {
 }
 
 @CodableByConstant(field: "role", defaultCase: "custom")
+@nonexhaustive
 public enum ChatMessage {
     case developer(ChatDeveloperMessage)
     case system(ChatSystemMessage)

@@ -7,7 +7,6 @@
 import Foundation
 import SimpleCodableMacro
 
-// TranscriptionTextSegmentEvent
 @BaseModelNoWithExtra
 public struct AudioTranscriptionTextSegmentEvent {
     public static let type: String = "transcript.text.segment"
@@ -24,7 +23,7 @@ public struct AudioTranscriptionTextDeltaEvent {
     public let logprobs: [AudioTranscriptionLogprob]?
     public let segment_id: String?
 }
-//
+
 @BaseModelNoWithExtra
 public struct AudioTranscriptionTextDoneEvent {
     public static let type: String = "transcript.text.done"
@@ -33,8 +32,8 @@ public struct AudioTranscriptionTextDoneEvent {
     public let usage: AudioTranscriptionUsageTokens?
 }
 
-
 @CodableByConstant
+@nonexhaustive
 public enum AudioTranscriptionStreamResult {
     case segment(AudioTranscriptionTextSegmentEvent)
     case delta(AudioTranscriptionTextDeltaEvent)

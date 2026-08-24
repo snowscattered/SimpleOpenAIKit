@@ -32,7 +32,7 @@ public struct AudioTranscriptionDiarized {
     public let text: String
     public let usage: AudioTranscriptionUsage?
 }
-//
+
 @BaseModelNoWithExtra
 public struct AudioTranscriptionSegment {
     public let id: Int
@@ -63,6 +63,7 @@ public struct AudioTranscriptionVerbose {
 }
 
 @CodableTraversal
+@nonexhaustive
 public enum AudioTranscriptionCreateResult {
     case string(String)
     case transcription(AudioTranscription)

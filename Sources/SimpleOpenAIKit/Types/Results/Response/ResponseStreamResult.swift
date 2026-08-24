@@ -14,6 +14,7 @@ public struct UnknownEvent {
 
 // ResponseStreamResult
 @CodableByConstant(defaultCase: "unkowned")
+@nonexhaustive
 public enum ResponseStreamResult {
     // State
     case response_created(ResponseCreatedEvent)
@@ -52,5 +53,7 @@ public enum ResponseStreamResult {
     case response_output_text_delta(ResponseTextDeltaEvent)
     case response_output_text_done(ResponseTextDoneEvent)
     // Extension OpenAI
+    // Codex Agent Message
+//    case agent_message(ResponseAgentMessage)
     case unkowned(UnknownEvent)
 }

@@ -31,6 +31,7 @@ public struct ImageEditCompletedEvent {
 }
 
 @CodableByConstant
+@nonexhaustive
 public enum ImagesEditStreamResult {
     case partialImage(ImageEditPartialImageEvent)
     case completed(ImageEditCompletedEvent)

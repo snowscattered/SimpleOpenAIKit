@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @CodableByConstant
+@nonexhaustive
 public enum MessageCitation {
     case char_location(MessageCitationCharLocation)
     case content_block_location(MessageCitationContentBlockLocation)

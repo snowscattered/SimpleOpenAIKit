@@ -11,6 +11,7 @@ import SimpleCodableMacro
 // MARK: - Block Union
 
 @CodableByConstant
+@nonexhaustive
 public enum MessageBlock {
     case text(MessageTextBlock)
     case thinking(MessageThinkingBlock)

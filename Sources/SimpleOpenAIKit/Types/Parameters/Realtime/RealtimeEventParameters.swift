@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @CodableByConstant
+@nonexhaustive
 public enum RealtimeEventParameters {
     case conversation_create(RealtimeConversationItemCreateEventParameters)
     case conversation_delete(RealtimeConversationItemDeleteEventParameters)

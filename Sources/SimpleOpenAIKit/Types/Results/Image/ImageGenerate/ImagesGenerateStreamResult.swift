@@ -31,6 +31,7 @@ public struct ImageGenerateCompletedEvent {
 }
 
 @CodableByConstant
+@nonexhaustive
 public enum ImagesGenerateStreamResult {
     case partialImage(ImageGeneratePartialImageEvent)
     case completed(ImageGenerateCompletedEvent)
