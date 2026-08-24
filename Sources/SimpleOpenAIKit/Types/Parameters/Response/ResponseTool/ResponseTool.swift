@@ -14,6 +14,7 @@ public struct ResponseBaseTool {
 }
 
 @CodableByConstant(defaultCase: "other")
+@nonexhaustive
 public enum ResponseTool {
     case function(ResponseFunctionTool)
     case custom(ResponseCustomTool)

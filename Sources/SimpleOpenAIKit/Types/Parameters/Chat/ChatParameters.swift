@@ -42,38 +42,15 @@ public struct ChatFunction {
 public struct ChatFunctionCallOption {
     public var name: String
 }
-public enum ChatFunctionCall {
+@CodableLiteral
+public enum ChatFunctionCallLiteral: String {
     case auto, none
+}
+@CodableTraversal
+public enum ChatFunctionCall {
+    case literal(ChatFunctionCallLiteral)
     case option(ChatFunctionCallOption)
 }
-// Customized
-nonisolated extension ChatFunctionCall: BaseModel {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let rawValue = try? container.decode(String.self) {
-            switch rawValue {
-            case "auto": self = .auto
-            case "none": self = .none
-            default: throw DecodingError.dataCorruptedError(
-                in: container,
-                debugDescription: #"Expected Literal["none", "auto", "required"] but got \#(rawValue)"#
-            )
-            }
-        } else {
-            let option = try container.decode(ChatFunctionCallOption.self)
-            self = .option(option)
-        }
-    }
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .auto: try container.encode("auto")
-        case .none: try container.encode("none")
-        case .option(let opt): try container.encode(opt)
-        }
-    }
-}
-
 
 @BaseModelNoWithExtra
 public struct ChatFunctionTool {

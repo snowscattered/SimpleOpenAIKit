@@ -8,6 +8,7 @@ import Foundation
 import SimpleCodableMacro
 
 @CodableByConstant
+@nonexhaustive
 public enum MessageStreamResult {
     case message_start(MessageStartEvent)
     case message_delta(MessageDeltaEvent)

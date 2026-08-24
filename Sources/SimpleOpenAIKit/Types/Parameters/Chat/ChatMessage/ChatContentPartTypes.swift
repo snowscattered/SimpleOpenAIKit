@@ -90,6 +90,7 @@ public struct ChatCustomPart {
 }
 
 @CodableByConstant(defaultCase: "custom")
+@nonexhaustive
 public enum ChatContentPart {
     case text(ChatContentPartText)
     case image(ChatContentPartImage)

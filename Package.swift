@@ -42,6 +42,7 @@ let package = Package(
                 "SimpleCodableMacro",
                 "SimpleCodableMacroPlugin"
             ],
+            path: "Tests/SimpleCodableMacroTests"
         ),
         
         // MARK: SimpleOpenAIKit
@@ -57,6 +58,7 @@ let package = Package(
         .testTarget(
             name: "SimpleOpenAIKitTests",
             dependencies: ["SimpleOpenAIKit"],
+            path: "Tests/SimpleOpenAIKitTests",
             resources: [.process("Resources")],
         ),
     ],

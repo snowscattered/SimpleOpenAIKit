@@ -212,17 +212,10 @@ public struct ResponseModeration {
 
 // MARK: - Prompt
 
-@CodableByConstant
-public enum ResponsePromptVariable {
-    case input_text(ResponseTextContent)
-    case input_image(ResponseImageContent)
-    case input_file(ResponseFileContent)
-}
-
 @BaseModelNoWithExtra
 public struct ResponsePrompt {
     public var id: String
-    public var variables: [String: ResponsePromptVariable]?
+    public var variables: [String: ResponseContent]?
     public var version: String?
 }
 

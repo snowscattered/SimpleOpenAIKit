@@ -1,5 +1,5 @@
 //
-//  ResopnseAgentMessageItem.swift
+//  ResponseAgentMessageItem.swift
 //  SimpleOpenAIKit
 //
 //  Created by snow on 8/6/26.
@@ -8,13 +8,7 @@
 import Foundation
 import SimpleCodableMacro
 
-@CodableByConstant
-public enum ResponseAgentMessageContent {
-    case input_text(ResponseTextContent)
-    case input_image(ResponseImageContent)
-    case input_file(ResponseFileContent)
-    case encrypted_content(ResponseEncryptedContent)
-}
+public typealias ResponseAgentMessageContent = ResponseContent
 @SingleOrArray
 public enum ResponseAgentMessageItemContent {
     case string(String)
@@ -27,7 +21,7 @@ extension ResponseAgentMessageItemContent: ExpressibleByStringLiteral, Expressib
 
 // Codex Agent
 @BaseModelNoWithExtra
-public struct ResopnseAgentMessageItem {
+public struct ResponseAgentMessageItem {
     public static let type: String = "agent_message"
     public var id: String?
     public var author: String?
@@ -35,7 +29,7 @@ public struct ResopnseAgentMessageItem {
     public var content: [ ResponseAgentMessageContent ]
     public var status: ResponseItemStatusLiteral?
 }
-extension ResopnseAgentMessageItem {
+extension ResponseAgentMessageItem {
     public func toInputMessage() -> ResponseMessage {
         var content = [] as [ ResponseMessageInputContent ]
         for i in self.content {

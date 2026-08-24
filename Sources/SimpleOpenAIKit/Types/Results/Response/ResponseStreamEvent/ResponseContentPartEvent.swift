@@ -7,12 +7,6 @@
 import Foundation
 import SimpleCodableMacro
 
-
-//@BaseModelNoWithExtra
-//public struct ResponseReasoningTextPart {
-//    public static let type: String = "reasoning_text"
-//    public let text: String
-//}
 public typealias ResponseReasoningTextPart = ResponseReasoningContent
 @CodableByConstant
 public enum ResponseContentPart {

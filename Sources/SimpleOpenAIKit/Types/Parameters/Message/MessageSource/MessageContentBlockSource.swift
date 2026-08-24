@@ -8,6 +8,7 @@ import Foundation
 import SimpleCodableMacro
 
 @CodableByConstant
+@nonexhaustive
 public enum MessageContentBlockSourceContents {
     case text(MessageTextBlock)
     case image(MessageImageBlock)

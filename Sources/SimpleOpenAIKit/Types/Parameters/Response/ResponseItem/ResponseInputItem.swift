@@ -13,6 +13,7 @@ public struct ResponseBaseItem {
     public var type: String
 }
 @CodableByConstant(nilCase: "message", still: true, defaultCase: "other")
+@nonexhaustive
 public enum ResponseInputItem {
     case message(ResponseMessageItem)
     case reasoning(ResponseReasoningItem)
@@ -22,6 +23,8 @@ public enum ResponseInputItem {
     case custom_tool_call(ResponseCustomToolCallItem)
     case custom_tool_call_output(ResponseCustomToolCallOutputItem)
     case web_search(ResponseWebSearchItem)
+    // Codex Agent Message
+    case agent_message(ResponseAgentMessageItem)
     
     case other(ResponseBaseItem)
 }

@@ -14,6 +14,7 @@ public struct UnknownEvent {
 
 // ResponseStreamResult
 @CodableByConstant(defaultCase: "unkowned")
+@nonexhaustive
 public enum ResponseStreamResult {
     // State
     case response_created(ResponseCreatedEvent)
