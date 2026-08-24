@@ -15,6 +15,7 @@ public enum MessageSource {
 }
 
 @CodableByConstant
+@nonexhaustive
 public enum MessageDocumentBlockSource {
     case base64pdf(MessageBase64PDFSource)
     case plaintext(MessagePlainTextSource)

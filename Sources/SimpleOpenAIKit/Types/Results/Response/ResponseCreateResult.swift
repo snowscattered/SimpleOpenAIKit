@@ -81,6 +81,7 @@ public struct ResponseUsage {
 
 //public typealias ResponseOutputItem = ResponseInputItem
 @CodableByConstant(defaultCase: "other")
+@nonexhaustive
 public enum ResponseOutputItem {
     case message(ResponseOutputMessage)  // Not Bind with ResponseInputItem
     

@@ -8,8 +8,8 @@
 import Foundation
 import SimpleCodableMacro
 
-//@CodableByConstant(nilCase: "tool", defaultCase: "tool")
 @CodableTraversal
+@nonexhaustive
 public enum MessageTool {
     case tool(MessageBaseTool)
     case web_search(MessageWebSearchTool)

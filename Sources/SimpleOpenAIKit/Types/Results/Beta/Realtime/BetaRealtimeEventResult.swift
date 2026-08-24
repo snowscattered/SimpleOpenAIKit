@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @CodableByConstant(defaultCase: "unkowned")
+@nonexhaustive
 public enum BetaRealtimeEventResult {
     // Session
     case session_created(BetaRealtimeSessionCreatedEvent)

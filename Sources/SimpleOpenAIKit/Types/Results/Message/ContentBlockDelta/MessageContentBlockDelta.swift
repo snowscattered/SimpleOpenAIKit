@@ -8,6 +8,7 @@ import Foundation
 import SimpleCodableMacro
 
 @CodableByConstant
+@nonexhaustive
 public enum MessageContentBlockDelta {
     case citations_delta(MessageCitationsDelta)
     case input_json_delta(MessageInputJSONDelta)

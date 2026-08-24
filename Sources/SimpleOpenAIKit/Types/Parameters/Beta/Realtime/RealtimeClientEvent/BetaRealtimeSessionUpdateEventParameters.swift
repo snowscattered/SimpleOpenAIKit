@@ -37,34 +37,14 @@ public struct BetaReamtimeTracingTracingConfiguration {
     public var metadata: BaseType?
     public var workflow_name: String?
 }
-// Customized
-public enum BetaReamtimeTracing: BaseModel {
+@CodableLiteral
+public enum BetaReamtimeTracingLiteral: String {
     case auto
+}
+@CodableTraversal
+public enum BetaReamtimeTracing {
+    case auto(BetaReamtimeTracingLiteral)
     case config(BetaReamtimeTracingTracingConfiguration)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let string = try? container.decode(String.self), string == "auto" {
-            self = .auto
-            return
-        }
-        do {
-            let config = try BetaReamtimeTracingTracingConfiguration(from: decoder)
-            self = .config(config)
-            return
-        } catch {}
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "Cannot decode SessionTracing")
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        switch self {
-        case .auto:
-            var container = encoder.singleValueContainer()
-            try container.encode("auto")
-        case .config(let config):
-            try config.encode(to: encoder)
-        }
-    }
 }
 @CodableLiteral
 public enum BetaRealtimeTurnDetectionType: String {

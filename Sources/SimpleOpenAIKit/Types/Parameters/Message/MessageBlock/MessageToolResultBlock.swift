@@ -18,6 +18,7 @@ public struct MessageToolReference {
 // MARK: - Content (Tool Result Items)
 
 @CodableByConstant
+@nonexhaustive
 public enum MessageToolContent {
     case text(MessageTextBlock)
     case image(MessageImageBlock)

@@ -8,12 +8,7 @@
 import Foundation
 import SimpleCodableMacro
 
-@CodableByConstant
-public enum ResponseCustomToolCallOutputContent {
-    case input_text(ResponseTextContent)
-    case input_image(ResponseImageContent)
-    case input_file(ResponseFileContent)
-}
+public typealias ResponseCustomToolCallOutputContent = ResponseContent
 
 @SingleOrArray
 public enum ResponseCustomToolCallOutput {

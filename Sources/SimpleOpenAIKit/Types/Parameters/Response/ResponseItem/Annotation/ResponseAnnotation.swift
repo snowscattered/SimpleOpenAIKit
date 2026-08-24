@@ -8,6 +8,7 @@ import Foundation
 import SimpleCodableMacro
 
 @CodableByConstant
+@nonexhaustive
 public enum ResponseAnnotation {
     case file_citation(ResponseAnnotationFileCitation)
     case file_path(ResponseAnnotationFilePath)

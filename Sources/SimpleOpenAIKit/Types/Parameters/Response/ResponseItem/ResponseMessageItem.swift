@@ -39,15 +39,8 @@ public enum ResponsePhaseLiteral: String {
     case final_answer
 }
 // MARK: - EasyInputMessage
-@CodableByConstant
-public enum ResponseMessageInputContent {
-    case input_text(ResponseTextContent)
-    case input_image(ResponseImageContent)
-    case input_file(ResponseFileContent)
-    // Extension OpenAI
-    case input_video(ResponseVideoContent)
-    case input_audio(ResponseAudioContent)
-}
+public typealias ResponseMessageInputContent = ResponseContent
+
 @SingleOrArray
 public enum ResponseMessageInputItemContent {
     case string(String)
