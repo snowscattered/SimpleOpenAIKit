@@ -10,6 +10,10 @@ import Foundation
 import SimpleCodableMacro
 @testable import SimpleOpenAIKit
 
+struct OBJ: Codable & Sendable {
+    public var a: Int
+}
+
 @Suite("AsyncSessionTests")
 struct AsyncSessionTests {
     let url = URL(string: "https://api.deepseek.com/chat/completions")!
@@ -25,7 +29,29 @@ struct AsyncSessionTests {
         base_url: URL(string: "https://api.deepseek.com")!,
         max_retries: 0
     )
-
+    @Test mutating func makeRequest() async throws {
+        payload.stream = false
+        let request = try OpenAISession.shared.getRequest(
+            url,
+            payload: payload,
+            requestOptions: RequestOptions(
+                extra_body: .init(OBJ(a: 10))
+            ),
+            client: client,
+            method: .post
+        )
+        guard let string = String(data: request.httpBody!, encoding: .utf8) else {
+            throw EncodingError.invalidValue(
+                self,
+                EncodingError.Context(
+                    codingPath: [],
+                    debugDescription: "Failed to convert the encoded data to a UTF‑8 string."
+                )
+            )
+        }
+        print(string)
+        
+    }
     @Test mutating func asyncData() async throws {
         payload.stream = false
         let response: BaseType = try await OpenAISession.shared.AsyncResponse(
