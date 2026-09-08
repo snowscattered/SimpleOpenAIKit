@@ -28,6 +28,35 @@ package func declAccessModifier(of decl: some DeclGroupSyntax) -> String {
     return ""
 }
 
+package func multiConstantValues(from attribute: AttributeSyntax) throws -> [String] {
+    guard case let .argumentList(arguments) = attribute.arguments,
+          !arguments.isEmpty
+    else {
+        throw MacroError("@MultiConstant requires at least one value")
+    }
+
+    if arguments.count == 1,
+       let values = arguments.first?.expression.as(ArrayExprSyntax.self) {
+        guard !values.elements.isEmpty else {
+            throw MacroError("@MultiConstant requires at least one value")
+        }
+        return values.elements.map { $0.expression.trimmedDescription }
+    }
+
+    return arguments.map { $0.expression.trimmedDescription }
+}
+
+package func multiConstantValues(from caseDecl: EnumCaseDeclSyntax) throws -> [String]? {
+    let attributes = caseDecl.attributes.compactMap { $0.as(AttributeSyntax.self) }
+        .filter { $0.attributeName.trimmedDescription == "MultiConstant" }
+
+    guard attributes.count <= 1 else {
+        throw MacroError("@MultiConstant can only be applied once to each case")
+    }
+
+    return try attributes.first.map { try multiConstantValues(from: $0) }
+}
+
 package func collectStoredProperties(of structDecl: StructDeclSyntax) -> [StoredProperty] {
     structDecl.memberBlock.members.compactMap { member in
         guard let varDecl = member.decl.as(VariableDeclSyntax.self),

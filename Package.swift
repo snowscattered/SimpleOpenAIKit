@@ -38,17 +38,38 @@ let package = Package(
         ),
         .testTarget(
             name: "SimpleCodableMacroTests",
-            dependencies: [
-                "SimpleCodableMacro",
-                "SimpleCodableMacroPlugin"
-            ],
+            dependencies: [ "SimpleCodableMacro" ],
             path: "Tests/SimpleCodableMacroTests"
+        ),
+        
+        // MARK: SimpleOpenAIKitMacro
+        .macro(
+            name: "SimpleOpenAIKitMacroPlugin",
+            dependencies: [
+                .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
+                .product(name: "SwiftCompilerPlugin", package: "swift-syntax"),
+                "SimpleCodableMacro"
+            ],
+            path: "Sources/SimpleOpenAIKitMacroPlugin"
+        ),
+        .target(
+            name: "SimpleOpenAIKitMacro",
+            dependencies: ["SimpleOpenAIKitMacroPlugin"],
+            path: "Sources/SimpleOpenAIKitMacro"
+        ),
+        .testTarget(
+            name: "SimpleOpenAIKitMacroTests",
+            dependencies: [ "SimpleOpenAIKitMacro" ],
+            path: "Tests/SimpleOpenAIKitMacroTests"
         ),
         
         // MARK: SimpleOpenAIKit
         .target(
             name: "SimpleOpenAIKit",
-            dependencies: ["SimpleCodableMacro"],
+            dependencies: [
+                "SimpleCodableMacro",
+                "SimpleOpenAIKitMacro"
+            ],
             path: "Sources/SimpleOpenAIKit",
             swiftSettings: [
                 .define("SelectInputStream"),

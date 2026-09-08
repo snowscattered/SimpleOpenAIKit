@@ -7,7 +7,7 @@
 
 import Foundation
 import Testing
-@testable import SimpleCodableMacro
+import SimpleCodableMacro
 
 @CodableLiteral
 enum Literal: Int {
@@ -72,6 +72,26 @@ extension After {
     }
 }
 
+@BaseModelNoWithExtra
+struct MultiRole {
+    let role: String
+}
+@CodableByConstant(field: "role")
+enum Multi {
+    @MultiConstant("D", "C")
+    case multi(MultiRole)
+    @MultiConstant("E")
+    case singleValue(MultiRole)
+    case a(A)
+}
+@CodableByConstantAndSingle(field: "role", singleCase: "single")
+enum MultiSingle {
+    @MultiConstant(["D", "C"])
+    case multi(MultiRole)
+    case a(A)
+    case single(B)
+}
+
 @Suite struct SimpleCodableMacroTests {
     // MARK: - CodableLiteral
     @Test("CodableLiteral Using") func CodableLiteralMacroTest() async throws {
@@ -104,6 +124,24 @@ extension After {
         print(x)
         let y = try JSONEncoder().encode(x)
         print(String(data: y, encoding: .utf8)!)
+    }
+
+    @Test("MultiConstant Using") func MultiConstantMacroTest() throws {
+        do {
+            for role in ["D", "C"] {
+                let json = #"{"role":"\#(role)"}"#
+                let multi = try JSONDecoder().decode(Multi.self, from: json.data(using: .utf8)!)
+                print(multi)
+            }
+
+            let aJSON = #"{"role":"A","name":"N"}"#
+            let aMulti = try JSONDecoder().decode(Multi.self, from: aJSON.data(using: .utf8)!)
+            print(aMulti)
+
+            let singleValueJSON = #"{"role":"E"}"#
+            let singleValue = try JSONDecoder().decode(Multi.self, from: singleValueJSON.data(using: .utf8)!)
+            print(singleValue)
+        } catch { print(error) }
     }
     
     // MARK: - CodableTraversal
