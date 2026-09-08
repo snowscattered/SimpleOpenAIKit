@@ -2,8 +2,7 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 
-// MARK: - MemberMacro
-struct BaseModelWithExtraMacro: MemberMacro {
+struct BaseModelWithExtraMacro: MemberMacro, ExtensionMacro {
     static func expansion(
         of node: AttributeSyntax,
         providingMembersOf declaration: some DeclGroupSyntax,
@@ -16,12 +15,32 @@ struct BaseModelWithExtraMacro: MemberMacro {
 
         let access = declAccessModifier(of: structDecl)
         let extraProperty: DeclSyntax = "\(raw: access)var extra: [String : BaseType] = [:]"
-        return [extraProperty]
-    }
-}
 
-// MARK: - ExtensionMacro
-extension BaseModelWithExtraMacro: ExtensionMacro {
+        // Skip when the struct declares its own init, otherwise overloads become ambiguous.
+        guard !structDecl.memberBlock.members.contains(where: { $0.decl.is(InitializerDeclSyntax.self) }) else {
+            return [extraProperty]
+        }
+
+        // MARK: - Init
+        let stored = collectStoredProperties(of: structDecl).filter { !$0.isStatic && !$0.isImmutableWithDefault }
+        var initParams = stored.map { prop -> String in
+            prop.isOptional ? "\(prop.name): \(prop.typeName)? = nil" : "\(prop.name): \(prop.typeName)"
+        }
+        var initBody = stored.map { "self.\($0.name) = \($0.name)" }
+        // `extra` is added by this macro, so it becomes the last parameter.
+        initParams.append("extra: [String : BaseType] = [:]")
+        initBody.append("self.extra = extra")
+
+        let initDecl: DeclSyntax = """
+            \(raw: access)init(
+                \(raw: initParams.joined(separator: ",\n"))
+            ) {
+                \(raw: initBody.joined(separator: "\n"))
+            }
+            """
+        return [extraProperty, initDecl]
+    }
+    
     static func expansion(
         of node: AttributeSyntax,
         attachedTo declaration: some DeclGroupSyntax,

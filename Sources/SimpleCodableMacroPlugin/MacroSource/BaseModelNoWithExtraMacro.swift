@@ -2,7 +2,41 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 
-struct BaseModelNoWithExtraMacro: ExtensionMacro {
+struct BaseModelNoWithExtraMacro: MemberMacro, ExtensionMacro {
+    static func expansion(
+        of node: AttributeSyntax,
+        providingMembersOf declaration: some DeclGroupSyntax,
+        conformingTo protocols: [TypeSyntax],
+        in context: some MacroExpansionContext
+    ) throws -> [DeclSyntax] {
+        guard let structDecl = declaration.as(StructDeclSyntax.self) else {
+            throw MacroError("@BaseModelNoWithExtra can only be applied to structs")
+        }
+
+        // Skip when the struct declares its own init, otherwise overloads become ambiguous.
+        guard !structDecl.memberBlock.members.contains(where: { $0.decl.is(InitializerDeclSyntax.self) }) else {
+            return []
+        }
+
+        // The init must live in the struct body: a memberwise init in an extension
+        // collides with the synthesized one ("invalid redeclaration").
+        let access = declAccessModifier(of: structDecl)
+        let stored = collectStoredProperties(of: structDecl).filter { !$0.isStatic && !$0.isImmutableWithDefault }
+        let initParams = stored.map { prop -> String in
+            prop.isOptional ? "\(prop.name): \(prop.typeName)? = nil" : "\(prop.name): \(prop.typeName)"
+        }.joined(separator: ",\n")
+        let initBody = stored.map { "self.\($0.name) = \($0.name)" }.joined(separator: "\n")
+
+        let initDecl: DeclSyntax = """
+            \(raw: access)init(
+                \(raw: initParams)
+            ) {
+                \(raw: initBody)
+            }
+            """
+        return [initDecl]
+    }
+    
     static func expansion(
         of node: AttributeSyntax,
         attachedTo declaration: some DeclGroupSyntax,
