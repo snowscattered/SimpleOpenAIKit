@@ -22,9 +22,9 @@ package macro CodableTraversal() = #externalMacro(module: "SimpleCodableMacroPlu
 @attached(extension, conformances: BaseModel, names: named(CodingKeys), named(init(from:)), named(encode(to:)))
 package macro CodableByConstant(
     field: String = "type",
-    nilCase: String = "",
-    still: Bool = false,
-    defaultCase: String = ""
+    nilCase: String? = nil,
+    still: Bool? = nil,
+    defaultCase: String? = nil
 ) = #externalMacro(module: "SimpleCodableMacroPlugin", type: "CodableByConstantMacro")
 
 /// Like `CodableByConstant`, but also tries to decode a top-level single value
@@ -33,8 +33,18 @@ package macro CodableByConstant(
 package macro CodableByConstantAndSingle(
     field: String = "type",
     singleCase: String,
-    defaultCase: String = "",
+    defaultCase: String? = nil,
 ) = #externalMacro(module: "SimpleCodableMacroPlugin", type: "CodableByConstantAndSingleMacro")
+
+/// Supplies one or more field values used to decode an enum case.
+/// Apply this marker to a case handled by `CodableByConstant` or
+/// `CodableByConstantAndSingle` to avoid requiring a static field on the
+/// associated value's type.
+@attached(peer)
+package macro MultiConstant(_ values: String...) = #externalMacro(module: "SimpleCodableMacroPlugin", type: "MultiConstMacro")
+
+@attached(peer)
+package macro MultiConstant(_ values: [String]) = #externalMacro(module: "SimpleCodableMacroPlugin", type: "MultiConstMacro")
 
 /// Marker attribute for properties inside a `@BaseModelWithExtra` or `@BaseModelNoWithExtra` struct.
 /// The annotated property will be decoded but skipped during encoding.
@@ -43,11 +53,14 @@ package macro transient() = #externalMacro(module: "SimpleCodableMacroPlugin", t
 
 /// A macro that generates a `nonisolated extension` conforming to `BaseModelNoWithExtra`.
 /// The annotated type must already be `Codable & Sendable`.
+/// A memberwise `init` is also generated in the struct body.
+@attached(member, names: named(init))
 @attached(extension, conformances: BaseModelNoWithExtra, names: named(CodingKeys), named(init(from:)), named(encode(to:)))
 package macro BaseModelNoWithExtra() = #externalMacro(module: "SimpleCodableMacroPlugin", type: "BaseModelNoWithExtraMacro")
 
 /// A macro applied to a struct to generate `BaseModel: Codable & Sendable` conformance
 /// with an `extra` dictionary capturing unknown JSON keys.
-@attached(member, names: named(extra))
+/// A memberwise `init` (including `extra`) is also generated in the struct body.
+@attached(member, names: named(extra), named(init))
 @attached(extension, conformances: BaseModelWithExtra, names: named(CodingKeys), named(init(from:)), named(encode(to:)))
 package macro BaseModelWithExtra() = #externalMacro(module: "SimpleCodableMacroPlugin", type: "BaseModelWithExtraMacro")

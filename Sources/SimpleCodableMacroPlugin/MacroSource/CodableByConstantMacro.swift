@@ -49,29 +49,36 @@ struct CodableByConstantMacro: ExtensionMacro {
 //            }
         }
 
-        let enumCases = enumDecl.memberBlock.members
+        let enumCaseDecls = enumDecl.memberBlock.members
             .compactMap { $0.decl.as(EnumCaseDeclSyntax.self) }
-            .flatMap { $0.elements }
 
-        var regularCases: [(caseName: String, typeName: String)] = []
+        var regularCases: [(caseName: String, typeName: String, constantValues: [String]?)] = []
         var nilCase: (caseName: String, typeName: String)? = nil
         var fallbackCase: (caseName: String, typeName: String)? = nil
 
-        for ec in enumCases {
-            let caseName = ec.name.text
-            guard let params = ec.parameterClause?.parameters,
-                  params.count == 1,
-                  let param = params.first
-            else {
-                throw MacroError("@CodableByStaticType cases must have exactly one associated value")
+        for caseDecl in enumCaseDecls {
+            let constantValues = try multiConstantValues(from: caseDecl)
+
+            for ec in caseDecl.elements {
+                let caseName = ec.name.text
+                guard let params = ec.parameterClause?.parameters,
+                      params.count == 1,
+                      let param = params.first
+                else {
+                    throw MacroError("@CodableByStaticType cases must have exactly one associated value")
+                }
+                let entry: (caseName: String, typeName: String) = (caseName, param.type.trimmedDescription)
+
+                if caseName == defaultCaseName { fallbackCase = entry }
+                if caseName == nilCaseName {
+                    nilCase = entry
+                    if nilCaseStill {
+                        regularCases.append((entry.caseName, entry.typeName, constantValues))
+                    }
+                } else if caseName != defaultCaseName {
+                    regularCases.append((entry.caseName, entry.typeName, constantValues))
+                }
             }
-            let entry = (caseName, param.type.trimmedDescription)
-            
-            if caseName == defaultCaseName { fallbackCase = entry }
-            if caseName == nilCaseName {
-                nilCase = entry
-                if nilCaseStill { regularCases.append(entry) }
-            } else if caseName != defaultCaseName { regularCases.append(entry) }
         }
 
         guard !regularCases.isEmpty else {
@@ -79,7 +86,8 @@ struct CodableByConstantMacro: ExtensionMacro {
         }
         // MARK: - Decode
         let decodeCases = regularCases.map { Case in
-            "case \(Case.typeName).\(field): self = .\(Case.caseName)(try c.decode(\(Case.typeName).self))"
+            let pattern = Case.constantValues?.joined(separator: ", ") ?? "\(Case.typeName).\(field)"
+            return "case \(pattern): self = .\(Case.caseName)(try c.decode(\(Case.typeName).self))"
         }.joined(separator: "\n")
 
         let nilBranch: String
@@ -96,7 +104,7 @@ struct CodableByConstantMacro: ExtensionMacro {
             defaultBranch = "default: throw DecodingError.dataCorruptedError(forKey: .\(field), in: container, debugDescription: \"Unknown \(field): \\(field ?? \"null\")\")"
         }
         // MARK: - Encode
-        var allCases = regularCases
+        var allCases: [(caseName: String, typeName: String)] = regularCases.map { ($0.caseName, $0.typeName) }
         if let nilC = nilCase,
            !nilCaseStill {
             allCases.append(nilC)

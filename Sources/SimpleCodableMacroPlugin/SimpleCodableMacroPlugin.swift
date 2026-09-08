@@ -12,6 +12,7 @@ struct SimpleCodableMacroPlugin: CompilerPlugin {
         SingleOrArrayMacro.self,
         CodableByConstantMacro.self,
         CodableByConstantAndSingleMacro.self,
+        MultiConstMacro.self,
         BaseModelWithExtraMacro.self,
         BaseModelNoWithExtraMacro.self,
     ]
