@@ -57,7 +57,18 @@ extension BaseType: ExpressibleByBooleanLiteral,
         for (key, value) in elements { dict[key] = value }
         self = .dict(dict)
     }
+    public init(_ object: some Codable & Sendable) throws {
+        let data = try JSONEncoder().encode(object)
+        self = .dict(try JSONDecoder().decode([String: BaseType].self, from: data))
+    }
 }
+public extension Dictionary where Key == String, Value == BaseType {
+    init(_ object: some Codable & Sendable) throws {
+        let data = try JSONEncoder().encode(object)
+        self = try JSONDecoder().decode([String: BaseType].self, from: data)
+    }
+}
+
 extension BaseType {
     public subscript(key: String) -> BaseType? {
         get {

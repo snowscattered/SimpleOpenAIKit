@@ -54,22 +54,26 @@ extension SessionProtocol {
         }
         request.allHTTPHeaderFields = headers
         // Body
-        var body: Data? = nil
         if method != .get {
             if hasFile {
                 let encoder = MultipartFormDataEncodeContainer()
                 try encoder.encode(payload)
-                if let extra = requestOptions?.extra_body, !extra.isEmpty {
-                    try encoder.encode(extra)
+                if let extraBody = requestOptions?.extra_body, !extraBody.isEmpty {
+                    try encoder.encode(extraBody)
                 }
                 request.httpBodyStream = encoder.serialize
                 request.allHTTPHeaderFields?["Content-Type"] = "multipart/form-data; boundary=\(encoder.boundary)"
             } else {
                 var payloadMap = (try? JSONDecoder().decode(Body.self, from: try JSONEncoder().encode(payload))) ?? [:]
-                if let extra = requestOptions?.extra_body, !extra.isEmpty {
-                    payloadMap = payloadMap | extra
+                if let extraBody = requestOptions?.extra_body, !extraBody.isEmpty {
+                    payloadMap = payloadMap | extraBody
                 }
-                body = try JSONEncoder().encode(payloadMap)
+                let body = try JSONEncoder().encode(payloadMap)
+                request.httpBody = body
+            }
+        } else {
+            if let extraBody = requestOptions?.extra_body, !extraBody.isEmpty {
+                let body = try JSONEncoder().encode(extraBody)
                 request.httpBody = body
             }
         }
