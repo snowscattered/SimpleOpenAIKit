@@ -10,6 +10,8 @@ package struct StoredProperty {
     let isTransient: Bool
     let isStatic: Bool
     let isImmutableWithDefault: Bool
+    let isMutable: Bool
+    let defaultValue: String?
 }
 
 package struct TypeOptionality {
@@ -78,14 +80,18 @@ package func collectStoredProperties(of structDecl: StructDeclSyntax) -> [Stored
         
         let isStatic = varDecl.modifiers.contains(where: { $0.name.tokenKind == .keyword(.static) })
         let isImmutableWithDefault = varDecl.bindingSpecifier.tokenKind == .keyword(.let) && binding.initializer != nil
-        
+        let isMutable = varDecl.bindingSpecifier.tokenKind == .keyword(.var)
+        let defaultValue = binding.initializer?.value.trimmedDescription
+
         return StoredProperty(
             name: pattern.identifier.text,
             typeName: type.name,
             isOptional: type.isOptional,
             isTransient: isTransient,
             isStatic: isStatic,
-            isImmutableWithDefault: isImmutableWithDefault
+            isImmutableWithDefault: isImmutableWithDefault,
+            isMutable: isMutable,
+            defaultValue: defaultValue
         )
     }
 }

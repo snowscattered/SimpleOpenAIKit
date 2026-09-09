@@ -66,8 +66,19 @@ struct BaseModelNoWithExtraMacro: MemberMacro, ExtensionMacro {
         let codingKeysCases = stored.map { "case \($0.name)" }.joined(separator: "\n")
         // MARK: - Decode
         let decodable = stored.filter { !$0.isStatic && !$0.isImmutableWithDefault }
-        let decodeBody = decodable.map { prop in
+        let decodeBody = decodable.map { prop -> String in
             if prop.isOptional {
+                // `var` optional with a default value: `decodeIfPresent` alone would turn a
+                // missing key into nil, so keep the default when the key is absent.
+                if prop.isMutable, let defaultValue = prop.defaultValue {
+                    return """
+                    if container.contains(.\(prop.name)) {
+                        self.\(prop.name) = try container.decodeIfPresent(\(prop.typeName).self, forKey: .\(prop.name))
+                    } else {
+                        self.\(prop.name) = \(defaultValue)
+                    }
+                    """
+                }
                 return "self.\(prop.name) = try container.decodeIfPresent(\(prop.typeName).self, forKey: .\(prop.name))"
             } else {
                 return "self.\(prop.name) = try container.decode(\(prop.typeName).self, forKey: .\(prop.name))"
