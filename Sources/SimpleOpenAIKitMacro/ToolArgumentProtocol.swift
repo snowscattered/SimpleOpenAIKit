@@ -7,7 +7,7 @@
 
 import SimpleCodableMacro
 
-public protocol ArgumentSchema: Encodable & Sendable {
+public protocol ArgumentSchema: Codable & Sendable {
     static var ArgumentSchema: [String: BaseType] { get }
 }
 public extension ArgumentSchema {
@@ -19,7 +19,7 @@ public extension ArgumentSchema {
 
 public protocol MainArgument: ArgumentSchema {}
 public protocol ReferArgument: ArgumentSchema {}
-public protocol EnumArgument: Encodable & Sendable {
+public protocol EnumArgument: Codable & Sendable {
     static var ArgumentSchema: [String: BaseType] { get }
 }
 public extension EnumArgument {
@@ -28,7 +28,7 @@ public extension EnumArgument {
         try container.encode(Self.ArgumentSchema)
     }
 }
-public protocol AnyOfArgument: Encodable & Sendable {
+public protocol AnyOfArgument: Codable & Sendable {
     static var ArgumentSchema: [String: BaseType] { get }
 }
 public extension AnyOfArgument {
