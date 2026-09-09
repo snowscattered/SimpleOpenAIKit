@@ -79,6 +79,27 @@ struct A {
 //  ],
 //  "additionalProperties": false
 //}
+@Test func verifyADecode() async throws {
+    let json = """
+    {
+        "Arg1": "Hello",
+        "Arg2": null,
+        "Arg3": 42,
+        "Arg4": 3.14,
+        "Arg5": true,
+        "Arg6": ["a", "b", "c"],
+        "Arg7": [1, 2, 3],
+        "Arg8": "A",
+        "Arg9": 2, 
+        "Arg10": "some string",
+        "Arg11": 1.0
+    }
+    """.data(using: .utf8)!
+    
+    let decoder = JSONDecoder()
+    let a = try decoder.decode(A.self, from: json)
+    print(a)
+}
 
 @ReferArgument
 struct AA {
@@ -166,3 +187,16 @@ struct B {
 //        }
 //    }
 //}
+@Test func verifyBDecode() async throws {
+    let json = """
+    {
+        "aa": { "Arg1": "mainAA" },
+        "ab": { "aa": { "Arg1": "abAA" } },
+        "ac": { "aa": { "Arg1": "acAA" } }
+    }
+    """.data(using: .utf8)!
+    
+    let decoder = JSONDecoder()
+    let b = try decoder.decode(B.self, from: json)
+    print(b)
+}

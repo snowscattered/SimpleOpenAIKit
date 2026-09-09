@@ -110,9 +110,10 @@ public macro EnumToolArgument() = #externalMacro(module: "SimpleOpenAIKitMacroPl
 
 /// Generates `static var ArgumentSchema: [String: BaseType]` on an enum: `{"anyOf": [...]}` with one
 /// entry per case, each of them the schema of that case's associated value. A case may carry a
-/// `@*ToolArgument` macro to describe itself, e.g. `@StringToolArgument(description: "DA")`.
+/// `@*ToolArgument` macro to describe itself, e.g. `@StringToolArgument(description: "DA")`. Cases
+/// must use distinct associated value types because decoding tries them in declaration order.
 ///
 /// The `AnyOfArgument` conformance is added automatically.
-@attached(member, names: named(ArgumentSchema))
+@attached(member, names: named(ArgumentSchema), named(init(from:)))
 @attached(extension, conformances: AnyOfArgument)
 public macro AnyOfToolArgument() = #externalMacro(module: "SimpleOpenAIKitMacroPlugin", type: "AnyOfToolArgumentMacro")
