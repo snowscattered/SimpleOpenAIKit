@@ -38,12 +38,17 @@ public struct ResponseImageGenerationInputImageMask {
     public var file_id: String
     public var image_url: String
 }
+@CodableLiteral
+public enum ResponseImageGenerationToolAction: String {
+    case generate, edit, auto
+}
 
 @BaseModelNoWithExtra
 public struct ResponseImageGenerationTool {
     public static let type: String = "image_generation"
     public var model: String?
     public var size: String?
+    public var action: ResponseImageGenerationToolAction?
     public var background: ResponseImageGenBackgroundLiteral?
     public var input_fidelity: ResponseImageGenInputFidelityLiteral?
     public var input_image_mask: ResponseImageGenerationInputImageMask?

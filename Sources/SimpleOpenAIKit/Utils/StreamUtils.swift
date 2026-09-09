@@ -21,7 +21,7 @@ private func EventConversion<T: Decodable & Sendable>(
     guard let jsonData = rawData.data(using: .utf8) else {
         throw NetworkError.invalidData
     }
-    return .yield(try JSONCodable.decodeData(T.self, from: jsonData))
+    return .yield(try decodeData(T.self, from: jsonData))
 }
 
 func syncStreamResponse<T: Decodable & Sendable>(
@@ -34,7 +34,7 @@ func syncStreamResponse<T: Decodable & Sendable>(
     return try retry(maxRetries: maxRetries, shouldRetry: shouldRetry) {
         if T.self == Data.self {
             return try URLSession.shared.syncStreamData(request)
-                .conversion { chunk throws in .yield(chunk) } as! SyncThrowingStream<T, any Error>
+                .conversion { chunk throws in .yield(chunk as! T) }
         }
         return try URLSession.shared.syncSSE(request).conversion(EventConversion)
     }
@@ -50,7 +50,7 @@ func asyncStreamResponse<T: Decodable & Sendable>(
     return try await retry(maxRetries: maxRetries, shouldRetry: shouldRetry) {
         if T.self == Data.self {
             return try await URLSession.shared.asyncStreamData(request)
-                .conversion { chunk throws in .yield(chunk) } as! AsyncThrowingStream<T, any Error>
+                .conversion { chunk throws in .yield(chunk as! T) }
         }
         return try await URLSession.shared.asyncSSE(request).conversion(EventConversion)
     }

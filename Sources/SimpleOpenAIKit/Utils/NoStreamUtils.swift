@@ -18,7 +18,7 @@ func syncResponse<T: Decodable & Sendable>(
         if T.self == Data.self {
             return try URLSession.shared.syncData(request) as! T
         }
-        return try JSONCodable.decodeData(from: URLSession.shared.syncData(request))
+        return try decodeData(from: URLSession.shared.syncData(request))
     }
 }
 
@@ -33,6 +33,6 @@ func asyncResponse<T: Decodable & Sendable>(
         if T.self == Data.self {
             return try await URLSession.shared.asyncData(request) as! T
         }
-        return try JSONCodable.decodeData(from: await URLSession.shared.asyncData(request))
+        return try decodeData(from: await URLSession.shared.asyncData(request))
     }
 }

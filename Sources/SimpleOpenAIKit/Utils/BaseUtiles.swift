@@ -14,22 +14,12 @@ enum HTTPMethod: String {
     case delete = "DELETE"
 }
 
-struct JSONCodable {
-    static let decoder: JSONDecoder = {
-        let d = JSONDecoder()
-        return d
-    }()
-    static let encoder: JSONEncoder = {
-        let e = JSONEncoder()
-        return e
-    }()
-    @inlinable
-    static func decodeData<T: Decodable>(_ type: T.Type = T.self, from data: Data) throws -> T {
-        do {
-            return try decoder.decode(type, from: data)
-        } catch {
-            throw NetworkError.decodeError(error: error, message: String(decoding: data, as: UTF8.self))
-        }
+@inlinable
+func decodeData<T: Decodable>(_ type: T.Type = T.self, from data: Data) throws -> T {
+    do {
+        return try JSONDecoder().decode(type, from: data)
+    } catch {
+        throw NetworkError.decodeError(error: error, message: String(decoding: data, as: UTF8.self))
     }
 }
 

@@ -95,7 +95,8 @@ public struct RealtimeTruncationRetentionRatio {
     public var retention_ratio: Double
     public var token_limits: RealtimeTokenLimits?
 }
-@CodableTraversal
+//@CodableTraversal
+@CodableByConstantAndSingle(singleCase: "literal")
 public enum RealtimeTruncation {
     case literal(RealtimeTruncationLiteral)
     case retion_ratio(RealtimeTruncationRetentionRatio)

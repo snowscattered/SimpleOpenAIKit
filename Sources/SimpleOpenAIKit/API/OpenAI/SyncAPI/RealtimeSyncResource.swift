@@ -27,7 +27,7 @@ private final class RealtimeEventSyncReceiver: @unchecked Sendable {
                 case .data(let receivedData): data = receivedData
                 @unknown default: return
                 }
-                let event = try? JSONCodable.decodeData(RealtimeEventResult.self, from: data)
+                let event = try? decodeData(RealtimeEventResult.self, from: data)
                 continuation.yield(event ?? RealtimeEventResult.unkowned(.init(type: "unknown")))
                 self.receiveNext()
             case .failure(_): break
@@ -134,7 +134,7 @@ public class SyncRealtimeConnection: Sequence, @unchecked Sendable {
         return stream.makeIterator()
     }
     public func send(event: RealtimeEventParameters) throws {
-        try ws.send(.string(String(decoding: JSONCodable.encoder.encode(event), as: UTF8.self))) { _ in }
+        try ws.send(.string(String(decoding: JSONEncoder().encode(event), as: UTF8.self))) { _ in }
     }
 
     public func recv() -> RealtimeEventResult? {

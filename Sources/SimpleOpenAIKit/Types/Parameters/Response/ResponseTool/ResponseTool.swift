@@ -8,6 +8,12 @@
 import Foundation
 import SimpleCodableMacro
 
+// Share
+@CodableLiteral
+public enum ResponseToolAllowedCallers: String {
+    case direct, programmatic
+}
+
 @BaseModelWithExtra
 public struct ResponseBaseTool {
     public var type: String
@@ -22,6 +28,12 @@ public enum ResponseTool {
     case file_search(ResponseFileSearchTool)
     case image_generation(ResponseImageGenerationTool)
     case web_search(ResponseWebSearchTool)
+    // case computer()
+    // case code_interpreter()
+    // case local_shell()
+    // case mcp()
+    // case apply_patch()
+    // case tool_search()
     // Extension OpenAI
     case other(ResponseBaseTool)
 }
@@ -35,22 +47,3 @@ extension ResponseTool {
         return .web_search(.init())
     }
 }
-extension ResponseTool: ExpressibleByDictionaryLiteral {
-    public typealias Key = String
-    public typealias Value = BaseType
-    public init(dictionaryLiteral elements: (String, Value)...) {
-        let dict = Dictionary(uniqueKeysWithValues: elements)
-        guard let data = try? JSONEncoder().encode(dict),
-              let tool = try? JSONDecoder().decode(ResponseTool.self, from: data)
-        else {
-            let typeValue = (elements.first(where: { $0.0 == "type" })?.1 as? String) ?? "other"
-            var extraDict = Dictionary(uniqueKeysWithValues: elements)
-            extraDict.removeValue(forKey: "type")
-            let baseTool = ResponseBaseTool(type: typeValue, extra: extraDict)
-            self = .other(baseTool)
-            return
-        }
-        self = tool
-    }
-}
-

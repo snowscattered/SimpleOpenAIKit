@@ -24,6 +24,8 @@ public enum ResponseErrorCode: String {
     case server_error
     case rate_limit_exceeded
     case invalid_prompt
+    case data_residency_mismatch
+    case bio_policy
     case vector_store_timeout
     case invalid_image
     case invalid_image_format
@@ -65,6 +67,7 @@ public enum ResponseStatus: String {
 @BaseModelNoWithExtra
 public struct ResponseInputTokensDetails {
     public let cached_tokens: Int
+    public var cache_write_tokens: Int? = 0  // In OpenAI, is must
 }
 @BaseModelNoWithExtra
 public struct ResponseOutputTokensDetails {

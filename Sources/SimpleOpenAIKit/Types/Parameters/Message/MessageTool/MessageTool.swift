@@ -8,11 +8,14 @@
 import Foundation
 import SimpleCodableMacro
 
-@CodableTraversal
+@CodableByConstant(nilCase: "tool", still: true)
 @nonexhaustive
 public enum MessageTool {
+    @MultiConstant("custom")
     case tool(MessageBaseTool)
+    @MultiConstant(["web_search_20250305", "web_search_20260209"])
     case web_search(MessageWebSearchTool)
+    @MultiConstant(["web_fetch_20250910", "web_fetch_20260209"])
     case web_fetch(MessageWebFetchTool)
 }
 extension MessageTool {

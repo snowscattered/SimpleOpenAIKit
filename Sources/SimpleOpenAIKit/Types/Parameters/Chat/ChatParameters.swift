@@ -29,15 +29,7 @@ public struct ChatAudio {
     public var format: ChatAudioFormatLiteral
 }
 
-// MARK: - Tool
-
-@BaseModelNoWithExtra
-public struct ChatFunction {
-    public var name: String
-    public var description: String?
-    public var parameters: [String: BaseType]?
-    public var strict: Bool?
-}
+// MARK: - FuncionCall
 @BaseModelNoWithExtra
 public struct ChatFunctionCallOption {
     public var name: String
@@ -52,13 +44,61 @@ public enum ChatFunctionCall {
     case option(ChatFunctionCallOption)
 }
 
+// MARK: - Tool
+/// MARK: FunctionTool
+@BaseModelNoWithExtra
+public struct ChatFunction {
+    public var name: String
+    public var description: String?
+    public var parameters: [String: BaseType]?
+    public var strict: Bool?
+}
 @BaseModelNoWithExtra
 public struct ChatFunctionTool {
     public static let type: String = "function"
     public var function: ChatFunction
 }
-
-public typealias ChatTool = ChatFunctionTool
+/// MARK: CustomTool
+@BaseModelNoWithExtra
+public struct ChatCustomTextFormat {
+    public static let type: String = "text"
+}
+@CodableLiteral
+public enum ChatCustomGrammarFormatSyntax: String {
+    case lark
+    case regex
+}
+@BaseModelNoWithExtra
+public struct ChatCustomGrammarFormatGrammar {
+    public var definition: String
+    public var syntax: ChatCustomGrammarFormatSyntax
+}
+@BaseModelNoWithExtra
+public struct ChatCustomGrammarFormat {
+    public static let type: String = "grammar"
+    public var grammar: ChatCustomGrammarFormatGrammar
+}
+@CodableByConstant
+public enum ChatCustomFormat {
+    case text(ChatCustomTextFormat)
+    case grammar(ChatCustomGrammarFormat)
+}
+@BaseModelNoWithExtra
+public struct ChatCustom {
+    public var name: String
+    public var description: String?
+    public var format: ChatCustomFormat
+}
+@BaseModelNoWithExtra
+public struct ChatCustomTool {
+    public static let type: String = "custom"
+    public var custom: ChatCustom
+}
+@CodableByConstant
+public enum ChatTool {
+    case function_tool(ChatFunctionTool)
+    case custom_tool(ChatCustomTool)
+}
 
 // MARK: - Tool Choice
 
@@ -66,10 +106,45 @@ public typealias ChatTool = ChatFunctionTool
 public enum ChatToolChoiceLiteral: String {
     case none, auto, required
 }
-@CodableTraversal
+@CodableLiteral
+public enum ChatAllowedToolsModeLiteral: String {
+    case all, required
+}
+@BaseModelNoWithExtra
+public struct ChatAllowedTools {
+    public var mode: ChatAllowedToolsModeLiteral
+    public var tools: [String: BaseType]
+}
+@BaseModelNoWithExtra
+public struct ChatAllowedToolChoiceType {
+    public static let type: String = "allowed_tools"
+    public var allowed_tools: ChatAllowedTools
+}
+@BaseModelNoWithExtra
+public struct ChatNamedToolChoiceFunction {
+    public var name: String
+}
+@BaseModelNoWithExtra
+public struct ChatNamedToolChoiceCustom {
+    public var name: String
+}
+@BaseModelNoWithExtra
+public struct ChatNamedToolChoiceType {
+    public static let type: String = "function"
+    public var function: ChatNamedToolChoiceFunction
+}
+@BaseModelNoWithExtra
+public struct ChatNamedToolChoiceCustomType {
+    public static let type: String = "custom"
+    public var custom: ChatNamedToolChoiceCustom
+}
+//@CodableTraversal
+@CodableByConstantAndSingle(singleCase: "literal")
 public enum ChatToolChoice {
     case literal(ChatToolChoiceLiteral)
-    case object([String: BaseType])
+    case allowed_tools(ChatAllowedToolChoiceType)
+    case function(ChatNamedToolChoiceType)
+    case custom(ChatNamedToolChoiceCustomType)
 }
 
 // MARK: - Response Format

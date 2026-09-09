@@ -32,13 +32,13 @@ public enum MessageBaseToolType: String {
 public struct MessageBaseTool {
     public var type: MessageBaseToolType?
     public var name: String
-    public var input_schema: MessageInputSchema
     public var description: String?
+    public var input_schema: MessageInputSchema
     public var strict: Bool?
+    public var defer_loading: Bool?
     
     public var cache_control: MessageCacheControlEphemeral?
     public var allowed_callers: [MessageAllowedCaller]?
-    public var defer_loading: Bool?
     public var eager_input_streaming: Bool?
     public var input_examples: [[String: BaseType]]?
 }

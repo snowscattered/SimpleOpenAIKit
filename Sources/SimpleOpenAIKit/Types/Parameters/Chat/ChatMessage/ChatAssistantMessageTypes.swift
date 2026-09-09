@@ -15,13 +15,6 @@ public struct ChatAssistantAudio {
     public let data: String?
     public let expires_at: String?
     public let transcript: String?
-    
-    init(id: String) {
-        self.id = id
-        self.data = nil
-        self.expires_at = nil
-        self.transcript = nil
-    }
 }
 
 @CodableByConstant
@@ -102,17 +95,6 @@ public struct ChatAssistantMessage {
     public var reasoning_content: String?
     /// Result Field
     let annotation: [ChatAnnotation]?
-    
-    init(audio: ChatAssistantAudio? = nil, content: ChatStringOrContentAssistentPart? = nil, function_call: ChatAssistantFunctionCall? = nil, refusal: String? = nil, tool_calls: [ChatToolCall]? = nil, name: String? = nil, reasoning_content: String? = nil) {
-        self.audio = audio
-        self.content = content
-        self.function_call = function_call
-        self.refusal = refusal
-        self.tool_calls = tool_calls
-        self.name = name
-        self.reasoning_content = reasoning_content
-        self.annotation = nil
-    }
 }
 extension ChatAssistantMessage: ExpressibleByStringLiteral {
     public init(stringLiteral value: String) { self = .init(content: .string(value)) }

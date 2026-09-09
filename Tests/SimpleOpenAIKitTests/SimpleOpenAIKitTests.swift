@@ -8,4 +8,4 @@
 import Testing
 import Foundation
 import SimpleCodableMacro
-@testable import SimpleOpenAIKit
+import SimpleOpenAIKit

@@ -155,7 +155,7 @@ private final class ResponseEventAsyncReceiver: @unchecked Sendable {
                 case .data(let receivedData): data = receivedData
                 @unknown default: return
                 }
-                let event = try? JSONCodable.decodeData(ResponseStreamResult.self, from: data)
+                let event = try? decodeData(ResponseStreamResult.self, from: data)
                 self.continuation.yield(event ?? ResponseStreamResult.unkowned(.init(type: "unknown")))
                 self.receiveNext()
             case .failure(_): break
@@ -177,7 +177,7 @@ public class AsyncResponseConnection: AsyncSequence, @unchecked Sendable {
         return stream.makeAsyncIterator()
     }
     public func send(event: ResponseClientEventParameters) async throws {
-        try await ws.send(.string(String(decoding: JSONCodable.encoder.encode(event), as: UTF8.self)))
+        try await ws.send(.string(String(decoding: JSONEncoder().encode(event), as: UTF8.self)))
     }
     public func revc() async -> ResponseStreamResult? {
         return await self.iterator.next()
