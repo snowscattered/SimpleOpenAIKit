@@ -27,7 +27,7 @@ private final class BetaRealtimeEventSyncReceiver: @unchecked Sendable {
                 case .data(let receivedData): data = receivedData
                 @unknown default: return
                 }
-                let event = try? JSONCodable.decodeData(BetaRealtimeEventResult.self, from: data)
+                let event = try? decodeData(BetaRealtimeEventResult.self, from: data)
                 continuation.yield(event ?? BetaRealtimeEventResult.unkowned(.init(type: "unknown")))
                 self.receiveNext()
             case .failure(_): break
@@ -134,7 +134,7 @@ public class BetaSyncRealtimeConnection: Sequence, @unchecked Sendable {
         return stream.makeIterator()
     }
     public func send(event: BetaRealtimeEventParameters) throws {
-        try ws.send(.string(String(decoding: JSONCodable.encoder.encode(event), as: UTF8.self))) { _ in }
+        try ws.send(.string(String(decoding: JSONEncoder().encode(event), as: UTF8.self))) { _ in }
     }
 
     public func recv() -> BetaRealtimeEventResult? {

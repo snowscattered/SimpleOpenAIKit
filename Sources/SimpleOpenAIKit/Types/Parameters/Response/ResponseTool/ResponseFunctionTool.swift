@@ -12,8 +12,11 @@ import SimpleCodableMacro
 public struct ResponseFunctionTool {
     public static let type: String = "function"
     public var name: String
-    public var parameters: [String: BaseType]?
     public var description: String?
-    public var defer_loading: Bool?
+    public var parameters: [String: BaseType]?
     public var strict: Bool?
+    public var defer_loading: Bool?
+    public var async: Bool?
+    public var allowed_callers: [ResponseToolAllowedCallers]?
+    public var output_schema: [String: BaseType]?
 }

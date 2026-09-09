@@ -29,10 +29,10 @@ public struct ChatToolCallFunctionDelta {
 }
 @BaseModelNoWithExtra
 public struct ChatToolCallDelta {
+    public var type: String? = "function"
     public let index: Int
     public let id: String?
     public let function: ChatFunctionCallDelta?
-    public var type: String? = "function"
 }
 @BaseModelNoWithExtra
 public struct ChatDelta{
@@ -55,11 +55,11 @@ public struct ChatStreamChoice{
 // StreamResult
 @BaseModelNoWithExtra
 public struct ChatStreamResult {
+    public static let object: String = "chat.completion"
     public let id: String
     public let choices: [ChatStreamChoice]
     public let created: Int
     public let model: String
-    public static let object: String = "chat.completion"
     public let service_tier: ChatServiceTier?
     public let system_fingerprint: String?
     public let usage: ChatUsage?

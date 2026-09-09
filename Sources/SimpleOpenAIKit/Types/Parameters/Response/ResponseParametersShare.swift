@@ -90,6 +90,7 @@ public struct ResponseToolChoiceShell {
 @CodableByConstantAndSingle(singleCase: "option", defaultCase: "types")
 public enum ResponseToolChoice {
     case option(ResponseToolChoiceOptions)
+    case allowed(ResponseToolChoiceAllowed)
     case types(ResponseToolChoiceTypes)
     case function(ResponseToolChoiceFunction)
     case mcp(ResponseToolChoiceMcp)
@@ -105,9 +106,15 @@ public enum ResponseReasoningSummaryLiteral: String {
     case auto, concise, detailed
 }
 
+@CodableLiteral
+public enum ResponseReasoningContext: String {
+    case auto, current_turn, all_turns
+}
 @BaseModelNoWithExtra
 public struct ResponseReasoning {
     public var effort: ResponseReasoningEffortLiteral? = ResponseReasoningEffortLiteral.none
+    public var context: ResponseReasoningContext?
+    public var mode: String?
     public var generate_summary: ResponseReasoningSummaryLiteral?
     public var summary: ResponseReasoningSummaryLiteral?
 }
@@ -246,7 +253,7 @@ public enum ResponsePromptCacheRetentionLiteral: String {
 // MARK: - Servive Tier
 @CodableLiteral
 public enum ResponseServiceTierLiteral: String {
-    case auto, `default`, flex, scale, priority
+    case auto, `default`, flex, scale, priority, fast, ultrafast
 }
 
 // MARK: - Truncation

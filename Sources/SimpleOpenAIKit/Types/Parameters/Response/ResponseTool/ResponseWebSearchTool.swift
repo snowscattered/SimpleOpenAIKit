@@ -30,6 +30,7 @@ public enum ResponseWebSearchContextSizeLiteral: String {
 @BaseModelNoWithExtra
 public struct ResponseWebSearchTool {
     public static let type: String = "web_search"
+    public var external_web_access: Bool?
     public var filters: ResponseWebSearchFilters?
     public var search_context_size: ResponseWebSearchContextSizeLiteral?
     public var user_location: ResponseWebSearchUserLocation?

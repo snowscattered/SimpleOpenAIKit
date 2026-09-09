@@ -13,16 +13,10 @@ import SimpleCodableMacro
 public enum ResponseComparisonTypeLiteral: String {
     case eq, ne, gt, gte, lt, lte
 }
-@CodableLiteral
-public enum ResponseRankerLiteral: String {
-    case auto
-    case default_2024_11_15 = "default-2024-11-15"
-}
-
 @BaseModelNoWithExtra
 public struct ResponseComparisonFilter {
-    public var key: String
     public var type: ResponseComparisonTypeLiteral
+    public var key: String
     public var value: BaseType
 }
 
@@ -32,33 +26,16 @@ public enum ResponseCompoundFilterTypeLiteral: String {
 }
 @BaseModelNoWithExtra
 public struct ResponseCompoundFilter {
-    public var filters: [BaseType]
     public var type: ResponseCompoundFilterTypeLiteral
+    public var filters: [BaseType]
 }
 
-public enum ResponseFilters: BaseModel {
+@CodableByConstant
+public enum ResponseFilters {
+    @MultiConstant(["eq", "ne", "gt", "gte", "lt", "lte"])
     case comparison(ResponseComparisonFilter)
+    @MultiConstant(["and", "or"])
     case compound(ResponseCompoundFilter)
-
-    private enum CodingKeys: String, CodingKey { case type }
-
-    public nonisolated init(from decoder: Decoder) throws {
-        let c = try decoder.container(keyedBy: CodingKeys.self)
-        let t = try c.decode(String.self, forKey: .type)
-        let s = try decoder.singleValueContainer()
-        switch t {
-        case "and", "or": self = .compound(try s.decode(ResponseCompoundFilter.self))
-        default:          self = .comparison(try s.decode(ResponseComparisonFilter.self))
-        }
-    }
-
-    public nonisolated func encode(to encoder: Encoder) throws {
-        var c = encoder.singleValueContainer()
-        switch self {
-        case .comparison(let v): try c.encode(v)
-        case .compound(let v):   try c.encode(v)
-        }
-    }
 }
 
 @BaseModelNoWithExtra
@@ -66,7 +43,11 @@ public struct ResponseRankingOptionsHybridSearch {
     public var embedding_weight: Double?
     public var text_weight: Double?
 }
-
+@CodableLiteral
+public enum ResponseRankerLiteral: String {
+    case auto
+    case default_2024_11_15 = "default-2024-11-15"
+}
 @BaseModelNoWithExtra
 public struct ResponseRankingOptions {
     public var hybrid_search: ResponseRankingOptionsHybridSearch?

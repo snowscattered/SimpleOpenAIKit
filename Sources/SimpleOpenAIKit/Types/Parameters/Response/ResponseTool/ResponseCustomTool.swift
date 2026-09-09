@@ -38,4 +38,6 @@ public struct ResponseCustomTool {
     public var defer_loading: Bool?
     public var description: String?
     public var format: ResponseCustomToolInputFormat?
+    public var async: Bool?
+    public var allowed_callers: [ResponseToolAllowedCallers]?
 }

@@ -12,8 +12,9 @@ public struct ModelResult {
 //    public static let object: String = "model"
     public let object: String
     public let id: String
-    public let created: Int?
+    public let created: Int
     public let owned_by: String
+    public let shutdown_date: String?
 }
 @BaseModelNoWithExtra
 public struct ModelDeletedResult {

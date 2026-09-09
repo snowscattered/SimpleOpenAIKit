@@ -78,7 +78,7 @@ public struct RealtimeMcpTool {
     public var server_url: String?
 }
 // MARK: RealtimeTool
-@CodableTraversal
+@CodableByConstant
 public enum RealtimeResponseTool {
     case function(RealtimeFunctionTool)
     case mcp(RealtimeMcpTool)
