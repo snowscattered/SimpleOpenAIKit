@@ -37,9 +37,9 @@ struct MessageAsyncTests {
         }
     }
     struct Tool: ToolProtocol {
-        static let name: String = "fetch_weather"
-        static let description: String = "Fetch the weather for a given location."
-        static let strict: Bool? = true
+        let name: String = "fetch_weather"
+        let description: String = "Fetch the weather for a given location."
+        let strict: Bool? = true
         @ReferArgument
         struct Location {
             let lat: Float
@@ -51,12 +51,12 @@ struct MessageAsyncTests {
             let location: Location
             let time: Double
         }
-        static func call(arguments: Argument) async throws -> String { "sunny" }
+        func call(arguments: Argument) async throws -> String { "sunny" }
     }
     @Test func asyncResponseToolData() async throws {
         var parameters = param
         parameters.messages = [.user("Could you fetch the current weather for lat=40.7128, lon=-74.0060? Also tell me what it'll be like in 5 hours.")]
-        parameters.tools = [.init(Tool.self)]
+        parameters.tools = [.init(Tool())]
         let res = try await anthropicAsyncClient.messages.create(
             parameters: parameters
         )
@@ -74,7 +74,7 @@ struct MessageAsyncTests {
     @Test func asyncResponseToolStrean() async throws {
         var parameters = param
         parameters.messages = [.user("Could you fetch the current weather for lat=40.7128, lon=-74.0060? Also tell me what it'll be like in 5 hours.")]
-        parameters.tools = [.init(Tool.self)]
+        parameters.tools = [.init(Tool())]
         let res = try await anthropicAsyncClient.messages.stream(
             parameters: parameters
         )

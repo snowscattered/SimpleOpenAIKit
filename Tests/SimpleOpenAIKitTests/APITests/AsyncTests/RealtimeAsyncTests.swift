@@ -18,8 +18,8 @@ struct RealtimeAsyncTests {
                 model: "gpt-realtime",
                 instructions: "",
                 audio: .init(
-                    input: .init(format: .pcm),
-                    output: .init(format: .pcm)
+                    input: .init(format: .`audio/pcm`),
+                    output: .init(format: .`audio/pcm`)
                 ),
             )))
             Task {

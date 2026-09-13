@@ -17,7 +17,7 @@ struct FilesAsyncTests {
         let url = try #require(bundle.url(forResource: "TextTest", withExtension: "txt"))
         return .init(
             file: try .init(url: url),
-            purpose: "file-extract",
+            purpose: .other("file-extract"),
         )
     }
     @Test func FileStream() async throws {

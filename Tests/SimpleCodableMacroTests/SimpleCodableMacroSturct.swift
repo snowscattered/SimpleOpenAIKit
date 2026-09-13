@@ -18,7 +18,7 @@ enum IntLiteral: Int {
 }
 @CodableLiteral
 enum StringLiteral: String {
-    case A, `func`, `a-b`
+    case A, `func`, `A-A`
 }
 
 @CodableStringLiteralWithOther

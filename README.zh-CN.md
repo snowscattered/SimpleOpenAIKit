@@ -163,13 +163,15 @@ func openAIVisionExample() throws {
 
 #### Tool
 
-Chat、Message 和 Response 使用统一的 Tool 定义与格式，均通过 `.init(Tool.self)` 添加工具，区别只在参数类型及其 `tools` 属性。
+Chat、Message 和 Response 使用统一的 Tool 定义与格式，均通过 `.init(Tool())` 添加工具，区别只在参数类型及其 `tools` 属性。
+
+> **提示**：同一个 Tool 也可以与 Foundation Models 的 `Tool` 一起使用。这里不会自动生成兼容层，因此需要自行添加 Foundation Models 的 `Tool` 协议实现，并为参数类型添加 `@Generable` 宏。
 
 ```swift
 struct WeatherTool: ToolProtocol {
-    static let name: String = "fetch_weather"
-    static let description: String = "Fetch the weather for a given location."
-    static let strict: Bool? = true
+    let name: String = "fetch_weather"
+    let description: String = "Fetch the weather for a given location."
+    let strict: Bool? = true
 
     @ReferArgument
     struct Location {
@@ -184,7 +186,7 @@ struct WeatherTool: ToolProtocol {
         let time: Double
     }
 
-    static func call(arguments: Argument) async throws -> String {
+    func call(arguments: Argument) async throws -> String {
         "sunny"
     }
 }
@@ -194,7 +196,7 @@ func openAIToolExample() async throws {
         model: "your-model",
         input: "Could you fetch the current weather for lat=40.7128, lon=-74.0060? Also tell me what it'll be like in 5 hours?"
     )
-    parameters.tools = [.init(WeatherTool.self)]
+    parameters.tools = [.init(WeatherTool())]
 
     let response = try await openAIAsyncClient.responses.create(
         parameters: parameters
@@ -207,7 +209,7 @@ func openAIToolExample() async throws {
                 WeatherTool.Argument.self,
                 from: Data(functionCall.arguments.utf8)
             )
-            print(try await WeatherTool.call(arguments: arguments))
+            print(try await WeatherTool().call(arguments: arguments))
         default:
             continue
         }
@@ -218,9 +220,9 @@ func openAIToolExample() async throws {
 同一个 Tool 定义也可分别用于 `ChatParameters.tools`、`MessageParameters.tools` 和 `ResponseParameters.tools`：
 
 ```swift
-let chatTools: [ChatTool] = [.init(WeatherTool.self)]
-let messageTools: [MessageTool] = [.init(WeatherTool.self)]
-let responseTools: [ResponseTool] = [.init(WeatherTool.self)]
+let chatTools: [ChatTool] = [.init(WeatherTool())]
+let messageTools: [MessageTool] = [.init(WeatherTool())]
+let responseTools: [ResponseTool] = [.init(WeatherTool())]
 ```
 
 #### Request Option
