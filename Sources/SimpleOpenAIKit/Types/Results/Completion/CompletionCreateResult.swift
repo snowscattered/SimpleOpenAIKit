@@ -18,9 +18,7 @@ public struct CompletionChoiceLogprobs {
 }
 @CodableLiteral
 public enum CompletionChoiceFinishReason: String {
-    case stop
-    case length
-    case content_filter
+    case stop, length, content_filter
 }
 @BaseModelNoWithExtra
 public struct CompletionResultChoice {

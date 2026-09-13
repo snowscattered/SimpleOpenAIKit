@@ -11,8 +11,7 @@ import SimpleCodableMacro
 // MARK: - Cache Control
 @CodableLiteral
 public enum MessageCacheControlTTL: String {
-    case fiveMinutes = "5m"
-    case oneHour = "1h"
+    case `5m`, `1h`
 }
 
 @BaseModelNoWithExtra

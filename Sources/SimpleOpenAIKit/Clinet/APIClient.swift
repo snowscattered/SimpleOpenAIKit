@@ -9,7 +9,7 @@ import Foundation
 
 public protocol APIClient {
     var api_key: String { get }
-    var base_url: URL? { get }
+    var base_url: URL { get }
     var timeout: TimeInterval { get set }
     var max_retries: Int { get set }
     

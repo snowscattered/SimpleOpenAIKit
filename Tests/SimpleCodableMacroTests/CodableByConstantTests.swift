@@ -11,13 +11,19 @@ import SimpleCodableMacro
 
 @Suite struct CodableByConstantTests {
     @Test("CodableByConstant Using") func CodableByConstantMacroTest() throws {
+//        let CodableByConstantJson = #"""
+//        {
+//            "role": "A",
+//            "name": "N"
+//        }
+//        """#
         let CodableByConstantJson = #"""
         {
-            "role": "A",
-            "name": "N"
+            "role": "B",
+            "age": 12
         }
         """#
-        let x = try JSONDecoder().decode(X.self, from: CodableByConstantJson.data(using: .utf8)!)
+        let x = try JSONDecoder().decode(CodableConstantStruct.self, from: CodableByConstantJson.data(using: .utf8)!)
         print(x)
         let y = try JSONEncoder().encode(x)
         print(String(data: y, encoding: .utf8)!)

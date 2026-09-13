@@ -27,7 +27,7 @@ private final class BetaRealtimeEventSyncReceiver: @unchecked Sendable {
                 case .data(let receivedData): data = receivedData
                 @unknown default: return
                 }
-                let event = try? decodeData(BetaRealtimeEventResult.self, from: data)
+                let event = try? decodeNetworkData(BetaRealtimeEventResult.self, from: data)
                 continuation.yield(event ?? BetaRealtimeEventResult.unkowned(.init(type: "unknown")))
                 self.receiveNext()
             case .failure(_): break

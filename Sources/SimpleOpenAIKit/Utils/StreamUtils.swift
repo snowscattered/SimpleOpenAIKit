@@ -10,24 +10,21 @@ import Foundation
 private func EventConversion<T: Decodable & Sendable>(
     element: Event,
 ) throws -> StreamAction<T> {
-    guard let rawData = element.data else { return .skip }
+    guard let jsonString = element.data else { return .skip }
     // Anthropic Ping
-    if rawData.range(of: #"{"type"\s*:\s*"ping"}"#, options: .regularExpression) != nil {
+    if jsonString.range(of: #"{"type"\s*:\s*"ping"}"#, options: .regularExpression) != nil {
         return .skip
     }
-    if rawData == "[DONE]" {
+    if jsonString == "[DONE]" {
         return .finish
     }
-    guard let jsonData = rawData.data(using: .utf8) else {
-        throw NetworkError.invalidData
-    }
-    return .yield(try decodeData(T.self, from: jsonData))
+    let data = Data(jsonString.utf8)
+    return .yield(try decodeNetworkData(T.self, from: data))
 }
 
 func syncStreamResponse<T: Decodable & Sendable>(
     _ type: T.Type = T.self,
     request: URLRequest,
-    method: HTTPMethod = .post,
     maxRetries: Int = 2,
     shouldRetry: (Error) -> Bool = { error in true }
 ) throws -> SyncThrowingStream<T, Error> {
@@ -43,7 +40,6 @@ func syncStreamResponse<T: Decodable & Sendable>(
 func asyncStreamResponse<T: Decodable & Sendable>(
     _ type: T.Type = T.self,
     request: URLRequest,
-    method: HTTPMethod = .post,
     maxRetries: Int = 2,
     shouldRetry: (Error) -> Bool = { error in true }
 ) async throws -> AsyncThrowingStream<T, Error> {

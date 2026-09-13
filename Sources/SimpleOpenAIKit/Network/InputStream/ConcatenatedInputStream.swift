@@ -7,7 +7,7 @@
 
 import Foundation
 
-package final class ConcatenatedInputStream: InputStream {
+final class ConcatenatedInputStream: InputStream {
     private let streams: [InputStream]
     private var currentIndex = 0
     
@@ -17,36 +17,36 @@ package final class ConcatenatedInputStream: InputStream {
     }
     
     private var _status: Stream.Status = .notOpen
-    package override var streamStatus: Stream.Status { return _status }
+    override var streamStatus: Stream.Status { return _status }
     private weak var _delegate: StreamDelegate?
-    package override var delegate: StreamDelegate? {
+    override var delegate: StreamDelegate? {
         get { return _delegate }
         set { _delegate = newValue }
     }
     
-    package override func open() {
+    override func open() {
         _status = .open
         if !streams.isEmpty && streams[0].streamStatus == .notOpen {
             streams[0].open()
         }
     }
-    package override func close() {
+    override func close() {
         _status = .closed
         for stream in streams where stream.streamStatus != .closed { stream.close() }
     }
     
-    package override func schedule(in aRunLoop: RunLoop, forMode mode: RunLoop.Mode) {
+    override func schedule(in aRunLoop: RunLoop, forMode mode: RunLoop.Mode) {
         if currentIndex < streams.count {
             streams[currentIndex].schedule(in: aRunLoop, forMode: mode)
         }
     }
-    package override func remove(from aRunLoop: RunLoop, forMode mode: RunLoop.Mode) {
+    override func remove(from aRunLoop: RunLoop, forMode mode: RunLoop.Mode) {
         if currentIndex < streams.count {
             streams[currentIndex].remove(from: aRunLoop, forMode: mode)
         }
     }
     
-    package override func read(_ buffer: UnsafeMutablePointer<UInt8>, maxLength len: Int) -> Int {
+    override func read(_ buffer: UnsafeMutablePointer<UInt8>, maxLength len: Int) -> Int {
         guard _status == .open else { return -1 }
         
         var totalBytesRead = 0
@@ -82,7 +82,7 @@ package final class ConcatenatedInputStream: InputStream {
         }
         return 0
     }
-    package override var hasBytesAvailable: Bool {
+    override var hasBytesAvailable: Bool {
         guard _status == .open else { return false }
         for i in currentIndex..<streams.count {
             let stream = streams[i]

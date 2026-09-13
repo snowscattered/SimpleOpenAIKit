@@ -27,7 +27,7 @@ private final class RealtimeEventSyncReceiver: @unchecked Sendable {
                 case .data(let receivedData): data = receivedData
                 @unknown default: return
                 }
-                let event = try? decodeData(RealtimeEventResult.self, from: data)
+                let event = try? decodeNetworkData(RealtimeEventResult.self, from: data)
                 continuation.yield(event ?? RealtimeEventResult.unkowned(.init(type: "unknown")))
                 self.receiveNext()
             case .failure(_): break

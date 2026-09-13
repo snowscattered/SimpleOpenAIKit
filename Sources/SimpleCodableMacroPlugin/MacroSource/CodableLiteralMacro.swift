@@ -30,28 +30,25 @@ struct CodableLiteralMacro: ExtensionMacro {
         // Collect all case names
         let cases = enumDecl.memberBlock.members
             .compactMap { $0.decl.as(EnumCaseDeclSyntax.self) }
-            .flatMap { $0.elements.map { $0.rawValue?.value.trimmedDescription ?? $0.name.text } }
+            .flatMap { $0.elements.map {
+                $0.rawValue?.value.trimmedDescription ?? unquote(fromCaseName: $0.name.text)
+            } }
 
         // Build the expected values string for the error message, e.g. ["float", "base64"]
         let expectedValues = cases.map { #""\#($0)""# }.joined(separator: ", ")
-
-        let initFromSyntax: DeclSyntax = """
-            \(raw: access)init(from decoder: Decoder) throws {
-                let container = try decoder.singleValueContainer()
-                let rawValue = try container.decode(\(raw: rawTypeName).self)
-                guard let value = Self(rawValue: rawValue) else {
-                    throw DecodingError.dataCorruptedError(
-                        in: container,
-                        debugDescription: #"Expected Literal[\(raw: expectedValues)] but got \\#(rawValue)"#
-                    )
-                }
-                self = value
-            }
-            """
-
         let ext: DeclSyntax = """
             extension \(raw: enumName): BaseModel {
-                \(initFromSyntax)
+                \(raw: access)init(from decoder: Decoder) throws {
+                    let container = try decoder.singleValueContainer()
+                    let rawValue = try container.decode(\(raw: rawTypeName).self)
+                    guard let value = Self(rawValue: rawValue) else {
+                        throw DecodingError.dataCorruptedError(
+                            in: container,
+                            debugDescription: #"Expected Literal[\(raw: expectedValues)] but got \\#(rawValue)"#
+                        )
+                    }
+                    self = value
+                }
             }
             """
 

@@ -10,10 +10,7 @@ import SimpleCodableMacro
 // Shared Literals
 @CodableLiteral
 public enum ImageResultQualityLiteral: String {
-    case low
-    case medium
-    case high
-    case auto
+    case low, medium, high, auto
 }
 
 // Shared Image type

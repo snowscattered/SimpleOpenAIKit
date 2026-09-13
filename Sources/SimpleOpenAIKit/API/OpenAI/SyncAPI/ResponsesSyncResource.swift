@@ -155,7 +155,7 @@ private final class ResponseEventSyncReceiver: @unchecked Sendable {
                 case .data(let receivedData): data = receivedData
                 @unknown default: return
                 }
-                let event = try? decodeData(ResponseStreamResult.self, from: data)
+                let event = try? decodeNetworkData(ResponseStreamResult.self, from: data)
                 continuation.yield(event ?? ResponseStreamResult.unkowned(.init(type: "unknown")))
                 self.receiveNext()
             case .failure(_): break

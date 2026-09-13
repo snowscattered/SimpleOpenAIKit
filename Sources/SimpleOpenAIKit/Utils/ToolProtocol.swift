@@ -19,9 +19,7 @@ public protocol ToolProtocol {
 }
 public extension ToolProtocol {
     static var defer_loading: Bool? { nil }
-    static func call(
-        _ data: Data
-    ) async throws -> Output {
+    static func call( _ data: Data ) async throws -> Output {
         let argument = try JSONDecoder().decode(Argument.self, from: data)
         return try await call(arguments: argument)
     }

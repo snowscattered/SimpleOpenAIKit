@@ -12,9 +12,10 @@ import SimpleCodableMacro
 public enum ImageResponseFormatLiteral: String {
     case url, b64_json
 }
-@CodableLiteral
-public enum ImageOutputFormatLiteral: String {
+@CodableStringLiteralWithOther
+public enum ImageOutputFormatLiteral {
     case png, jpeg, webp
+    case other(String)
 }
 @CodableLiteral
 public enum ImageBackgroundLiteral: String {

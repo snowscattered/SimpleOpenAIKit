@@ -30,12 +30,17 @@ package func declAccessModifier(of decl: some DeclGroupSyntax) -> String {
     return ""
 }
 
+package func unquote(fromCaseName name: String) -> String {
+    guard name.hasPrefix("`"), name.hasSuffix("`"), name.count >= 2 else {
+        return name
+    }
+    return String(name.dropFirst().dropLast())
+}
+
 package func multiConstantValues(from attribute: AttributeSyntax) throws -> [String] {
     guard case let .argumentList(arguments) = attribute.arguments,
           !arguments.isEmpty
-    else {
-        throw MacroError("@MultiConstant requires at least one value")
-    }
+    else { throw MacroError("@MultiConstant requires at least one value") }
 
     if arguments.count == 1,
        let values = arguments.first?.expression.as(ArrayExprSyntax.self) {

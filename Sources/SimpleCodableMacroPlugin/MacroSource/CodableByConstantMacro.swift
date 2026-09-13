@@ -42,11 +42,6 @@ struct CodableByConstantMacro: ExtensionMacro {
                let segment = stringLit.segments.first?.as(StringSegmentSyntax.self) {
                 defaultCaseName = segment.content.text
             }
-//            if let singleArg = args.first(where: { $0.label?.text == "singleCase" }),
-//               let stringLit = singleArg.expression.as(StringLiteralExprSyntax.self),
-//               let segment = stringLit.segments.first?.as(StringSegmentSyntax.self) {
-//                singleCaseName = segment.content.text
-//            }
         }
 
         let enumCaseDecls = enumDecl.memberBlock.members

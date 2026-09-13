@@ -7,7 +7,7 @@
 
 import Foundation
 
-package struct AnthropicSession: Sendable, SessionProtocol {
+struct AnthropicSession: Sendable, SessionProtocol {
     typealias Client = AnthropicClient
     static let shared: AnthropicSession = AnthropicSession()
     init() { }
@@ -34,9 +34,10 @@ package struct AnthropicSession: Sendable, SessionProtocol {
             payload = p
         } else if let m = try? JSONDecoder().decode(AnthropicErrorMessage.self, from: data) {
             payload = .init(error: m)
-        } else if let s = String(data: data, encoding: .utf8) {
-            payload = AnthropicErrorResponse(error: .init(message: s, type: nil, param: nil, code: nil))
         }
+        payload = AnthropicErrorResponse(
+            error: .init(message: String(decoding: data, as: UTF8.self), type: nil, param: nil, code: nil)
+        )
         switch statusCode {
         case 400:
             return .badRequest(payload)

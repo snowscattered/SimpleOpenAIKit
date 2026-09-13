@@ -8,9 +8,10 @@
 import Foundation
 import SimpleCodableMacro
 
-@CodableLiteral
-public enum ResponseAudioFormatLiteral: String {
+@CodableStringLiteralWithOther
+public enum ResponseAudioFormatLiteral {
     case wav, mp3
+    case other(String)
 }
 
 @BaseModelNoWithExtra

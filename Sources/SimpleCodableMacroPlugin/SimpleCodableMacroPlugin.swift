@@ -7,6 +7,7 @@ import SwiftSyntaxMacros
 struct SimpleCodableMacroPlugin: CompilerPlugin {
     let providingMacros: [Macro.Type] = [
         CodableLiteralMacro.self,
+        CodableStringLiteralWithOtherMacro.self,
         CodableTraversalMacro.self,
         TransientMacro.self,
         SingleOrArrayMacro.self,

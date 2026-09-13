@@ -7,7 +7,13 @@
 
 import Foundation
 
-protocol SessionProtocol {
+public enum HTTPMethod: String {
+    case get = "GET"
+    case post = "POST"
+    case update = "UPDATE"
+    case delete = "DELETE"
+}
+public protocol SessionProtocol {
     associatedtype Client: APIClient
     static var shared: Self { get }
     func getRequest<Payload: Encodable>(
@@ -21,7 +27,9 @@ protocol SessionProtocol {
     func retryErrorHandler(error: Error) -> Bool
     func wrapError(error: Error) -> Error
 }
-extension SessionProtocol {
+public extension SessionProtocol {
+    func retryErrorHandler(error: Error) -> Bool { return true }
+    func wrapError(error: Error) -> Error { return error }
     func getRequest<Payload: Encodable>(
         _ url: URL,
         payload: Payload?,

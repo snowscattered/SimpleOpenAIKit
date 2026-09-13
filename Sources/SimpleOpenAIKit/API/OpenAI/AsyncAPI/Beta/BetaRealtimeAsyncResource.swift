@@ -27,7 +27,7 @@ private final class BetaRealtimeEventAsyncReceiver: @unchecked Sendable {
                 case .data(let receivedData): data = receivedData
                 @unknown default: return
                 }
-                let event = try? decodeData(BetaRealtimeEventResult.self, from: data)
+                let event = try? decodeNetworkData(BetaRealtimeEventResult.self, from: data)
                 self.continuation.yield(event ?? BetaRealtimeEventResult.unkowned(.init(type: "unknown")))
                 self.receiveNext()
             case .failure(_): break
@@ -137,7 +137,7 @@ public class BetaAsyncRealtimeConnection: AsyncSequence, @unchecked Sendable {
     public func send(event: BetaRealtimeEventParameters) async throws {
         try await ws.send(.string(String(decoding: JSONEncoder().encode(event), as: UTF8.self)))
     }
-    public func revc() async -> BetaRealtimeEventResult? {
+    public func recv() async -> BetaRealtimeEventResult? {
         return await self.iterator.next()
     }
 }

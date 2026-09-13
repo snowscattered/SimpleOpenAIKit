@@ -8,9 +8,10 @@
 import Foundation
 import SimpleCodableMacro
 
-@CodableLiteral
-public enum AudioSpeechResponseFormatLiteral: String {
+@CodableStringLiteralWithOther
+public enum AudioSpeechResponseFormatLiteral {
     case mp3, opus, aac, flac, wav, pcm
+    case other(String)
 }
 
 @CodableLiteral

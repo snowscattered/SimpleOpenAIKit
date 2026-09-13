@@ -10,9 +10,7 @@ import SimpleCodableMacro
 
 @CodableLiteral
 public enum FileStatusLiteral: String {
-    case uploaded
-    case processed
-    case error
+    case uploaded, processed, error
 }
 @BaseModelNoWithExtra
 public struct FileResult {

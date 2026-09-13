@@ -7,7 +7,7 @@
 
 import Foundation
 
-package struct OpenAISession: Sendable, SessionProtocol {
+struct OpenAISession: Sendable, SessionProtocol {
     typealias Client = OpenAIClient
     static let shared: OpenAISession = OpenAISession()
     init() { }
@@ -34,9 +34,10 @@ package struct OpenAISession: Sendable, SessionProtocol {
             payload = p
         } else if let m = try? JSONDecoder().decode(OpenAIErrorMessage.self, from: data) {
             payload = .init(error: m)
-        } else if let s = String(data: data, encoding: .utf8) {
-            payload = OpenAIErrorResponse(error: .init(message: s, type: nil, param: nil, code: nil))
         }
+        payload = OpenAIErrorResponse(
+            error: .init(message: String(decoding: data, as: UTF8.self), type: nil, param: nil, code: nil)
+        )
         switch statusCode {
         case 400:
             return .badRequest(payload)

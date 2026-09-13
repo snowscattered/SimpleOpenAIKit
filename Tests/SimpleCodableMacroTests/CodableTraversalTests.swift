@@ -17,7 +17,7 @@ import SimpleCodableMacro
             "name": "N"
         }
         """#
-        let x = try JSONDecoder().decode(T.self, from: CodableByConstantJson.data(using: .utf8)!)
+        let x = try JSONDecoder().decode(CodableTraversalStruct.self, from: CodableByConstantJson.data(using: .utf8)!)
         print(x)
         let y = try JSONEncoder().encode(x)
         print(String(data: y, encoding: .utf8)!)

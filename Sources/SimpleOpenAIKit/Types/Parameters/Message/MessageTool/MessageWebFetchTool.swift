@@ -8,11 +8,9 @@
 import Foundation
 import SimpleCodableMacro
 
-
 @CodableLiteral
 public enum MessageWebFetchToolTypeLiteral: String {
-    case web_fetch_20250910
-    case web_fetch_20260209
+    case web_fetch_20250910, web_fetch_20260209
 }
 
 @CodableLiteral
