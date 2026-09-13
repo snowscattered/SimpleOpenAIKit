@@ -195,16 +195,17 @@ extension FileParameters {
 #endif
 
 // MARK: - Create
-@CodableLiteral
-public enum FilesPurposeLiteral: String {
+@CodableStringLiteralWithOther
+public enum FilesPurposeLiteral {
     case assistants
     case assistants_output
     case batch
     case batch_output
-    case fine_tune = "fine-tune"
-    case fine_tune_results = "fine-tune-results"
+    case `fine-tune`
+    case `fine-tune-results`
     case vision
     case user_data
+    case other(String)
 }
 @BaseModelNoWithExtra
 public struct FilesExpiresAfter {
@@ -214,16 +215,14 @@ public struct FilesExpiresAfter {
 @BaseModelWithExtra
 public struct FilesCreateParameters {
     public var file: FileParameters
-//    public var purpose: FilesPurposeLiteral?
-    public var purpose: String?
+    public var purpose: FilesPurposeLiteral?
     public var expires_after: FilesExpiresAfter?
 }
 
 // MARK: - List
 @CodableLiteral
 public enum ListOrder: String {
-    case asc
-    case desc
+    case asc, desc
 }
 @BaseModelWithExtra
 public struct FilesListParameters {

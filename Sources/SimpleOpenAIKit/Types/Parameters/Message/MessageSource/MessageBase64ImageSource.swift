@@ -8,18 +8,18 @@
 import Foundation
 import SimpleCodableMacro
 
-@CodableLiteral
-public enum MessageBase64ImageSourceMidiaType: String {
-    case jpeg = "image/jpeg"
-    case png = "image/png"
-    case gif = "image/gif"
-    case webp = "image/webp"
+@CodableStringLiteralWithOther
+public enum MessageBase64ImageSourceMidiaType {
+    case `image/jpeg`
+    case `image/png`
+    case `image/gif`
+    case `image/webp`
+    case other(String)
 }
 
 @BaseModelNoWithExtra
 public struct MessageBase64ImageSource {
     public static let type: String = "base64"
     public var data: String
-//    public var media_type: MessageBase64ImageSourceMidiaType
-    public var media_type: String
+    public var media_type: MessageBase64ImageSourceMidiaType
 }

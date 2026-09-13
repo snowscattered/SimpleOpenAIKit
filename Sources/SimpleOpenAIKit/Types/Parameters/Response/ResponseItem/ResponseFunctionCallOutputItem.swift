@@ -24,7 +24,10 @@ extension ResponseFunctionCallOutput: ExpressibleByStringLiteral, ExpressibleByA
 public struct ResponseFunctionCallOutputItem {
     public static let type: String = "function_call_output"
     public var id: String?
-    public var call_id: String
+    public var call_id: String?
+    public var namespace: String?
+    public var name: String?
     public var output: ResponseFunctionCallOutput
+    public var caller: ResponseFunctionCaller?
     public var status: ResponseItemStatusLiteral?
 }

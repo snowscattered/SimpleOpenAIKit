@@ -105,16 +105,7 @@ public extension BaseModel {
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.sortedKeys, .prettyPrinted]
         let data = try encoder.encode(self)
-        guard let string = String(data: data, encoding: .utf8) else {
-            throw EncodingError.invalidValue(
-                self,
-                EncodingError.Context(
-                    codingPath: [],
-                    debugDescription: "Failed to convert the encoded data to a UTF‑8 string."
-                )
-            )
-        }
-        return string
+        return String(decoding: data, as: UTF8.self)
     }
 }
 // MARK: - BaseModelExtra
@@ -129,5 +120,3 @@ public extension BaseModelNoWithExtra {
 public protocol BaseModelWithExtra: BaseModelNoWithExtra {
     var extra: [String: BaseType] { get set }
 }
-
-package struct VoidStruct: Codable & Sendable { }

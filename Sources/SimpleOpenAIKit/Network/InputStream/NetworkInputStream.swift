@@ -7,7 +7,7 @@
 
 import Foundation
 
-package final class NetworkInputStream: InputStream {
+final class NetworkInputStream: InputStream {
     private let url: URL
     private var task: URLSessionDataTask?
     private var session: URLSession?
@@ -25,7 +25,7 @@ package final class NetworkInputStream: InputStream {
         super.init(data: Data())
     }
 
-    package override func open() {
+    override func open() {
         let delegate = InputStreamNetWorkDelegate(owner: self)
         let config = URLSessionConfiguration.default
         config.requestCachePolicy = .reloadIgnoringLocalCacheData
@@ -34,20 +34,20 @@ package final class NetworkInputStream: InputStream {
         task?.resume()
     }
 
-    package override func close() {
+    override func close() {
         task?.cancel()
         session?.invalidateAndCancel()
         task = nil
         session = nil
     }
 
-    package override var hasBytesAvailable: Bool {
+    override var hasBytesAvailable: Bool {
         lock.lock()
         defer { lock.unlock() }
         return (buffer.count - readOffset) > 0 || (!isFinished && streamError == nil)
     }
 
-    package override func read(_ buf: UnsafeMutablePointer<UInt8>, maxLength len: Int) -> Int {
+    override func read(_ buf: UnsafeMutablePointer<UInt8>, maxLength len: Int) -> Int {
         while true {
             lock.lock()
             let available = buffer.count - readOffset
@@ -75,7 +75,7 @@ package final class NetworkInputStream: InputStream {
         }
     }
 
-    package override var streamStatus: Stream.Status {
+    override var streamStatus: Stream.Status {
         lock.lock()
         defer { lock.unlock() }
         if streamError != nil { return .error }
@@ -83,7 +83,7 @@ package final class NetworkInputStream: InputStream {
         return .open
     }
 
-    package override var streamError: Error? {
+    override var streamError: Error? {
         lock.lock()
         defer { lock.unlock() }
         return _streamError

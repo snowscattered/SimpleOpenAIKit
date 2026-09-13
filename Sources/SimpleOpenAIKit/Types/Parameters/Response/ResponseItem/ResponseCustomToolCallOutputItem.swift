@@ -26,6 +26,7 @@ public struct ResponseCustomToolCallOutputItem {
     public var id: String?
     public var call_id: String
     public var output: ResponseCustomToolCallOutput
-    public var status: ResponseItemStatusLiteral?
     public var created_at: String?
+    public var caller: ResponseCustomCaller?
+    public var status: ResponseItemStatusLiteral?
 }

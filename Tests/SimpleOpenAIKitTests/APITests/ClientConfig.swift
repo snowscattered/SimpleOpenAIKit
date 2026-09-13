@@ -10,7 +10,7 @@ import Foundation
 
 nonisolated(unsafe) let client = OpenAI(
     api_key: "NoKey",
-    base_url: URL(string: "https://localhost:8000"),
+    base_url: URL(string: "https://localhost:8000")!,
     max_retries: 1
 )
 nonisolated(unsafe) let asyncClient = AsyncOpenAI(
@@ -21,7 +21,7 @@ nonisolated(unsafe) let asyncClient = AsyncOpenAI(
 
 nonisolated(unsafe) let anthropicClient = Anthropic(
     api_key: "NoKey",
-    base_url: URL(string: "https://localhost:8000"),
+    base_url: URL(string: "https://localhost:8000")!,
     max_retries: 1
 )
 nonisolated(unsafe) let anthropicAsyncClient = AsyncAnthropic(

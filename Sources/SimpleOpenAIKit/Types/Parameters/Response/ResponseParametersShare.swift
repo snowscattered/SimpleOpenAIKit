@@ -235,7 +235,7 @@ public enum ResponsePromptCacheMode: String {
 
 @CodableLiteral
 public enum ResponsePromptCacheTTL: String {
-    case _30m = "30m"
+    case `30m`
 }
 
 @BaseModelNoWithExtra
@@ -246,8 +246,7 @@ public struct ResponsePromptCacheOption {
 
 @CodableLiteral
 public enum ResponsePromptCacheRetentionLiteral: String {
-    case inMemory = "in-memory"
-    case h24 = "24h"
+    case `in-memory`, `24h`
 }
 
 // MARK: - Servive Tier

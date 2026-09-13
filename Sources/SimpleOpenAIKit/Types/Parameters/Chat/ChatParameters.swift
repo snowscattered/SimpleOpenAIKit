@@ -226,8 +226,7 @@ public enum ChatModalityLiteral: String {
 
 @CodableLiteral
 public enum ChatPromptCacheRetentionLiteral: String {
-    case inMemory = "in-memory"
-    case h24 = "24h"
+    case `in-memory`, `24h`
 }
 
 @CodableLiteral

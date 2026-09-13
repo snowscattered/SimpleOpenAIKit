@@ -10,8 +10,7 @@ import SimpleCodableMacro
 
 @CodableLiteral
 public enum BetaRealtimeRateLimitName: String {
-    case requests
-    case tokens
+    case requests, tokens
 }
 
 @BaseModelNoWithExtra

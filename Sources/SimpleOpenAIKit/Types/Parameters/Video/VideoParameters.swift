@@ -18,11 +18,10 @@ public enum VideoInputReference {
     case file(FileParameters)
     case image(VideoImageInputReference)
 }
-@CodableLiteral
-public enum VideoSeconds: String {
-    case four = "4"
-    case eight = "8"
-    case twelve = "12"
+@CodableStringLiteralWithOther
+public enum VideoSeconds {
+    case `4`, `8`, `12`
+    case other(String)
 }
 @BaseModelNoWithExtra
 public struct VideoReferenceInputParam {
@@ -92,9 +91,7 @@ public struct VideoRemixParameter {
 // MARK: - DownLoad
 @CodableLiteral
 public enum VideoDownloadContentVariant: String {
-    case video
-    case thumbnail
-    case spritesheet
+    case video, thumbnail, spritesheet
 }
 @BaseModelWithExtra
 public struct VideoDownloadContentParameter {

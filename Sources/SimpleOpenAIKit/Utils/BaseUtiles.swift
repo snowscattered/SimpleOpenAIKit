@@ -7,15 +7,8 @@
 import Foundation
 import SimpleCodableMacro
 
-enum HTTPMethod: String {
-    case get = "GET"
-    case post = "POST"
-    case update = "UPDATE"
-    case delete = "DELETE"
-}
-
 @inlinable
-func decodeData<T: Decodable>(_ type: T.Type = T.self, from data: Data) throws -> T {
+func decodeNetworkData<T: Decodable>(_ type: T.Type = T.self, from data: Data) throws -> T {
     do {
         return try JSONDecoder().decode(type, from: data)
     } catch {

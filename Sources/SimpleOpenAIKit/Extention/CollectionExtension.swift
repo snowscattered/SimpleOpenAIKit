@@ -17,7 +17,7 @@ extension Dictionary {
     ///   - rhs: The dictionary whose values take precedence.
     /// - Returns: A new dictionary containing all key-value pairs from both dictionaries,
     ///           with values from `rhs` overriding those in `lhs` for matching keys.
-    static package func | (lhs: Dictionary, rhs: Dictionary) -> Dictionary {
+    static func | (lhs: Dictionary, rhs: Dictionary) -> Dictionary {
         var result = lhs
         result.merge(rhs) { $1 }
         return result

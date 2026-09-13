@@ -9,13 +9,12 @@ import Foundation
 
 public class OpenAIClient: APIClient {
     public let api_key: String
-//    workload_identity: WorkloadIdentity | None = None,
     public let organization: String?
     public let project: String?
     public let webhook_secret: String?
     
-    public let base_url: URL?
-    public let websocket_base_url: URL?
+    public let base_url: URL
+    public let websocket_base_url: URL
     
     public var timeout: TimeInterval
     public var max_retries: Int
@@ -46,9 +45,9 @@ public class OpenAIClient: APIClient {
         organization: String? = nil,
         project: String? = nil,
         webhook_secret: String? = nil,
-        base_url: URL? = URL(string: "https://api.openai.com/v1")!,
+        base_url: URL = URL(string: "https://api.openai.com/v1")!,
         
-        websocket_base_url: URL? = URL(string: "wss://api.openai.com/v1")!,
+        websocket_base_url: URL = URL(string: "wss://api.openai.com/v1")!,
         timeout: TimeInterval = 60000,
         max_retries: Int = 2,
         
@@ -67,19 +66,13 @@ public class OpenAIClient: APIClient {
         self.default_query = default_query
     }
     
-    package func getServerUrl(path: String) throws -> URL {
+    func getServerUrl(path: String) throws -> URL {
         let fullPath = path.hasPrefix("/") ? path : "/\(path)"
-        guard let result = self.base_url?.appendingPathComponent(fullPath).absoluteURL else {
-            throw OpenAIError.invalidUrl
-        }
-        return result
+        return self.base_url.appendingPathComponent(fullPath).absoluteURL
     }
     
-    package func getWSServerUrl(path: String) throws -> URL {
+    func getWSServerUrl(path: String) throws -> URL {
         let fullPath = path.hasPrefix("/") ? path : "/\(path)"
-        guard let result = self.websocket_base_url?.appendingPathComponent(fullPath).absoluteURL else {
-            throw OpenAIError.invalidUrl
-        }
-        return result
+        return self.websocket_base_url.appendingPathComponent(fullPath).absoluteURL
     }
 }

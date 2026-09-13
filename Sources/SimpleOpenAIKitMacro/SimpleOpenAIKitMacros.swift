@@ -68,7 +68,7 @@ public macro NumberToolArgument(
 /// Describes a `boolean` value, which has no constraint of its own beyond `description`. Attaching it
 /// to a value whose Swift type is not a `boolean` one is an error.
 @attached(peer)
-package macro BooleanToolArgument(
+public macro BooleanToolArgument(
     description: String? = nil
 ) = #externalMacro(module: "SimpleOpenAIKitMacroPlugin", type: "BooleanToolArgumentMacro")
 

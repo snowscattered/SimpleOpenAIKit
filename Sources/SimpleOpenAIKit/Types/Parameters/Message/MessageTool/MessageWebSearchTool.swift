@@ -10,8 +10,7 @@ import SimpleCodableMacro
 
 @CodableLiteral
 public enum MessageWebSearchToolTypeLiteral: String {
-    case web_search_20250305
-    case web_search_20260209
+    case web_search_20250305, web_search_20260209
 }
 
 @CodableLiteral

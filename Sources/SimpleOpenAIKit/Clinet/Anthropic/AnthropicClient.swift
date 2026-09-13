@@ -11,7 +11,7 @@ public class AnthropicClient: APIClient {
     public let api_key: String
     public let auth_token: String?
     
-    public let base_url: URL?
+    public let base_url: URL
     
     public var timeout: TimeInterval
     public var max_retries: Int
@@ -36,7 +36,7 @@ public class AnthropicClient: APIClient {
     public init(
         api_key: String,
         auth_token: String? = nil,
-        base_url: URL? = URL(string: "https://api.anthropic.com")!,
+        base_url: URL = URL(string: "https://api.anthropic.com")!,
         
         timeout: TimeInterval = 60000,
         max_retries: Int = 2,
@@ -54,11 +54,8 @@ public class AnthropicClient: APIClient {
         self.default_query = default_query
     }
     
-    package func getServerUrl(path: String) throws -> URL {
+    func getServerUrl(path: String) throws -> URL {
         let fullPath = path.hasPrefix("/") ? path : "/\(path)"
-        guard let result = self.base_url?.appendingPathComponent(fullPath).absoluteURL else {
-            throw AnthropicError.invalidUrl
-        }
-        return result
+        return self.base_url.appendingPathComponent(fullPath).absoluteURL
     }
 }

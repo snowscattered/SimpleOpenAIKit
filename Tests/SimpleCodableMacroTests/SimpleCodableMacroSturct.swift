@@ -12,9 +12,19 @@ import Testing
 import SimpleCodableMacro
 
 @CodableLiteral
-enum Literal: Int {
+enum IntLiteral: Int {
     case oneHundred = 100
     case twoHundred = 210
+}
+@CodableLiteral
+enum StringLiteral: String {
+    case A, `func`, `A-A`
+}
+
+@CodableStringLiteralWithOther
+enum CodableStringLiteralStruct {
+    case a, b, c, `func`, `a-b`
+    case other(String)
 }
 
 @SingleOrArray
@@ -52,7 +62,7 @@ struct OptionModel {
 }
 
 @CodableByConstant(field: "role", defaultCase: "other")
-enum X {
+enum CodableConstantStruct {
     case a(A)
     case b(B)
     case c(C)
@@ -60,7 +70,7 @@ enum X {
 }
 
 @CodableTraversal
-enum T {
+enum CodableTraversalStruct {
     case a(A)
     case b(B)
     case c(C)

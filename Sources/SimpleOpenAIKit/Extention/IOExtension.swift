@@ -9,10 +9,10 @@ import Foundation
 import System
 
 extension Data {
-    package mutating func read() -> Data {
+    mutating func read() -> Data {
         return self
     }
-    package mutating func read(size: Int) -> Data? {
+    mutating func read(size: Int) -> Data? {
         guard !self.isEmpty else { return nil }
         let end = Swift.min(size, self.count)
         let chunk = Data(self.prefix(end))

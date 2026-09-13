@@ -12,6 +12,7 @@ English | [中文](README.zh-CN.md)
   - [Define a Client](#openai-define-a-client)
   - [Usage](#usage)
     - [Vision](#vision)
+    - [Tool](#tool)
     - [Request Option](#request-option)
   - [Async Response](#async-response)
   - [Stream](#stream)
@@ -79,7 +80,7 @@ The following list is based on the top-level properties in `Sources/SimpleOpenAI
 | `files` | ✅ | `create`, `list`, `retrieve`, `delete` |
 | `uploads` | ✅ | `create`, `cancel`, `complete`, `upload_file_chunked`, `part.create` |
 | `videos` | ✅ | `create`, `list`, `retrieve`, `delete`, `edit`, `create_character`, `create_and_poll` |
-| `realtime` | ✅ | `connect`, `send`, `recv` (`revc` in Async), plus session / response / item event methods |
+| `realtime` | ✅ | `connect`, `send`, `recv`, plus session / response / item event methods |
 | `beta.realtime` | ✅ |now olny supprot `Realtime`  |
 | `vector_stores` | ❌ | - |
 | `batches` | ❌ | - |
@@ -158,6 +159,70 @@ func openAIVisionExample() throws {
     )
     print(response.output_text)
 }
+```
+
+#### Tool
+
+Chat, Message, and Response use the same tool definition and `.init(Tool())` format. Only the parameter type and its `tools` property differ.
+
+> **Note**: The same tool can also be used with Foundation Models' `Tool`. This package does not generate that compatibility automatically, so you need to add the Foundation Models `Tool` conformance and annotate the argument types with `@Generable` yourself.
+
+```swift
+struct WeatherTool: ToolProtocol {
+    let name: String = "fetch_weather"
+    let description: String = "Fetch the weather for a given location."
+    let strict: Bool? = true
+
+    @ReferArgument
+    struct Location {
+        let lat: Float
+        let long: Float
+    }
+
+    @MainArgument
+    struct Argument {
+        @ReferToolArgument(description: "The location to fetch the weather for.")
+        let location: Location
+        let time: Double
+    }
+
+    func call(arguments: Argument) async throws -> String {
+        "sunny"
+    }
+}
+
+func openAIToolExample() async throws {
+    var parameters: ResponseCreateParameters = .init(
+        model: "your-model",
+        input: "Could you fetch the current weather for lat=40.7128, lon=-74.0060? Also tell me what it'll be like in 5 hours?"
+    )
+    parameters.tools = [.init(WeatherTool())]
+
+    let response = try await openAIAsyncClient.responses.create(
+        parameters: parameters
+    )
+
+    for item in response.output {
+        switch item {
+        case .function_call(let functionCall):
+            let arguments = try JSONDecoder().decode(
+                WeatherTool.Argument.self,
+                from: Data(functionCall.arguments.utf8)
+            )
+            print(try await WeatherTool().call(arguments: arguments))
+        default:
+            continue
+        }
+    }
+}
+```
+
+The same definition can be used with `ChatParameters.tools`, `MessageParameters.tools`, and `ResponseParameters.tools`:
+
+```swift
+let chatTools: [ChatTool] = [.init(WeatherTool())]
+let messageTools: [MessageTool] = [.init(WeatherTool())]
+let responseTools: [ResponseTool] = [.init(WeatherTool())]
 ```
 
 #### Request Option

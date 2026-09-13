@@ -9,11 +9,12 @@ import Foundation
 import SimpleCodableMacro
 
 // Format
-@CodableLiteral
-public enum RealtimeAudioFormat: String {
-    case pcm = "audio/pcm"
-    case pcmu = "audio/pcmu"
-    case pcma = "audio/pcma"
+@CodableStringLiteralWithOther
+public enum RealtimeAudioFormat {
+    case `audio/pcm`
+    case `audio/pcmu`
+    case `audio/pcma`
+    case other(String)
 }
 // MARK: Output Modalities
 @CodableLiteral

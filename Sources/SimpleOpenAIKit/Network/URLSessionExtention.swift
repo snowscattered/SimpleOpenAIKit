@@ -107,16 +107,14 @@ extension URLSession {
         }
     }
     // MARK: - StreamSSE
-    func asyncSSE(_ request: URLRequest) async throws -> AsyncStream<Event> {
-        let parser = EventParser()
+    func asyncSSE(_ request: URLRequest, parser: CustomParser = EventParser()) async throws -> AsyncStream<Event> {
         return try await self.asyncStreamData(request).conversion { chunk in
             let events = parser.parse(chunk)
             if events.isEmpty { return .skip }
             return .yieldMore(events)
         }
     }
-    func syncSSE(_ request: URLRequest) throws -> SyncStream<Event> {
-        let parser = EventParser()
+    func syncSSE(_ request: URLRequest, parser: CustomParser = EventParser()) throws -> SyncStream<Event> {
         return try self.syncStreamData(request).conversion { chunk in
             let events = parser.parse(chunk)
             if events.isEmpty { return .skip }

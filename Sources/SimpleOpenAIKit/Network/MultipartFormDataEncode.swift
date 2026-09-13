@@ -7,15 +7,6 @@
 
 import Foundation
 
-// MARK: - Extension Data
-private extension Data {
-    mutating func append(_ string: String, encoding: String.Encoding = .utf8) {
-        if let data = string.data(using: encoding) {
-            append(data)
-        }
-    }
-}
-
 // MARK: - Dynamic Coding Key
 private struct AnyCodingKey: CodingKey {
     var stringValue: String

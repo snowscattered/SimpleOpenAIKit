@@ -10,7 +10,6 @@ import Foundation
 func syncResponse<T: Decodable & Sendable>(
     _ type: T.Type = T.self,
     request: URLRequest,
-    method: HTTPMethod = .post,
     maxRetries: Int = 2,
     shouldRetry: (Error) -> Bool = { error in true }
 ) throws -> T {
@@ -18,14 +17,13 @@ func syncResponse<T: Decodable & Sendable>(
         if T.self == Data.self {
             return try URLSession.shared.syncData(request) as! T
         }
-        return try decodeData(from: URLSession.shared.syncData(request))
+        return try decodeNetworkData(from: URLSession.shared.syncData(request))
     }
 }
 
 func asyncResponse<T: Decodable & Sendable>(
     _ type: T.Type = T.self,
     request: URLRequest,
-    method: HTTPMethod = .post,
     maxRetries: Int = 2,
     shouldRetry: (Error) -> Bool = { error in true }
 ) async throws -> T {
@@ -33,6 +31,6 @@ func asyncResponse<T: Decodable & Sendable>(
         if T.self == Data.self {
             return try await URLSession.shared.asyncData(request) as! T
         }
-        return try decodeData(from: await URLSession.shared.asyncData(request))
+        return try decodeNetworkData(from: await URLSession.shared.asyncData(request))
     }
 }
