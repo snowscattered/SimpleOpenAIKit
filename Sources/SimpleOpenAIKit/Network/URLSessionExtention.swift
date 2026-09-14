@@ -26,7 +26,7 @@ extension URLSession {
             for try await byte in bytes {
                 errorData.append(byte)
             }
-            throw NetworkError.statusError(statusCode: httpResponse.statusCode, data: errorData)
+            throw NetworkError.statusError(data: errorData, request: request, response: httpResponse)
         }
         
         return AsyncStream { continuation in
@@ -84,7 +84,7 @@ extension URLSession {
             }
             errorSemaphore.wait()
             if let error = container.error { throw error }
-            throw NetworkError.statusError(statusCode: httpResponse.statusCode, data: container.errorData)
+            throw NetworkError.statusError(data: container.errorData, request: request, response: httpResponse)
         }
         
         return SyncStream { continuation in
@@ -126,7 +126,7 @@ extension URLSession {
         let (data, response) = try await URLSession.shared.data(for: request)
         guard let httpResponse = response as? HTTPURLResponse else { throw URLError(.badServerResponse) }
         guard 200...299 ~= httpResponse.statusCode else {
-            throw NetworkError.statusError(statusCode: httpResponse.statusCode, data: data)
+            throw NetworkError.statusError(data: data, request: request, response: httpResponse)
         }
         return data
     }
@@ -149,7 +149,7 @@ extension URLSession {
         guard let response = container.response else { throw URLError(.badServerResponse) }
         guard let httpResponse = response as? HTTPURLResponse else { throw URLError(.badServerResponse) }
         guard 200...299 ~= httpResponse.statusCode else {
-            throw NetworkError.statusError(statusCode: httpResponse.statusCode, data: container.data)
+            throw NetworkError.statusError(data: container.data, request: request, response: httpResponse)
         }
         return container.data
     }
