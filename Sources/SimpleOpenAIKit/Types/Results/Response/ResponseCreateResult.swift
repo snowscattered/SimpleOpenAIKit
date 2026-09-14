@@ -67,7 +67,7 @@ public enum ResponseStatus: String {
 @BaseModelNoWithExtra
 public struct ResponseInputTokensDetails {
     public let cached_tokens: Int
-    public var cache_write_tokens: Int? = 0  // In OpenAI, is must
+    public var cache_write_tokens: Int = 0  // In OpenAI, is must
 }
 @BaseModelNoWithExtra
 public struct ResponseOutputTokensDetails {
