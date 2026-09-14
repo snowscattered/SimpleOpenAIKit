@@ -48,7 +48,7 @@ public class OpenAIClient: APIClient {
         base_url: URL = URL(string: "https://api.openai.com/v1")!,
         
         websocket_base_url: URL = URL(string: "wss://api.openai.com/v1")!,
-        timeout: TimeInterval = 60000,
+        timeout: TimeInterval = 600,
         max_retries: Int = 2,
         
         default_headers: Header = [:],
