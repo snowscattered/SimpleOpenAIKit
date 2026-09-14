@@ -38,7 +38,7 @@ public class AnthropicClient: APIClient {
         auth_token: String? = nil,
         base_url: URL = URL(string: "https://api.anthropic.com")!,
         
-        timeout: TimeInterval = 60000,
+        timeout: TimeInterval = 600,
         max_retries: Int = 2,
         
         default_headers: Header = [:],
