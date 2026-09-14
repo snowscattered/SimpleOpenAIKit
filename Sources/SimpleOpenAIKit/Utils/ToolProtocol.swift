@@ -11,43 +11,51 @@ import SimpleOpenAIKitMacro
 public protocol ToolProtocol {
     associatedtype Arguments: MainArgument
     associatedtype Output
-    var name: String { get }
-    var description: String { get }
-    var strict: Bool? { get }
-    var defer_loading: Bool? { get }
-    func call(arguments: Arguments) async throws -> Output
+    static var name: String { get }
+    static var description: String { get }
+    static var strict: Bool? { get }
+    static var defer_loading: Bool? { get }
+    @concurrent @discardableResult static func call(arguments: Arguments) async throws -> Output
 }
 public extension ToolProtocol {
-    var defer_loading: Bool? { nil }
-    func call( _ data: Data ) async throws -> Output {
-        let argument = try JSONDecoder().decode(Arguments.self, from: data)
-        return try await call(arguments: argument)
+    // Foundation Model
+//    var name: String { Self.name }
+    var description: String { Self.description }
+    @concurrent func call(arguments: Arguments) async throws -> Output {
+        return try await Self.call(arguments: arguments)
+    }
+
+    static var defer_loading: Bool? { nil }
+    static var strict: Bool? { nil }
+    @concurrent @discardableResult static func call(_ data: Data) async throws -> Output {
+        let arguments = try JSONDecoder().decode(Arguments.self, from: data)
+        return try await call(arguments: arguments)
     }
 }
 public extension ChatTool {
-    init<T: ToolProtocol>(_ tool: T) {
+    init<T: ToolProtocol>(_: T.Type) {
         self = .function_tool(.init(function: .init(
-            name: tool.name,
-            description: tool.description,
+            name: T.name,
+            description: T.description,
             parameters: T.Arguments.ArgumentSchema,
-            strict: tool.strict
+            strict: T.strict
         )))
     }
 }
 public extension ResponseTool {
     init<T: ToolProtocol>(
-        _ tool: T,
-        isAsync: Bool? = nil,
+         _: T.Type,
+        Async: Bool? = nil,
         allowed_callers: [ResponseToolAllowedCallers]? = nil,
         output_schema: [String: BaseType]? = nil
     ) {
         self = .function(.init(
-            name: tool.name,
-            description: tool.description,
+            name: T.name,
+            description: T.description,
             parameters: T.Arguments.ArgumentSchema,
-            strict: tool.strict,
-            defer_loading: tool.defer_loading,
-            async: isAsync,
+            strict: T.strict,
+            defer_loading: T.defer_loading,
+            async: Async,
             allowed_callers: allowed_callers,
             output_schema: output_schema
         ))
@@ -55,18 +63,18 @@ public extension ResponseTool {
 }
 public extension MessageTool {
     init<T: ToolProtocol>(
-        _ tool: T,
+        _: T.Type,
         cache_control: MessageCacheControlEphemeral? = nil,
         allowed_callers: [MessageAllowedCaller]? = nil,
         eager_input_streaming: Bool? = nil,
         input_examples: [[String: BaseType]]? = nil
     ) {
         self = .tool(.init(
-            name: tool.name,
-            description: tool.description,
+            name: T.name,
+            description: T.description,
             input_schema: .dict(T.Arguments.ArgumentSchema),
-            strict: tool.strict,
-            defer_loading: tool.defer_loading,
+            strict: T.strict,
+            defer_loading: T.defer_loading,
 
             cache_control: cache_control,
             allowed_callers: allowed_callers,

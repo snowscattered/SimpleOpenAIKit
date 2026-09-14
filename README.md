@@ -163,15 +163,15 @@ func openAIVisionExample() throws {
 
 #### Tool
 
-Chat, Message, and Response use the same tool definition and `.init(Tool())` format. Only the parameter type and its `tools` property differ.
+Chat, Message, and Response use the same tool definition and `.init(Tool.self)` format. Only the parameter type and its `tools` property differ.
 
 > **Note**: The same tool can also be used with Foundation Models' `Tool`. This package does not generate that compatibility automatically, so you need to add the Foundation Models `Tool` conformance and annotate the argument types with `@Generable` yourself.
 
 ```swift
 struct WeatherTool: ToolProtocol {
-    let name: String = "fetch_weather"
-    let description: String = "Fetch the weather for a given location."
-    let strict: Bool? = true
+    static let name: String = "fetch_weather"
+    static let description: String = "Fetch the weather for a given location."
+    static let strict: Bool? = true
 
     @ReferArgument
     struct Location {
@@ -186,7 +186,7 @@ struct WeatherTool: ToolProtocol {
         let time: Double
     }
 
-    func call(arguments: Argument) async throws -> String {
+    static func call(arguments: Argument) async throws -> String {
         "sunny"
     }
 }
@@ -196,7 +196,7 @@ func openAIToolExample() async throws {
         model: "your-model",
         input: "Could you fetch the current weather for lat=40.7128, lon=-74.0060? Also tell me what it'll be like in 5 hours?"
     )
-    parameters.tools = [.init(WeatherTool())]
+    parameters.tools = [.init(WeatherTool.self)]
 
     let response = try await openAIAsyncClient.responses.create(
         parameters: parameters
@@ -209,7 +209,7 @@ func openAIToolExample() async throws {
                 WeatherTool.Argument.self,
                 from: Data(functionCall.arguments.utf8)
             )
-            print(try await WeatherTool().call(arguments: arguments))
+            print(try await WeatherTool.call(arguments: arguments))
         default:
             continue
         }
@@ -220,9 +220,9 @@ func openAIToolExample() async throws {
 The same definition can be used with `ChatParameters.tools`, `MessageParameters.tools`, and `ResponseParameters.tools`:
 
 ```swift
-let chatTools: [ChatTool] = [.init(WeatherTool())]
-let messageTools: [MessageTool] = [.init(WeatherTool())]
-let responseTools: [ResponseTool] = [.init(WeatherTool())]
+let chatTools: [ChatTool] = [.init(WeatherTool.self)]
+let messageTools: [MessageTool] = [.init(WeatherTool.self)]
+let responseTools: [ResponseTool] = [.init(WeatherTool.self)]
 ```
 
 #### Request Option
