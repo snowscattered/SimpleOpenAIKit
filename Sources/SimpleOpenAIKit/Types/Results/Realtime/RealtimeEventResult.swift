@@ -66,3 +66,63 @@ public enum RealtimeEventResult {
     // Extension OpenAI
     case unkowned(UnknownEvent)
 }
+
+extension RealtimeEventResult {
+    var type: String {
+        switch self {
+        // Session
+        case .session_created:                        return RealtimeSessionCreatedEvent.type
+        case .session_updated:                        return RealtimeSessionUpdatedEvent.type
+        // Status
+        case .error:                                  return RealtimeErrorEvent.type
+        case .rate_limits_updated:                    return RealtimeRateLimitsUpdatedEvent.type
+        // Response
+        case .response_created:                       return RealtimeResponseCreatedEvent.type
+        case .response_done:                          return RealtimeResponseDoneEvent.type
+        // ConversationItem
+        case .conversation_created:                   return RealtimeConversationCreatedEvent.type
+        case .conversation_item_created:              return RealtimeConversationItemCreatedEvent.type
+        case .conversation_item_deleted:              return RealtimeConversationItemDeletedEvent.type
+        case .conversation_item_retrieved:            return RealtimeConversationItemRetrievedEvent.type
+        case .conversation_item_truncated:            return RealtimeConversationItemTruncatedEvent.type
+        case .conversation_item_input_audio_transcription_completed: return RealtimeConversationItemInputAudioTranscriptionCompletedEvent.type
+        case .conversation_item_input_audio_transcription_delta:     return RealtimeConversationItemInputAudioTranscriptionDeltaEvent.type
+        case .conversation_item_input_audio_transcription_failed:    return RealtimeConversationItemInputAudioTranscriptionFailedEvent.type
+        // OutputItem
+        case .response_output_item_added:             return RealtimeResponseOutputItemAddedEvent.type
+        case .response_output_item_done:              return RealtimeResponseOutputItemDoneEvent.type
+        // ContentPart
+        case .response_content_part_added:            return RealtimeResponseContentPartAddedEvent.type
+        case .response_content_part_done:             return RealtimeResponseContentPartDoneEvent.type
+        // Audio
+        case .response_audio_delta:                   return RealtimeResponseAudioDeltaEvent.type
+        case .response_audio_done:                    return RealtimeResponseAudioDoneEvent.type
+        // AudioTranscript
+        case .response_audio_transcript_delta:        return RealtimeResponseAudioTranscriptDeltaEvent.type
+        case .response_audio_transcript_done:         return RealtimeResponseAudioTranscriptDoneEvent.type
+        // Text
+        case .response_text_delta:                    return RealtimeResponseTextDeltaEvent.type
+        case .response_text_done:                     return RealtimeResponseTextDoneEvent.type
+        // FunctionArguments
+        case .response_function_call_arguments_delta: return RealtimeResponseFunctionCallArgumentsDeltaEvent.type
+        case .response_function_call_arguments_done:  return RealtimeResponseFunctionCallArgumentsDoneEvent.type
+        // AudioBuffer
+        case .input_audio_buffer_speech_started:      return RealtimeInputAudioBufferSpeechStartedEvent.type
+        case .input_audio_buffer_speech_stopped:      return RealtimeInputAudioBufferSpeechStoppedEvent.type
+        case .input_audio_buffer_cleared:             return RealtimeInputAudioBufferClearedEvent.type
+        case .input_audio_buffer_committed:           return RealtimeInputAudioBufferCommittedEvent.type
+        case .output_audio_buffer_started:            return RealtimeOutputAudioBufferStartedEvent.type
+        case .output_audio_buffer_stopped:            return RealtimeOutputAudioBufferStoppedEvent.type
+        case .output_audio_buffer_cleared:            return RealtimeOutputAudioBufferClearedEvent.type
+        // MCP
+        case .mcp_list_tool_in_progress:              return RealtimeMcpListToolsInProgressEvent.type
+        case .mcp_list_tool_completed:                return RealtimeMcpListToolsCompletedEvent.type
+        case .mcp_list_tool_failed:                   return RealtimeMcpListToolsFailedEvent.type
+        case .mcp_call_in_progress:                   return RealtimeResponseMcpCallInProgressEvent.type
+        case .mcp_call_completed:                     return RealtimeResponseMcpCallCompletedEvent.type
+        case .mcp_call_failed:                        return RealtimeResponseMcpCallFailedEvent.type
+        // Extension OpenAI
+        case .unkowned(let event):                    return event.type
+        }
+    }
+}

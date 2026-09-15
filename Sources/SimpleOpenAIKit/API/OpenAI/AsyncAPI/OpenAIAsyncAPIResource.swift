@@ -6,9 +6,8 @@
 //
 
 public class OpenAIAsyncAPIResource {
-    internal unowned let client: AsyncOpenAI
-
-    internal init(_ client: AsyncOpenAI) {
+    unowned let client: AsyncOpenAI
+    init(_ client: AsyncOpenAI) {
         self.client = client
     }
 

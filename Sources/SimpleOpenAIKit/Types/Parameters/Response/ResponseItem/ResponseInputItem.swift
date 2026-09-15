@@ -12,7 +12,7 @@ import SimpleCodableMacro
 public struct ResponseBaseItem {
     public var type: String
 }
-@CodableByConstant(nilCase: "message", still: true, defaultCase: "other")
+@CodableByConstant(nilCase: "message", still: true, defaultCase: "unkowned")
 @nonexhaustive
 public enum ResponseInputItem {
     case message(ResponseMessageItem)
@@ -26,7 +26,7 @@ public enum ResponseInputItem {
     // Codex Agent Message
     case agent_message(ResponseAgentMessageItem)
     
-    case other(ResponseBaseItem)
+    case unkowned(ResponseBaseItem)
 }
 
 extension ResponseInputItem {
@@ -41,5 +41,22 @@ extension ResponseInputItem {
     }
     public static func assistant(_ content: ResponseMessageInputItemContent) -> Self {
         return .message(.EasyInputMessage(.init(role: .assistant, content: content)))
+    }
+}
+
+extension ResponseInputItem {
+    var type: String {
+        switch self {
+        case .message:                 return ResponseMessageItem.type
+        case .reasoning:               return ResponseReasoningItem.type
+        case .function_call:           return ResponseFunctionCallItem.type
+        case .function_call_output:    return ResponseFunctionCallOutputItem.type
+        case .custom_tool_call:        return ResponseCustomToolCallItem.type
+        case .custom_tool_call_output: return ResponseCustomToolCallOutputItem.type
+        case .web_search:              return ResponseWebSearchItem.type
+        // Codex Agent Message
+        case .agent_message:           return ResponseAgentMessageItem.type
+        case .unkowned(let event):     return event.type
+        }
     }
 }

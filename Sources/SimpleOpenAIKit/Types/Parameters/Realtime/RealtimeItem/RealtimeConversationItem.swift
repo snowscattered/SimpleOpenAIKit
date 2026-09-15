@@ -41,3 +41,17 @@ extension RealtimeConversationItem {
         return .messages(.assistant(.init(content: [content])))
     }
 }
+
+extension RealtimeConversationItem {
+    var type: String {
+        switch self {
+        case .messages:            return RealtimeMessageConversationItem.type
+        case .functionCall:        return RealtimeFunctionCallItem.type
+        case .functionCallOutput:  return RealtimeFunctionCallOutputItem.type
+        case .mcpApprovalRequest:  return RealtimeMcpApprovalRequestItem.type
+        case .mcpApprovalResponse: return RealtimeMcpApprovalResponseItem.type
+        case .mcpListTool:         return RealtimeMcpListToolsItem.type
+        case .mcpToolCall:         return RealtimeMcpToolCallItem.type
+        }
+    }
+}

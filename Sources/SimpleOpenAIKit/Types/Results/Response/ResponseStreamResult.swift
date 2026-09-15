@@ -55,3 +55,47 @@ public enum ResponseStreamResult {
     // Extension OpenAI
     case unkowned(UnknownEvent)
 }
+
+extension ResponseStreamResult {
+    var type: String {
+        switch self {
+        // State
+        case .response_created:                       return ResponseCreatedEvent.type
+        case .response_in_progress:                   return ResponseInProgressEvent.type
+        case .response_completed:                     return ResponseCompletedEvent.type
+        case .response_failed:                        return ResponseFailedEvent.type
+        case .response_incomplete:                    return ResponseIncompleteEvent.type
+        case .response_error:                         return ResponseErrorEvent.type
+        // Content/Item Part
+        case .response_content_part_added:            return ResponseContentPartAddedEvent.type
+        case .response_content_part_done:             return ResponseContentPartDoneEvent.type
+        case .response_output_item_added:             return ResponseOutputItemAddedEvent.type
+        case .response_output_item_done:              return ResponseOutputItemDoneEvent.type
+        // Tool
+        case .response_custom_tool_call_input_delta:  return ResponseCustomToolCallInputDeltaEvent.type
+        case .response_custom_tool_call_input_done:   return ResponseCustomToolCallInputDoneEvent.type
+        case .response_function_call_arguments_delta: return ResponseFunctionCallArgumentsDeltaEvent.type
+        case .response_function_call_arguments_done:  return ResponseFunctionCallArgumentsDoneEvent.type
+        case .response_web_search_call_in_progress:   return ResponseWebSearchCallInProgressEvent.type
+        case .response_web_search_call_searching:     return ResponseWebSearchCallSearchingEvent.type
+        case .response_web_search_call_completed:     return ResponseWebSearchCallCompletedEvent.type
+        // Audio
+        case .response_audio_delta:                   return ResponseAudioDeltaEvent.type
+        case .response_audio_done:                    return ResponseAudioDoneEvent.type
+        case .response_audio_transcript_delta:        return ResponseAudioTranscriptDeltaEvent.type
+        case .response_audio_transcript_done:         return ResponseAudioTranscriptDoneEvent.type
+        // Text
+        case .response_reasoning_summary_part_added:  return ResponseReasoningSummaryPartAddedEvent.type
+        case .response_reasoning_summary_part_done:   return ResponseReasoningSummaryPartDoneEvent.type
+        case .response_reasoning_summary_text_delta:  return ResponseReasoningSummaryTextDeltaEvent.type
+        case .response_reasoning_summary_text_done:   return ResponseReasoningSummaryTextDoneEvent.type
+        case .response_reasoning_text_delta:          return ResponseReasoningTextDeltaEvent.type
+        case .response_reasoning_text_done:           return ResponseReasoningTextDoneEvent.type
+        case .response_refusal_delta:                 return ResponseRefusalDeltaEvent.type
+        case .response_refusal_done:                  return ResponseRefusalDoneEvent.type
+        case .response_output_text_delta:             return ResponseTextDeltaEvent.type
+        case .response_output_text_done:              return ResponseTextDoneEvent.type
+        case .unkowned(let event):                    return event.type
+        }
+    }
+}

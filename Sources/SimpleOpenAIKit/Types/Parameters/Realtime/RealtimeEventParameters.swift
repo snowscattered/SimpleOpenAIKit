@@ -23,3 +23,21 @@ public enum RealtimeEventParameters {
     case response_cancel(RealtimeResponseCancelEventParameters)
     case session_update(RealtimeSessionUpdateEventParameters)
 }
+
+extension RealtimeEventParameters {
+    var type: String {
+        switch self {
+        case .conversation_create:       return RealtimeConversationItemCreateEventParameters.type
+        case .conversation_delete:       return RealtimeConversationItemDeleteEventParameters.type
+        case .conversation_retrieve:     return RealtimeConversationItemRetrieveEventParameters.type
+        case .conversation_truncate:     return RealtimeConversationItemTruncateEventParameters.type
+        case .input_audio_buffer_append: return RealtimeInputAudioBufferAppendEventParameters.type
+        case .input_audio_buffer_clear:  return RealtimeInputAudioBufferClearEventParameters.type
+        case .input_audio_buffer_commit: return RealtimeInputAudioBufferCommitEventParameters.type
+        case .output_audio_buffer_clear: return RealtimeOutputAudioBufferClearEventParameters.type
+        case .response_create:           return RealtimeResponseCreateEventParameters.type
+        case .response_cancel:           return RealtimeResponseCancelEventParameters.type
+        case .session_update:            return RealtimeSessionUpdateEventParameters.type
+        }
+    }
+}
