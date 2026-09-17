@@ -38,7 +38,7 @@ public enum ResponseTool {
     case unowned(ResponseBaseTool)
 }
 
-extension ResponseTool {
+public extension ResponseTool {
     var type: String {
         switch self {
         case .function:           return ResponseFunctionTool.type

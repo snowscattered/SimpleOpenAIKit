@@ -24,7 +24,7 @@ public enum BetaRealtimeEventParameters {
     case session_update(BetaRealtimeSessionUpdateEventParameters)
 }
 
-extension BetaRealtimeEventParameters {
+public extension BetaRealtimeEventParameters {
     var type: String {
         switch self {
         case .conversation_create:       return BetaRealtimeConversationItemCreateEventParameters.type

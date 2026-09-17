@@ -37,7 +37,7 @@ public enum ImagesGenerateStreamResult {
     case completed(ImageGenerateCompletedEvent)
 }
 
-extension ImagesGenerateStreamResult {
+public extension ImagesGenerateStreamResult {
     var type: String {
         switch self {
         case .partialImage: return ImageGeneratePartialImageEvent.type

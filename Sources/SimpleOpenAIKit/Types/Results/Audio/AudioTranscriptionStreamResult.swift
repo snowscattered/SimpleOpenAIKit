@@ -40,7 +40,7 @@ public enum AudioTranscriptionStreamResult {
     case done(AudioTranscriptionTextDoneEvent)
 }
 
-extension AudioTranscriptionStreamResult {
+public extension AudioTranscriptionStreamResult {
     var type: String {
         switch self {
         case .segment: return AudioTranscriptionTextSegmentEvent.type

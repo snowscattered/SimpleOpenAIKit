@@ -44,7 +44,7 @@ extension ResponseInputItem {
     }
 }
 
-extension ResponseInputItem {
+public extension ResponseInputItem {
     var type: String {
         switch self {
         case .message:                 return ResponseMessageItem.type
