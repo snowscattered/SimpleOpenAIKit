@@ -7,11 +7,11 @@
 
 import Foundation
 
-public protocol APIClient {
+public protocol APIClientOption {
     var api_key: String { get }
     var base_url: URL { get }
-    var timeout: TimeInterval { get set }
-    var max_retries: Int { get set }
+    var timeout: TimeInterval { get }
+    var max_retries: Int { get }
     
     var headers: Header { get }
     var query: Query { get }

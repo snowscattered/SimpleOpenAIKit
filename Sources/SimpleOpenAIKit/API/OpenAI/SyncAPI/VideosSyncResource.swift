@@ -12,12 +12,12 @@ public extension OpenAISyncAPIResource.VideosSyncResource {
         parameters: VideoCreateParamerters,
         requestOptions: RequestOptions? = nil
     ) throws -> VideoResult {
-        let url = try client.getServerUrl(path: "/videos")
+        let url = try clientOption.getServerUrl(path: "/videos")
         return try OpenAISession.shared.SyncResponse(
             url,
             payload: parameters,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .post,
             hasFile: true
         )
@@ -26,7 +26,7 @@ public extension OpenAISyncAPIResource.VideosSyncResource {
         parameters: VideoListParameter? = nil,
         requestOptions: RequestOptions? = nil
     ) throws -> SyncThrowingPages<VideoResult> {
-        let url = try client.getServerUrl(path: "/videos")
+        let url = try clientOption.getServerUrl(path: "/videos")
         var nextAfter = parameters?.after
         return SyncThrowingPages {
             var currentParams = parameters ?? VideoListParameter()
@@ -36,7 +36,7 @@ public extension OpenAISyncAPIResource.VideosSyncResource {
                 url,
                 payload: currentParams,
                 requestOptions: requestOptions,
-                client: self.client,
+                clientOption: self.clientOption,
                 method: .get
             )
             if let last = result.data.last {
@@ -49,12 +49,12 @@ public extension OpenAISyncAPIResource.VideosSyncResource {
         video_id: String,
         requestOptions: RequestOptions? = nil
     ) throws -> VideoResult {
-        let url = try client.getServerUrl(path: "/videos/\(video_id)")
+        let url = try clientOption.getServerUrl(path: "/videos/\(video_id)")
         return try OpenAISession.shared.SyncResponse(
             url,
             payload: nil as String?,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .get
         )
     }
@@ -62,12 +62,12 @@ public extension OpenAISyncAPIResource.VideosSyncResource {
         video_id: String,
         requestOptions: RequestOptions? = nil
     ) throws -> VideoDeleteResult {
-        let url = try client.getServerUrl(path: "/videos/\(video_id)")
+        let url = try clientOption.getServerUrl(path: "/videos/\(video_id)")
         return try OpenAISession.shared.SyncResponse(
             url,
             payload: nil as String?,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .delete
         )
     }
@@ -75,12 +75,12 @@ public extension OpenAISyncAPIResource.VideosSyncResource {
         parameters: VideoEditParameter,
         requestOptions: RequestOptions? = nil
     ) throws -> VideoResult {
-        let url = try client.getServerUrl(path: "/videos/edits")
+        let url = try clientOption.getServerUrl(path: "/videos/edits")
         return try OpenAISession.shared.SyncResponse(
             url,
             payload: parameters,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .post,
             hasFile: true
         )
@@ -89,12 +89,12 @@ public extension OpenAISyncAPIResource.VideosSyncResource {
         parameters: VideoExtendParameter,
         requestOptions: RequestOptions? = nil
     ) throws -> VideoResult {
-        let url = try client.getServerUrl(path: "/videos/extend")
+        let url = try clientOption.getServerUrl(path: "/videos/extend")
         return try OpenAISession.shared.SyncResponse(
             url,
             payload: parameters,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .post,
             hasFile: true
         )
@@ -104,13 +104,13 @@ public extension OpenAISyncAPIResource.VideosSyncResource {
         prompt: String,
         requestOptions: RequestOptions? = nil
     ) throws -> VideoResult {
-        let url = try client.getServerUrl(path: "/videos/\(video_id)")
+        let url = try clientOption.getServerUrl(path: "/videos/\(video_id)")
         let parameters = VideoRemixParameter(video_id: video_id, prompt: prompt)
         return try OpenAISession.shared.SyncResponse(
             url,
             payload: parameters,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .delete
         )
     }
@@ -119,12 +119,12 @@ public extension OpenAISyncAPIResource.VideosSyncResource {
         parameters: VideoCharacterCreateParameter,
         requestOptions: RequestOptions? = nil
     ) throws -> VideoCharacterResult {
-        let url = try client.getServerUrl(path: "/videos/characters")
+        let url = try clientOption.getServerUrl(path: "/videos/characters")
         return try OpenAISession.shared.SyncResponse(
             url,
             payload: parameters,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .post
         )
     }
@@ -132,12 +132,12 @@ public extension OpenAISyncAPIResource.VideosSyncResource {
         character_id: String,
         requestOptions: RequestOptions? = nil
     ) throws -> VideoCharacterResult {
-        let url = try client.getServerUrl(path: "/videos/characters/\(character_id)")
+        let url = try clientOption.getServerUrl(path: "/videos/characters/\(character_id)")
         return try OpenAISession.shared.SyncResponse(
             url,
             payload: nil as String?,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .get
         )
     }
@@ -181,7 +181,7 @@ public extension OpenAISyncAPIResource.VideosSyncResource {
         variant: VideoDownloadContentVariant?,
         requestOptions: RequestOptions? = nil
     ) throws -> SyncThrowingStream<Data, Error> {
-        let url = try client.getServerUrl(path: "/videos/\(video_id)/content")
+        let url = try clientOption.getServerUrl(path: "/videos/\(video_id)/content")
         let parameters: VideoDownloadContentParameter = .init(video_id: video_id, variant: variant)
         var options = requestOptions ?? RequestOptions()
         if options.extra_headers["Accept"] == nil {
@@ -191,7 +191,7 @@ public extension OpenAISyncAPIResource.VideosSyncResource {
             url,
             payload: parameters,
             requestOptions: options,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .get
         )
     }

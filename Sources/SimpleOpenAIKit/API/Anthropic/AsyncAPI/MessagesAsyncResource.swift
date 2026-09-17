@@ -12,14 +12,14 @@ public extension AnthropicAsyncAPIResource.MessagesAsyncResource {
         parameters: MessageParameters,
         requestOptions: RequestOptions? = nil
     ) async throws -> MessageCreateResult {
-        let url = try client.getServerUrl(path: "/v1/messages")
+        let url = try clientOption.getServerUrl(path: "/v1/messages")
         var nostreamingParameters = parameters
         nostreamingParameters.stream = false
         return try await AnthropicSession.shared.AsyncResponse(
             url,
             payload: nostreamingParameters,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .post
         )
     }
@@ -28,14 +28,14 @@ public extension AnthropicAsyncAPIResource.MessagesAsyncResource {
         parameters: MessageParameters,
         requestOptions: RequestOptions? = nil
     ) async throws -> AsyncThrowingStream<MessageStreamResult, Error> {
-        let url = try client.getServerUrl(path: "/v1/messages")
+        let url = try clientOption.getServerUrl(path: "/v1/messages")
         var streamingParameters = parameters
         streamingParameters.stream = true
         return try await AnthropicSession.shared.AsyncStreamResponse(
             url,
             payload: streamingParameters,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .post
         )
     }
@@ -44,12 +44,12 @@ public extension AnthropicAsyncAPIResource.MessagesAsyncResource {
         parameters: MessageCountTokenParameters,
         requestOptions: RequestOptions? = nil
     ) async throws -> MessageCreateResult {
-        let url = try client.getServerUrl(path: "/v1/messages/count_tokens")
+        let url = try clientOption.getServerUrl(path: "/v1/messages/count_tokens")
         return try await AnthropicSession.shared.AsyncResponse(
             url,
             payload: parameters,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .post
         )
     }

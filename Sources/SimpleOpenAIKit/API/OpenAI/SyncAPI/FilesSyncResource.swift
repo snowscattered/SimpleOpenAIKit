@@ -12,12 +12,12 @@ public extension OpenAISyncAPIResource.FilesSyncResource {
         parameters: FilesCreateParameters,
         requestOptions: RequestOptions? = nil
     ) throws -> FileResult {
-        let url = try client.getServerUrl(path: "/files")
+        let url = try clientOption.getServerUrl(path: "/files")
         return try OpenAISession.shared.SyncResponse(
             url,
             payload: parameters,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .post,
             hasFile: true
         )
@@ -26,7 +26,7 @@ public extension OpenAISyncAPIResource.FilesSyncResource {
         parameters: FilesListParameters? = nil,
         requestOptions: RequestOptions? = nil
     ) throws -> SyncThrowingPages<FileResult> {
-        let url = try client.getServerUrl(path: "/files")
+        let url = try clientOption.getServerUrl(path: "/files")
         var nextAfter = parameters?.after
         var currentParams = parameters ?? FilesListParameters()
         return SyncThrowingPages {
@@ -35,7 +35,7 @@ public extension OpenAISyncAPIResource.FilesSyncResource {
                 url,
                 payload: currentParams,
                 requestOptions: requestOptions,
-                client: self.client,
+                clientOption: self.clientOption,
                 method: .get
             )
             if let last = result.data.last {
@@ -48,12 +48,12 @@ public extension OpenAISyncAPIResource.FilesSyncResource {
         file_id: String,
         requestOptions: RequestOptions? = nil
     ) throws -> FileResult {
-        let url = try client.getServerUrl(path: "/files/\(file_id)")
+        let url = try clientOption.getServerUrl(path: "/files/\(file_id)")
         return try OpenAISession.shared.SyncResponse(
             url,
             payload: nil as String?,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .get
         )
     }
@@ -61,12 +61,12 @@ public extension OpenAISyncAPIResource.FilesSyncResource {
         file_id: String,
         requestOptions: RequestOptions? = nil
     ) throws -> FileDeleted {
-        let url = try client.getServerUrl(path: "/files/\(file_id)")
+        let url = try clientOption.getServerUrl(path: "/files/\(file_id)")
         return try OpenAISession.shared.SyncResponse(
             url,
             payload: nil as String?,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .delete
         )
     }

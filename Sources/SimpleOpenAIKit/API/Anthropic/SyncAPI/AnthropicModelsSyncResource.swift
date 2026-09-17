@@ -10,33 +10,40 @@ import Foundation
 public extension AnthropicSyncAPIResource.ModelsSyncResource {
     func list(
         requestOptions: RequestOptions? = nil,
-        after_id: String?,
-        before_id: String?,
-        limit: Int?
-    ) throws -> PageStruct<ModelResult> {
-        let url = try client.getServerUrl(path: "/models")
-        var payload: [String: Any] = [:]
-        if let after_id { payload["after_id"] = after_id }
-        if let before_id { payload["before_id"] = before_id }
-        if let limit { payload["limit"] = limit }
-        return try AnthropicSession.shared.SyncResponse(
-            url,
-            payload: try JSONSerialization.data(withJSONObject: payload),
-            requestOptions: requestOptions,
-            client: self.client,
-            method: .get
-        )
+        after_id: String? = nil,
+        before_id: String? = nil,
+        limit: Int? = nil
+    ) throws -> SyncThrowingPages<ModelResult> {
+        let url = try clientOption.getServerUrl(path: "/models")
+        var currentAfter = after_id
+        return SyncThrowingPages {
+            var payload: [String: Any] = [:]
+            if let currentAfter { payload["after_id"] = currentAfter }
+            if let before_id { payload["before_id"] = before_id }
+            if let limit { payload["limit"] = limit }
+            let result: PageStruct<ModelResult> = try AnthropicSession.shared.SyncResponse(
+                url,
+                payload: try JSONSerialization.data(withJSONObject: payload),
+                requestOptions: requestOptions,
+                clientOption: self.clientOption,
+                method: .get
+            )
+            if let last = result.data.last {
+                currentAfter = last.id
+            }
+            return result
+        }
     }
     func retrieve(
         model: String,
         requestOptions: RequestOptions? = nil
     ) throws -> ModelResult {
-        let url = try client.getServerUrl(path: "/models/\(model)")
+        let url = try clientOption.getServerUrl(path: "/models/\(model)")
         return try AnthropicSession.shared.SyncResponse(
             url,
             payload: nil as String?,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .get
         )
     }

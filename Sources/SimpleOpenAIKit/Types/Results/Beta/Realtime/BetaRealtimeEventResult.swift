@@ -59,3 +59,56 @@ public enum BetaRealtimeEventResult {
     // Extension OpenAI
     case unkowned(UnknownEvent)
 }
+
+extension BetaRealtimeEventResult {
+    var type: String {
+        switch self {
+        // Session
+        case .session_created:                        return BetaRealtimeSessionCreatedEvent.type
+        case .session_updated:                        return BetaRealtimeSessionUpdatedEvent.type
+        // Status
+        case .error:                                  return BetaRealtimeErrorEvent.type
+        case .rate_limits_updated:                    return BetaRealtimeRateLimitsUpdatedEvent.type
+        // Response
+        case .response_created:                       return BetaRealtimeResponseCreatedEvent.type
+        case .response_done:                          return BetaRealtimeResponseDoneEvent.type
+        // ConversationItem
+        case .conversation_created:                   return BetaRealtimeConversationCreatedEvent.type
+        case .conversation_item_created:              return BetaRealtimeConversationItemCreatedEvent.type
+        case .conversation_item_deleted:              return BetaRealtimeConversationItemDeletedEvent.type
+        case .conversation_item_retrieved:            return BetaRealtimeConversationItemRetrievedEvent.type
+        case .conversation_item_truncated:            return BetaRealtimeConversationItemTruncatedEvent.type
+        case .conversation_item_input_audio_transcription_completed: return BetaRealtimeConversationItemInputAudioTranscriptionCompletedEvent.type
+        case .conversation_item_input_audio_transcription_delta:     return BetaRealtimeConversationItemInputAudioTranscriptionDeltaEvent.type
+        case .conversation_item_input_audio_transcription_failed:    return BetaRealtimeConversationItemInputAudioTranscriptionFailedEvent.type
+        // OutputItem
+        case .response_output_item_added:             return BetaRealtimeResponseOutputItemAddedEvent.type
+        case .response_output_item_done:              return BetaRealtimeResponseOutputItemDoneEvent.type
+        // ContentPart
+        case .response_content_part_added:            return BetaRealtimeResponseContentPartAddedEvent.type
+        case .response_content_part_done:             return BetaRealtimeResponseContentPartDoneEvent.type
+        // Audio
+        case .response_audio_delta:                   return BetaRealtimeResponseAudioDeltaEvent.type
+        case .response_audio_done:                    return BetaRealtimeResponseAudioDoneEvent.type
+        // AudioTranscript
+        case .response_audio_transcript_delta:        return BetaRealtimeResponseAudioTranscriptDeltaEvent.type
+        case .response_audio_transcript_done:         return BetaRealtimeResponseAudioTranscriptDoneEvent.type
+        // Text
+        case .response_text_delta:                    return BetaRealtimeResponseTextDeltaEvent.type
+        case .response_text_done:                     return BetaRealtimeResponseTextDoneEvent.type
+        // FunctionArguments
+        case .response_function_call_arguments_delta: return BetaRealtimeResponseFunctionCallArgumentsDeltaEvent.type
+        case .response_function_call_arguments_done:  return BetaRealtimeResponseFunctionCallArgumentsDoneEvent.type
+        // AudioBuffer
+        case .input_audio_buffer_speech_started:      return BetaRealtimeInputAudioBufferSpeechStartedEvent.type
+        case .input_audio_buffer_speech_stopped:      return BetaRealtimeInputAudioBufferSpeechStoppedEvent.type
+        case .input_audio_buffer_cleared:             return BetaRealtimeInputAudioBufferClearedEvent.type
+        case .input_audio_buffer_committed:           return BetaRealtimeInputAudioBufferCommittedEvent.type
+        case .output_audio_buffer_started:            return BetaRealtimeOutputAudioBufferStartedEvent.type
+        case .output_audio_buffer_stopped:            return BetaRealtimeOutputAudioBufferStoppedEvent.type
+        case .output_audio_buffer_cleared:            return BetaRealtimeOutputAudioBufferClearedEvent.type
+        // Extension OpenAI
+        case .unkowned(let event):                    return event.type
+        }
+    }
+}

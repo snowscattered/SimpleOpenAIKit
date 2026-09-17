@@ -12,12 +12,12 @@ public extension OpenAISyncAPIResource.EmbeddingsSyncResource {
         parameters: EmbeddingParameters,
         requestOptions: RequestOptions? = nil
     ) throws -> EmbeddingCreateResult {
-        let url = try client.getServerUrl(path: "/embeddings")
+        let url = try clientOption.getServerUrl(path: "/embeddings")
         return try OpenAISession.shared.SyncResponse(
             url,
             payload: parameters,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .post
         )
     }

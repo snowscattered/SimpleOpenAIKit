@@ -11,12 +11,12 @@ public extension OpenAIAsyncAPIResource.ModelsAsyncResource {
     func list(
         requestOptions: RequestOptions? = nil
     ) async throws -> PageStruct<ModelResult> {
-        let url = try client.getServerUrl(path: "/models")
+        let url = try clientOption.getServerUrl(path: "/models")
         return try await OpenAISession.shared.AsyncResponse(
             url,
             payload: nil as String?,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .get
         )
     }
@@ -24,12 +24,12 @@ public extension OpenAIAsyncAPIResource.ModelsAsyncResource {
         model: String,
         requestOptions: RequestOptions? = nil
     ) async throws -> ModelResult {
-        let url = try client.getServerUrl(path: "/models/\(model)")
+        let url = try clientOption.getServerUrl(path: "/models/\(model)")
         return try await OpenAISession.shared.AsyncResponse(
             url,
             payload: nil as String?,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .get
         )
     }
@@ -37,12 +37,12 @@ public extension OpenAIAsyncAPIResource.ModelsAsyncResource {
         model: String,
         requestOptions: RequestOptions? = nil
     ) async throws -> ModelDeletedResult {
-        let url = try client.getServerUrl(path: "/models/\(model)")
+        let url = try clientOption.getServerUrl(path: "/models/\(model)")
         return try await OpenAISession.shared.AsyncResponse(
             url,
             payload: nil as String?,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .delete
         )
     }

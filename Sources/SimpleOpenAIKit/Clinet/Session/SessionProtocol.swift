@@ -14,13 +14,13 @@ public enum HTTPMethod: String {
     case delete = "DELETE"
 }
 public protocol SessionProtocol {
-    associatedtype Client: APIClient
+    associatedtype ClientOption: APIClientOption
     static var shared: Self { get }
     func getRequest<Payload: Encodable>(
         _ url: URL,
         payload: Payload?,
         requestOptions: RequestOptions?,
-        client: Client,
+        clientOption: ClientOption,
         method: HTTPMethod,
         hasFile: Bool,
     ) throws -> URLRequest
@@ -34,7 +34,7 @@ public extension SessionProtocol {
         _ url: URL,
         payload: Payload?,
         requestOptions: RequestOptions?,
-        client: Client,
+        clientOption: ClientOption,
         method: HTTPMethod,
         hasFile: Bool = false,
     ) throws -> URLRequest {
@@ -42,7 +42,7 @@ public extension SessionProtocol {
             throw URLError(.badURL)
         }
         // Query - start with client.query as defaults
-        var query = client.query
+        var query = clientOption.query
         if method == .get {
             let payloadMap = try? JSONDecoder().decode(Query.self, from: try JSONEncoder().encode(payload))
             if let map = payloadMap {
@@ -56,7 +56,7 @@ public extension SessionProtocol {
         guard let finalURL = components.url else { throw URLError(.badURL) }
         var request = URLRequest(url: finalURL)
         // Header - start with client.headers as defaults
-        var headers = client.headers
+        var headers = clientOption.headers
         if let extra = requestOptions?.extra_headers, !extra.isEmpty {
             headers = headers | extra
         }
@@ -87,7 +87,7 @@ public extension SessionProtocol {
         }
         // Other
         request.httpMethod = method.rawValue
-        request.timeoutInterval = client.timeout
+        request.timeoutInterval = clientOption.timeout
         if let timeout = requestOptions?.timeout {
             request.timeoutInterval = timeout
         }
@@ -98,7 +98,7 @@ public extension SessionProtocol {
         _ url: URL,
         payload: Payload?,
         requestOptions: RequestOptions?,
-        client: Client,
+        clientOption: ClientOption,
         method: HTTPMethod,
         hasFile: Bool = false,
     ) throws -> T {
@@ -106,19 +106,19 @@ public extension SessionProtocol {
             url,
             payload: payload,
             requestOptions: requestOptions,
-            client: client,
+            clientOption: clientOption,
             method: method,
             hasFile: hasFile,
         )
         do {
-            return try syncResponse(request: request, maxRetries: client.max_retries, shouldRetry: retryErrorHandler)
+            return try syncResponse(request: request, maxRetries: clientOption.max_retries, shouldRetry: retryErrorHandler)
         } catch { throw wrapError(error: error) }
     }
     func SyncStreamResponse<T: Decodable & Sendable, Payload: Encodable>(
         _ url: URL,
         payload: Payload?,
         requestOptions: RequestOptions?,
-        client: Client,
+        clientOption: ClientOption,
         method: HTTPMethod,
         hasFile: Bool = false,
     ) throws -> SyncThrowingStream<T, Error> {
@@ -126,12 +126,12 @@ public extension SessionProtocol {
             url,
             payload: payload,
             requestOptions: requestOptions,
-            client: client,
+            clientOption: clientOption,
             method: method,
             hasFile: hasFile,
         )
         do {
-            return try syncStreamResponse(request: request, maxRetries: client.max_retries, shouldRetry: retryErrorHandler)
+            return try syncStreamResponse(request: request, maxRetries: clientOption.max_retries, shouldRetry: retryErrorHandler)
         } catch { throw wrapError(error: error) }
     }
     
@@ -139,7 +139,7 @@ public extension SessionProtocol {
         _ url: URL,
         payload: Payload?,
         requestOptions: RequestOptions?,
-        client: Client,
+        clientOption: ClientOption,
         method: HTTPMethod,
         hasFile: Bool = false,
     ) async throws -> T {
@@ -147,19 +147,19 @@ public extension SessionProtocol {
             url,
             payload: payload,
             requestOptions: requestOptions,
-            client: client,
+            clientOption: clientOption,
             method: method,
             hasFile: hasFile,
         )
         do {
-            return try await asyncResponse(request: request, maxRetries: client.max_retries, shouldRetry: retryErrorHandler)
+            return try await asyncResponse(request: request, maxRetries: clientOption.max_retries, shouldRetry: retryErrorHandler)
         } catch { throw wrapError(error: error) }
     }
     func AsyncStreamResponse<T: Decodable & Sendable, Payload: Encodable>(
         _ url: URL,
         payload: Payload?,
         requestOptions: RequestOptions?,
-        client: Client,
+        clientOption: ClientOption,
         method: HTTPMethod,
         hasFile: Bool = false,
     ) async throws -> AsyncThrowingStream<T, Error> {
@@ -167,12 +167,12 @@ public extension SessionProtocol {
             url,
             payload: payload,
             requestOptions: requestOptions,
-            client: client,
+            clientOption: clientOption,
             method: method,
             hasFile: hasFile,
         )
         do {
-            return try await asyncStreamResponse(request: request, maxRetries: client.max_retries, shouldRetry: retryErrorHandler)
+            return try await asyncStreamResponse(request: request, maxRetries: clientOption.max_retries, shouldRetry: retryErrorHandler)
         } catch { throw wrapError(error: error) }
     }
     
@@ -180,7 +180,7 @@ public extension SessionProtocol {
         _ url: URL,
         payload: Payload?,
         requestOptions: RequestOptions?,
-        client: Client,
+        clientOption: ClientOption,
         method: HTTPMethod,
         hasFile: Bool = false,
     ) throws -> URLSessionWebSocketTask {
@@ -188,7 +188,7 @@ public extension SessionProtocol {
             url,
             payload: nil as Payload?,
             requestOptions: requestOptions,
-            client: client,
+            clientOption: clientOption,
             method: .get,
         )
         return URLSession.shared.webSocketTask(with: request)

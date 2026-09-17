@@ -6,10 +6,9 @@
 //
 
 public class OpenAISyncAPIResource {
-    unowned let client: OpenAI
-
-    init(_ client: OpenAI) {
-        self.client = client
+    let clientOption: OpenAIClientOption
+    init(_ clientOption: OpenAIClientOption) {
+        self.clientOption = clientOption
     }
 
     // MARK: Model
@@ -19,7 +18,7 @@ public class OpenAISyncAPIResource {
     // MARK: Chat
     public final class ChatCompletionsSyncResource: OpenAISyncAPIResource { }
     public final class ChatsSyncResource: OpenAISyncAPIResource {
-        public lazy var completions = ChatCompletionsSyncResource(client)
+        public lazy var completions = ChatCompletionsSyncResource(clientOption)
     }
     // MARK: Embedding
     public final class EmbeddingsSyncResource: OpenAISyncAPIResource { }
@@ -27,22 +26,22 @@ public class OpenAISyncAPIResource {
     public final class ImageGenerateSyncResource: OpenAISyncAPIResource { }
     public final class ImageEditSyncResource: OpenAISyncAPIResource { }
     public final class ImagesSyncResource: OpenAISyncAPIResource {
-        public lazy var generate = ImageGenerateSyncResource(client)
-        public lazy var edit = ImageEditSyncResource(client)
+        public lazy var generate = ImageGenerateSyncResource(clientOption)
+        public lazy var edit = ImageEditSyncResource(clientOption)
     }
     // MARK: Audio
     public final class AudioSpeechSyncResource: OpenAISyncAPIResource { }
     public final class AudioTranscriptionsSyncResource: OpenAISyncAPIResource { }
     public final class AudioSyncResource: OpenAISyncAPIResource {
-        public lazy var speech = AudioSpeechSyncResource(client)
-        public lazy var transcriptions = AudioTranscriptionsSyncResource(client)
+        public lazy var speech = AudioSpeechSyncResource(clientOption)
+        public lazy var transcriptions = AudioTranscriptionsSyncResource(clientOption)
     }
     // MARK: Response
     public final class ResponsesInputItemsSyncResource: OpenAISyncAPIResource { }
     public final class ResponsesInputTokensSyncResource: OpenAISyncAPIResource { }
     public final class ResponsesSyncResource: OpenAISyncAPIResource {
-        public lazy var inputItems = ResponsesInputItemsSyncResource(client)
-        public lazy var inputTokens = ResponsesInputTokensSyncResource(client)
+        public lazy var inputItems = ResponsesInputItemsSyncResource(clientOption)
+        public lazy var inputTokens = ResponsesInputTokensSyncResource(clientOption)
     }
     // MARK: File
     public final class FilesSyncResource: OpenAISyncAPIResource { }
@@ -50,7 +49,7 @@ public class OpenAISyncAPIResource {
     // MARK: Upload
     public final class UploadsPartSyncResource: OpenAISyncAPIResource { }
     public final class UploadsSyncResource: OpenAISyncAPIResource {
-        public lazy var part = UploadsPartSyncResource(client)
+        public lazy var part = UploadsPartSyncResource(clientOption)
     }
 
     // MARK: Video
@@ -63,6 +62,6 @@ public class OpenAISyncAPIResource {
     // MARK: Beta
     public final class BetaRealtimeSyncResource: OpenAISyncAPIResource { }
     public final class BetaSyncResource: OpenAISyncAPIResource {
-        public lazy var realtime = BetaRealtimeSyncResource(client)
+        public lazy var realtime = BetaRealtimeSyncResource(clientOption)
     }
 }

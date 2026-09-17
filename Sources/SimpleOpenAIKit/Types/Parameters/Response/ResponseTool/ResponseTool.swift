@@ -19,7 +19,7 @@ public struct ResponseBaseTool {
     public var type: String
 }
 
-@CodableByConstant(defaultCase: "other")
+@CodableByConstant(defaultCase: "unowned")
 @nonexhaustive
 public enum ResponseTool {
     case function(ResponseFunctionTool)
@@ -35,7 +35,21 @@ public enum ResponseTool {
     // case apply_patch()
     // case tool_search()
     // Extension OpenAI
-    case other(ResponseBaseTool)
+    case unowned(ResponseBaseTool)
+}
+
+extension ResponseTool {
+    var type: String {
+        switch self {
+        case .function:           return ResponseFunctionTool.type
+        case .custom:             return ResponseCustomTool.type
+        case .namespace:          return ResponseNamespaceTool.type
+        case .file_search:        return ResponseFileSearchTool.type
+        case .image_generation:   return ResponseImageGenerationTool.type
+        case .web_search:         return ResponseWebSearchTool.type
+        case .unowned(let event): return event.type
+        }
+    }
 }
 
 // Add Simple Use

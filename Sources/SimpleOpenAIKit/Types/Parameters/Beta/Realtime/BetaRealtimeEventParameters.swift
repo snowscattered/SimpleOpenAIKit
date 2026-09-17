@@ -23,3 +23,21 @@ public enum BetaRealtimeEventParameters {
     case response_cancel(BetaRealtimeResponseCancelEventParameters)
     case session_update(BetaRealtimeSessionUpdateEventParameters)
 }
+
+extension BetaRealtimeEventParameters {
+    var type: String {
+        switch self {
+        case .conversation_create:       return BetaRealtimeConversationItemCreateEventParameters.type
+        case .conversation_delete:       return BetaRealtimeConversationItemDeleteEventParameters.type
+        case .conversation_retrieve:     return BetaRealtimeConversationItemRetrieveEventParameters.type
+        case .conversation_truncate:     return BetaRealtimeConversationItemTruncateEventParameters.type
+        case .input_audio_buffer_append: return BetaRealtimeInputAudioBufferAppendEventParameters.type
+        case .input_audio_buffer_clear:  return BetaRealtimeInputAudioBufferClearEventParameters.type
+        case .input_audio_buffer_commit: return BetaRealtimeInputAudioBufferCommitEventParameters.type
+        case .output_audio_buffer_clear: return BetaRealtimeOutputAudioBufferClearEventParameters.type
+        case .response_create:           return BetaRealtimeResponseCreateEventParameters.type
+        case .response_cancel:           return BetaRealtimeResponseCancelEventParameters.type
+        case .session_update:            return BetaRealtimeSessionUpdateEventParameters.type
+        }
+    }
+}

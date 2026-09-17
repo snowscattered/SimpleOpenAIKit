@@ -83,7 +83,7 @@ public struct ResponseUsage {
 }
 
 //public typealias ResponseOutputItem = ResponseInputItem
-@CodableByConstant(defaultCase: "other")
+@CodableByConstant(defaultCase: "unkowned")
 @nonexhaustive
 public enum ResponseOutputItem {
     case message(ResponseOutputMessage)  // Not Bind with ResponseInputItem
@@ -95,7 +95,7 @@ public enum ResponseOutputItem {
     case custom_tool_call_output(ResponseCustomToolCallOutputItem)
     case web_search(ResponseWebSearchItem)
     
-    case other(ResponseBaseItem)
+    case unkowned(ResponseBaseItem)
 }
 extension ResponseOutputItem {
     public func toInputItem() -> ResponseInputItem {
@@ -109,7 +109,7 @@ extension ResponseOutputItem {
         case .custom_tool_call_output(let item): return .custom_tool_call_output(item)
         case .web_search(let item):              return .web_search(item)
             
-        case .other(let item):                   return .other(item)
+        case .unkowned(let item):                return .unkowned(item)
         }
     }
 }

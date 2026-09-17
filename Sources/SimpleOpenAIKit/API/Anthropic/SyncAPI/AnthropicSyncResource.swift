@@ -6,10 +6,9 @@
 //
 
 public class AnthropicSyncAPIResource {
-    internal unowned let client: Anthropic
-
-    internal init(_ client: Anthropic) {
-        self.client = client
+    let clientOption: AnthropicClientOption
+    init(_ clientOption: AnthropicClientOption) {
+        self.clientOption = clientOption
     }
     // MARK: Model
     public final class ModelsSyncResource: AnthropicSyncAPIResource { }
