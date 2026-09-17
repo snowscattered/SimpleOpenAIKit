@@ -42,7 +42,7 @@ extension RealtimeConversationItem {
     }
 }
 
-extension RealtimeConversationItem {
+public extension RealtimeConversationItem {
     var type: String {
         switch self {
         case .messages:            return RealtimeMessageConversationItem.type

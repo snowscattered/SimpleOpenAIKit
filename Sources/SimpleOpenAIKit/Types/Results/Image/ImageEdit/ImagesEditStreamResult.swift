@@ -37,7 +37,7 @@ public enum ImagesEditStreamResult {
     case completed(ImageEditCompletedEvent)
 }
 
-extension ImagesEditStreamResult {
+public extension ImagesEditStreamResult {
     var type: String {
         switch self {
         case .partialImage: return ImageEditPartialImageEvent.type

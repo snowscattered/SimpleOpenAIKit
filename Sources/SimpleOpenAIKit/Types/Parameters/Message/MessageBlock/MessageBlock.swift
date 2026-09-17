@@ -26,7 +26,7 @@ public enum MessageBlock {
     case web_search_result(MessageWebSearchToolResultBlock)
     case web_fetch_result(MessageWebFetchToolResultBlock)
 }
-extension MessageBlock {
+public extension MessageBlock {
     var type: String {
         switch self {
         case .text:              return MessageTextBlock.type

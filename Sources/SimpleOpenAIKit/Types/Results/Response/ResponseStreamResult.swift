@@ -56,7 +56,7 @@ public enum ResponseStreamResult {
     case unkowned(UnknownEvent)
 }
 
-extension ResponseStreamResult {
+public extension ResponseStreamResult {
     var type: String {
         switch self {
         // State

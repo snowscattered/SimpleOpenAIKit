@@ -67,7 +67,7 @@ public enum RealtimeEventResult {
     case unkowned(UnknownEvent)
 }
 
-extension RealtimeEventResult {
+public extension RealtimeEventResult {
     var type: String {
         switch self {
         // Session

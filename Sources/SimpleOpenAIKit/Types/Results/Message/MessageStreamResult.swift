@@ -18,7 +18,7 @@ public enum MessageStreamResult {
     case content_block_stop(MessageContentBlockStopEvent)
 }
 
-extension MessageStreamResult {
+public extension MessageStreamResult {
     var type: String {
         switch self {
         case .message_start:       return MessageStartEvent.type

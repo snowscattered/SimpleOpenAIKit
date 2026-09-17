@@ -60,7 +60,7 @@ public enum BetaRealtimeEventResult {
     case unkowned(UnknownEvent)
 }
 
-extension BetaRealtimeEventResult {
+public extension BetaRealtimeEventResult {
     var type: String {
         switch self {
         // Session
