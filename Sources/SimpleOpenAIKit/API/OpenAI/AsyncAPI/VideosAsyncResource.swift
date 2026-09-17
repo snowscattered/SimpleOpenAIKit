@@ -12,12 +12,12 @@ public extension OpenAIAsyncAPIResource.VideosAsyncResource {
         parameters: VideoCreateParamerters,
         requestOptions: RequestOptions? = nil
     ) async throws -> VideoResult {
-        let url = try client.getServerUrl(path: "/videos")
+        let url = try clientOption.getServerUrl(path: "/videos")
         return try await OpenAISession.shared.AsyncResponse(
             url,
             payload: parameters,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .post,
             hasFile: true
         )
@@ -26,7 +26,7 @@ public extension OpenAIAsyncAPIResource.VideosAsyncResource {
         parameters: VideoListParameter? = nil,
         requestOptions: RequestOptions? = nil
     ) async throws -> AsyncThrowingPages<VideoResult> {
-        let url = try client.getServerUrl(path: "/videos")
+        let url = try clientOption.getServerUrl(path: "/videos")
         var nextAfter = parameters?.after
         return AsyncThrowingPages {
             var currentParams = parameters ?? VideoListParameter()
@@ -36,7 +36,7 @@ public extension OpenAIAsyncAPIResource.VideosAsyncResource {
                 url,
                 payload: currentParams,
                 requestOptions: requestOptions,
-                client: self.client,
+                clientOption: self.clientOption,
                 method: .get
             )
             if let last = result.data.last {
@@ -49,12 +49,12 @@ public extension OpenAIAsyncAPIResource.VideosAsyncResource {
         video_id: String,
         requestOptions: RequestOptions? = nil
     ) async throws -> VideoResult {
-        let url = try client.getServerUrl(path: "/videos/\(video_id)")
+        let url = try clientOption.getServerUrl(path: "/videos/\(video_id)")
         return try await OpenAISession.shared.AsyncResponse(
             url,
             payload: nil as String?,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .get
         )
     }
@@ -62,12 +62,12 @@ public extension OpenAIAsyncAPIResource.VideosAsyncResource {
         video_id: String,
         requestOptions: RequestOptions? = nil
     ) async throws -> VideoDeleteResult {
-        let url = try client.getServerUrl(path: "/videos/\(video_id)")
+        let url = try clientOption.getServerUrl(path: "/videos/\(video_id)")
         return try await OpenAISession.shared.AsyncResponse(
             url,
             payload: nil as String?,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .delete
         )
     }
@@ -75,12 +75,12 @@ public extension OpenAIAsyncAPIResource.VideosAsyncResource {
         parameters: VideoEditParameter,
         requestOptions: RequestOptions? = nil
     ) async throws -> VideoResult {
-        let url = try client.getServerUrl(path: "/videos/edits")
+        let url = try clientOption.getServerUrl(path: "/videos/edits")
         return try await OpenAISession.shared.AsyncResponse(
             url,
             payload: parameters,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .post,
             hasFile: true
         )
@@ -89,12 +89,12 @@ public extension OpenAIAsyncAPIResource.VideosAsyncResource {
         parameters: VideoExtendParameter,
         requestOptions: RequestOptions? = nil
     ) async throws -> VideoResult {
-        let url = try client.getServerUrl(path: "/videos/extend")
+        let url = try clientOption.getServerUrl(path: "/videos/extend")
         return try await OpenAISession.shared.AsyncResponse(
             url,
             payload: parameters,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .post,
             hasFile: true
         )
@@ -104,13 +104,13 @@ public extension OpenAIAsyncAPIResource.VideosAsyncResource {
         prompt: String,
         requestOptions: RequestOptions? = nil
     ) async throws -> VideoResult {
-        let url = try client.getServerUrl(path: "/videos/\(video_id)")
+        let url = try clientOption.getServerUrl(path: "/videos/\(video_id)")
         let parameters = VideoRemixParameter(video_id: video_id, prompt: prompt)
         return try await OpenAISession.shared.AsyncResponse(
             url,
             payload: parameters,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .delete
         )
     }
@@ -119,12 +119,12 @@ public extension OpenAIAsyncAPIResource.VideosAsyncResource {
         parameters: VideoCharacterCreateParameter,
         requestOptions: RequestOptions? = nil
     ) async throws -> VideoCharacterResult {
-        let url = try client.getServerUrl(path: "/videos/characters")
+        let url = try clientOption.getServerUrl(path: "/videos/characters")
         return try await OpenAISession.shared.AsyncResponse(
             url,
             payload: parameters,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .post
         )
     }
@@ -132,12 +132,12 @@ public extension OpenAIAsyncAPIResource.VideosAsyncResource {
         character_id: String,
         requestOptions: RequestOptions? = nil
     ) async throws -> VideoCharacterResult {
-        let url = try client.getServerUrl(path: "/videos/characters/\(character_id)")
+        let url = try clientOption.getServerUrl(path: "/videos/characters/\(character_id)")
         return try await OpenAISession.shared.AsyncResponse(
             url,
             payload: nil as String?,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .get
         )
     }
@@ -181,7 +181,7 @@ public extension OpenAIAsyncAPIResource.VideosAsyncResource {
         variant: VideoDownloadContentVariant?,
         requestOptions: RequestOptions? = nil
     ) async throws -> AsyncThrowingStream<Data, Error> {
-        let url = try client.getServerUrl(path: "/videos/\(video_id)/content")
+        let url = try clientOption.getServerUrl(path: "/videos/\(video_id)/content")
         let parameters: VideoDownloadContentParameter = .init(video_id: video_id, variant: variant)
         var options = requestOptions ?? RequestOptions()
         if options.extra_headers["Accept"] == nil {
@@ -191,7 +191,7 @@ public extension OpenAIAsyncAPIResource.VideosAsyncResource {
             url,
             payload: parameters,
             requestOptions: options,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .get
         )
     }

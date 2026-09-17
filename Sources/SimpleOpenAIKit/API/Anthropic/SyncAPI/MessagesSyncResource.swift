@@ -12,14 +12,14 @@ public extension AnthropicSyncAPIResource.MessagesSyncResource {
         parameters: MessageParameters,
         requestOptions: RequestOptions? = nil
     ) throws -> MessageCreateResult {
-        let url = try client.getServerUrl(path: "/v1/messages")
+        let url = try clientOption.getServerUrl(path: "/v1/messages")
         var nostreamingParameters = parameters
         nostreamingParameters.stream = false
         return try AnthropicSession.shared.SyncResponse(
             url,
             payload: nostreamingParameters,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .post
         )
     }
@@ -28,14 +28,14 @@ public extension AnthropicSyncAPIResource.MessagesSyncResource {
         parameters: MessageParameters,
         requestOptions: RequestOptions? = nil
     ) throws -> SyncThrowingStream<MessageStreamResult, Error> {
-        let url = try client.getServerUrl(path: "/v1/messages")
+        let url = try clientOption.getServerUrl(path: "/v1/messages")
         var streamingParameters = parameters
         streamingParameters.stream = true
         return try AnthropicSession.shared.SyncStreamResponse(
             url,
             payload: streamingParameters,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .post
         )
     }
@@ -44,12 +44,12 @@ public extension AnthropicSyncAPIResource.MessagesSyncResource {
         parameters: MessageCountTokenParameters,
         requestOptions: RequestOptions? = nil
     ) throws -> MessageCreateResult {
-        let url = try client.getServerUrl(path: "/v1/messages/count_tokens")
+        let url = try clientOption.getServerUrl(path: "/v1/messages/count_tokens")
         return try AnthropicSession.shared.SyncResponse(
             url,
             payload: parameters,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .post
         )
     }

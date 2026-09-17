@@ -12,12 +12,12 @@ public extension OpenAIAsyncAPIResource.EmbeddingsAsyncResource {
         parameters: EmbeddingParameters,
         requestOptions: RequestOptions? = nil
     ) async throws -> EmbeddingCreateResult {
-        let url = try client.getServerUrl(path: "/embeddings")
+        let url = try clientOption.getServerUrl(path: "/embeddings")
         return try await OpenAISession.shared.AsyncResponse(
             url,
             payload: parameters,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .post
         )
     }

@@ -6,9 +6,9 @@
 //
 
 public class OpenAIAsyncAPIResource {
-    unowned let client: AsyncOpenAI
-    init(_ client: AsyncOpenAI) {
-        self.client = client
+    let clientOption: OpenAIClientOption
+    init(_ clientOption: OpenAIClientOption) {
+        self.clientOption = clientOption
     }
 
     // MARK: Model
@@ -18,7 +18,7 @@ public class OpenAIAsyncAPIResource {
     // MARK: Chat
     public final class ChatCompletionsAsyncResource: OpenAIAsyncAPIResource { }
     public final class ChatsAsyncResource: OpenAIAsyncAPIResource {
-        public lazy var completions = ChatCompletionsAsyncResource(client)
+        public lazy var completions = ChatCompletionsAsyncResource(clientOption)
     }
     // MARK: Embedding
     public final class EmbeddingsAsyncResource: OpenAIAsyncAPIResource { }
@@ -26,22 +26,22 @@ public class OpenAIAsyncAPIResource {
     public final class ImageGenerateAsyncResource: OpenAIAsyncAPIResource { }
     public final class ImageEditAsyncResource: OpenAIAsyncAPIResource { }
     public final class ImagesAsyncResource: OpenAIAsyncAPIResource {
-        public lazy var generate = ImageGenerateAsyncResource(client)
-        public lazy var edit = ImageEditAsyncResource(client)
+        public lazy var generate = ImageGenerateAsyncResource(clientOption)
+        public lazy var edit = ImageEditAsyncResource(clientOption)
     }
     // MARK: Audio
     public final class AudioSpeechAsyncResource: OpenAIAsyncAPIResource { }
     public final class AudioTranscriptionsAsyncResource: OpenAIAsyncAPIResource { }
     public final class AudioAsyncResource: OpenAIAsyncAPIResource {
-        public lazy var speech = AudioSpeechAsyncResource(client)
-        public lazy var transcriptions = AudioTranscriptionsAsyncResource(client)
+        public lazy var speech = AudioSpeechAsyncResource(clientOption)
+        public lazy var transcriptions = AudioTranscriptionsAsyncResource(clientOption)
     }
     // MARK: Response
     public final class ResponsesInputItemsAsyncResource: OpenAIAsyncAPIResource { }
     public final class ResponsesInputTokensAsyncResource: OpenAIAsyncAPIResource { }
     public final class ResponsesAsyncResource: OpenAIAsyncAPIResource {
-        public lazy var inputItems = ResponsesInputItemsAsyncResource(client)
-        public lazy var inputTokens = ResponsesInputTokensAsyncResource(client)
+        public lazy var inputItems = ResponsesInputItemsAsyncResource(clientOption)
+        public lazy var inputTokens = ResponsesInputTokensAsyncResource(clientOption)
     }
     // MARK: File
     public final class FilesAsyncResource: OpenAIAsyncAPIResource { }
@@ -49,7 +49,7 @@ public class OpenAIAsyncAPIResource {
     // MARK: Upload
     public final class UploadsPartAsyncResource: OpenAIAsyncAPIResource { }
     public final class UploadsAsyncResource: OpenAIAsyncAPIResource {
-        public lazy var part = UploadsPartAsyncResource(client)
+        public lazy var part = UploadsPartAsyncResource(clientOption)
     }
     
     // MARK: Viideo
@@ -62,6 +62,6 @@ public class OpenAIAsyncAPIResource {
     // MARK: Beta
     public final class BetaRealtimeAsyncResource: OpenAIAsyncAPIResource { }
     public final class BetaAsyncResource: OpenAIAsyncAPIResource {
-        public lazy var realtime = BetaRealtimeAsyncResource(client)
+        public lazy var realtime = BetaRealtimeAsyncResource(clientOption)
     }
 }

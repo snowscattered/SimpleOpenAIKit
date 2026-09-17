@@ -8,7 +8,7 @@
 import Foundation
 
 struct OpenAISession: Sendable, SessionProtocol {
-    typealias Client = OpenAIClient
+    typealias ClientOption = OpenAIClientOption
     static let shared: OpenAISession = OpenAISession()
     init() { }
     

@@ -12,12 +12,12 @@ public extension OpenAISyncAPIResource.UploadsSyncResource {
         parameters: UploadCreateParameters,
         requestOptions: RequestOptions? = nil
     ) throws -> UploadResult {
-        let url = try client.getServerUrl(path: "/uploads")
+        let url = try clientOption.getServerUrl(path: "/uploads")
         return try OpenAISession.shared.SyncResponse(
             url,
             payload: parameters,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .post,
         )
     }
@@ -26,12 +26,12 @@ public extension OpenAISyncAPIResource.UploadsSyncResource {
         upload_id: String,
         requestOptions: RequestOptions? = nil
     ) throws -> UploadResult {
-        let url = try client.getServerUrl(path: "/uploads/\(upload_id)/cancel")
+        let url = try clientOption.getServerUrl(path: "/uploads/\(upload_id)/cancel")
         return try OpenAISession.shared.SyncResponse(
             url,
             payload: nil as String?,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .post,
         )
     }
@@ -43,13 +43,13 @@ public extension OpenAISyncAPIResource.UploadsSyncResource {
         md5: String? = nil,
         requestOptions: RequestOptions? = nil
     ) throws -> UploadResult {
-        let url = try client.getServerUrl(path: "/uploads/\(upload_id)/cancel")
+        let url = try clientOption.getServerUrl(path: "/uploads/\(upload_id)/cancel")
         let parameters = UploadCompleParameters(upload_id: upload_id, part_ids: part_ids, md5: md5)
         return try OpenAISession.shared.SyncResponse(
             url,
             payload: parameters,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .post,
         )
     }
@@ -117,12 +117,12 @@ public extension OpenAISyncAPIResource.UploadsPartSyncResource {
         parameters: FileParameters,
         requestOptions: RequestOptions? = nil
     ) throws -> UploadPartResult {
-        let url = try client.getServerUrl(path: "/uploads/\(upload_id)/cancel")
+        let url = try clientOption.getServerUrl(path: "/uploads/\(upload_id)/cancel")
         return try OpenAISession.shared.SyncResponse(
             url,
             payload: parameters,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .post,
             hasFile: true
         )

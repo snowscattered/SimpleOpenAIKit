@@ -11,12 +11,12 @@ public extension OpenAISyncAPIResource.ModelsSyncResource {
     func list(
         requestOptions: RequestOptions? = nil
     ) throws -> PageStruct<ModelResult> {
-        let url = try client.getServerUrl(path: "/models")
+        let url = try clientOption.getServerUrl(path: "/models")
         return try OpenAISession.shared.SyncResponse(
             url,
             payload: nil as String?,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .get
         )
     }
@@ -39,12 +39,12 @@ public extension OpenAISyncAPIResource.ModelsSyncResource {
         model: String,
         requestOptions: RequestOptions? = nil
     ) throws -> ModelResult {
-        let url = try client.getServerUrl(path: "/models/\(model)")
+        let url = try clientOption.getServerUrl(path: "/models/\(model)")
         return try OpenAISession.shared.SyncResponse(
             url,
             payload: nil as String?,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .get
         )
     }
@@ -52,12 +52,12 @@ public extension OpenAISyncAPIResource.ModelsSyncResource {
         model: String,
         requestOptions: RequestOptions? = nil
     ) throws -> ModelDeletedResult {
-        let url = try client.getServerUrl(path: "/models/\(model)")
+        let url = try clientOption.getServerUrl(path: "/models/\(model)")
         return try OpenAISession.shared.SyncResponse(
             url,
             payload: nil as String?,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .delete
         )
     }

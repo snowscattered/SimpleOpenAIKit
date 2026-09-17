@@ -12,12 +12,12 @@ public extension OpenAIAsyncAPIResource.UploadsAsyncResource {
         parameters: UploadCreateParameters,
         requestOptions: RequestOptions? = nil
     ) async throws -> UploadResult {
-        let url = try client.getServerUrl(path: "/uploads")
+        let url = try clientOption.getServerUrl(path: "/uploads")
         return try await OpenAISession.shared.AsyncResponse(
             url,
             payload: parameters,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .post,
         )
     }
@@ -26,12 +26,12 @@ public extension OpenAIAsyncAPIResource.UploadsAsyncResource {
         upload_id: String,
         requestOptions: RequestOptions? = nil
     ) async throws -> UploadResult {
-        let url = try client.getServerUrl(path: "/uploads/\(upload_id)/cancel")
+        let url = try clientOption.getServerUrl(path: "/uploads/\(upload_id)/cancel")
         return try await OpenAISession.shared.AsyncResponse(
             url,
             payload: nil as String?,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .post,
         )
     }
@@ -43,13 +43,13 @@ public extension OpenAIAsyncAPIResource.UploadsAsyncResource {
         md5: String? = nil,
         requestOptions: RequestOptions? = nil
     ) async throws -> UploadResult {
-        let url = try client.getServerUrl(path: "/uploads/\(upload_id)/cancel")
+        let url = try clientOption.getServerUrl(path: "/uploads/\(upload_id)/cancel")
         let parameters = UploadCompleParameters(upload_id: upload_id, part_ids: part_ids, md5: md5)
         return try await OpenAISession.shared.AsyncResponse(
             url,
             payload: parameters,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .post,
         )
     }
@@ -117,12 +117,12 @@ public extension OpenAIAsyncAPIResource.UploadsPartAsyncResource {
         parameters: FileParameters,
         requestOptions: RequestOptions? = nil
     ) async throws -> UploadPartResult {
-        let url = try client.getServerUrl(path: "/uploads/\(upload_id)/cancel")
+        let url = try clientOption.getServerUrl(path: "/uploads/\(upload_id)/cancel")
         return try await OpenAISession.shared.AsyncResponse(
             url,
             payload: parameters,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .post,
             hasFile: true
         )

@@ -19,7 +19,7 @@ struct SyncSessionTests {
             .user("你是谁？")
         ],
     )
-    let client = OpenAI(
+    let client: OpenAIClientOption = .init(
         api_key: "NoKey",
         base_url: URL(string: "https://api.deepseek.com")!,
         max_retries: 0
@@ -30,7 +30,7 @@ struct SyncSessionTests {
             url,
             payload: payload,
             requestOptions: nil,
-            client: client,
+            clientOption: client,
             method: .post
         )
         print(response)
@@ -43,7 +43,7 @@ struct SyncSessionTests {
             requestOptions: .init(
                 extra_body: ["thinking": ["type": "disabled"]]
             ),
-            client: client,
+            clientOption: client,
             method: .post
         )
         try Streram.forEach { value in

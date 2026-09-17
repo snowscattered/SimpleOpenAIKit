@@ -12,14 +12,14 @@ public extension OpenAISyncAPIResource.ResponsesSyncResource {
         parameters: ResponseCreateParameters,
         requestOptions: RequestOptions? = nil
     ) throws -> ResponseCreateResult {
-        let url = try client.getServerUrl(path: "/responses")
+        let url = try clientOption.getServerUrl(path: "/responses")
         var nostreamingParameters = parameters
         nostreamingParameters.stream = false
         return try OpenAISession.shared.SyncResponse(
             url,
             payload: nostreamingParameters,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .post
         )
     }
@@ -28,14 +28,14 @@ public extension OpenAISyncAPIResource.ResponsesSyncResource {
         parameters: ResponseCreateParameters,
         requestOptions: RequestOptions? = nil
     ) throws -> SyncThrowingStream<ResponseStreamResult, Error> {
-        let url = try client.getServerUrl(path: "/responses")
+        let url = try clientOption.getServerUrl(path: "/responses")
         var streamingParameters = parameters
         streamingParameters.stream = true
         return try OpenAISession.shared.SyncStreamResponse(
             url,
             payload: streamingParameters,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .post
         )
     }
@@ -44,12 +44,12 @@ public extension OpenAISyncAPIResource.ResponsesSyncResource {
         parameters: ResponseRetrieveParameters,
         requestOptions: RequestOptions? = nil
     ) throws -> ResponseCreateResult {
-        let url = try client.getServerUrl(path: "/responses/\(parameters.response_id)")
+        let url = try clientOption.getServerUrl(path: "/responses/\(parameters.response_id)")
         return try OpenAISession.shared.SyncResponse(
             url,
             payload: parameters,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .post
         )
     }
@@ -57,14 +57,14 @@ public extension OpenAISyncAPIResource.ResponsesSyncResource {
         parameters: ResponseRetrieveParameters,
         requestOptions: RequestOptions? = nil
     ) throws -> SyncThrowingStream<ResponseStreamResult, Error> {
-        let url = try client.getServerUrl(path: "/responses/\(parameters.response_id)")
+        let url = try clientOption.getServerUrl(path: "/responses/\(parameters.response_id)")
         var streamingParameters = parameters
         streamingParameters.stream = true
         return try OpenAISession.shared.SyncStreamResponse(
             url,
             payload: streamingParameters,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .post
         )
     }
@@ -73,12 +73,12 @@ public extension OpenAISyncAPIResource.ResponsesSyncResource {
         response_id: String,
         requestOptions: RequestOptions? = nil
     ) throws -> ResponseCreateResult {
-        let url = try client.getServerUrl(path: "/responses/\(response_id)/cancel")
+        let url = try clientOption.getServerUrl(path: "/responses/\(response_id)/cancel")
         return try OpenAISession.shared.SyncResponse(
             url,
             payload: nil as String?,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .post
         )
     }
@@ -87,12 +87,12 @@ public extension OpenAISyncAPIResource.ResponsesSyncResource {
         response_id: String,
         requestOptions: RequestOptions? = nil
     ) throws -> ResponseCreateResult {
-        let url = try client.getServerUrl(path: "/responses/\(response_id)/delete")
+        let url = try clientOption.getServerUrl(path: "/responses/\(response_id)/delete")
         return try OpenAISession.shared.SyncResponse(
             url,
             payload: nil as String?,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .post
         )
     }
@@ -101,12 +101,12 @@ public extension OpenAISyncAPIResource.ResponsesSyncResource {
         parameters: ResponseCompactParameters,
         requestOptions: RequestOptions? = nil
     ) throws -> ResponseCompactResult {
-        let url = try client.getServerUrl(path: "/responses/compact")
+        let url = try clientOption.getServerUrl(path: "/responses/compact")
         return try OpenAISession.shared.SyncResponse(
             url,
             payload: parameters,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .post
         )
     }
@@ -115,12 +115,12 @@ public extension OpenAISyncAPIResource.ResponsesSyncResource {
         requestOptions: RequestOptions? = nil,
         completion: @escaping (SyncResponseConnection) throws -> Void
     ) throws {
-        let url = try client.getWSServerUrl(path: "/responses")
+        let url = try clientOption.getWSServerUrl(path: "/responses")
         let ws = try OpenAISession.shared.WebSocket(
             url,
             payload: nil as String?,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .get
         )
         let (stream, continuation) = SyncStream<ResponseStreamResult>.makeStream()

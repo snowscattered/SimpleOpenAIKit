@@ -43,7 +43,7 @@ public extension OpenAISyncAPIResource.RealtimeSyncResource {
         requestOptions: RequestOptions? = nil,
         completion: @escaping (SyncRealtimeConnection) throws -> Void
     ) throws {
-        let url = try client.getWSServerUrl(path: "/realtime")
+        let url = try clientOption.getWSServerUrl(path: "/realtime")
         var requestOptions = requestOptions ?? RequestOptions()
         if let call_id {
             requestOptions.extra_query = requestOptions.extra_query | ["call_id": .string(call_id)]
@@ -53,7 +53,7 @@ public extension OpenAISyncAPIResource.RealtimeSyncResource {
             url,
             payload: nil as String?,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .get
         )
         let (stream, continuation) = SyncStream<RealtimeEventResult>.makeStream()

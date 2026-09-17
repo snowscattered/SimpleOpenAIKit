@@ -24,7 +24,8 @@ struct AsyncSessionTests {
         ],
         extra: ["thinking": ["type": "disabled"]]
     )
-    let client = AsyncOpenAI(
+
+    let client: OpenAIClientOption = .init(
         api_key: "NoKey",
         base_url: URL(string: "https://api.deepseek.com")!,
         max_retries: 0
@@ -37,7 +38,7 @@ struct AsyncSessionTests {
             requestOptions: RequestOptions(
                 extra_body: .init(OBJ(a: 10))
             ),
-            client: client,
+                    clientOption: client,
             method: .post
         )
         guard let string = String(data: request.httpBody!, encoding: .utf8) else {
@@ -58,7 +59,7 @@ struct AsyncSessionTests {
             url,
             payload: payload,
             requestOptions: nil,
-            client: client,
+            clientOption: client,
             method: .post
         )
         print(response)
@@ -69,7 +70,7 @@ struct AsyncSessionTests {
             url,
             payload: payload,
             requestOptions: nil,
-            client: client,
+            clientOption: client,
             method: .post
         )
         for try await result in Streram {

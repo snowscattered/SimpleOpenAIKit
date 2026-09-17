@@ -12,14 +12,14 @@ public extension OpenAIAsyncAPIResource.AudioTranscriptionsAsyncResource {
         parameters: AudioTranscriptionParameters,
         requestOptions: RequestOptions? = nil
     ) async throws -> AudioTranscriptionCreateResult {
-        let url = try client.getServerUrl(path: "/audio/transcriptions")
+        let url = try clientOption.getServerUrl(path: "/audio/transcriptions")
         var nostreamingParameters = parameters
         nostreamingParameters.stream = false
         return try await OpenAISession.shared.AsyncResponse(
             url,
             payload: nostreamingParameters,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .post
         )
     }
@@ -28,14 +28,14 @@ public extension OpenAIAsyncAPIResource.AudioTranscriptionsAsyncResource {
         parameters: AudioTranscriptionParameters,
         requestOptions: RequestOptions? = nil
     ) async throws -> AsyncThrowingStream<AudioTranscriptionStreamResult, Error> {
-        let url = try client.getServerUrl(path: "/audio/transcriptions")
+        let url = try clientOption.getServerUrl(path: "/audio/transcriptions")
         var streamingParameters = parameters
         streamingParameters.stream = true
         return try await OpenAISession.shared.AsyncStreamResponse(
             url,
             payload: streamingParameters,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .post
         )
     }

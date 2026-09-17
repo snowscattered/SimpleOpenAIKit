@@ -12,14 +12,14 @@ public extension OpenAISyncAPIResource.ImagesSyncResource {
         parameters: ImageGenerateParameters,
         requestOptions: RequestOptions? = nil
     ) throws -> ImageGenerateResult {
-        let url = try client.getServerUrl(path: "/images/generations")
+        let url = try clientOption.getServerUrl(path: "/images/generations")
         var nostreamingParameters = parameters
         nostreamingParameters.stream = false
         return try OpenAISession.shared.SyncResponse(
             url,
             payload: nostreamingParameters,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .post
         )
     }
@@ -27,14 +27,14 @@ public extension OpenAISyncAPIResource.ImagesSyncResource {
         parameters: ImageGenerateParameters,
         requestOptions: RequestOptions? = nil
     ) throws -> SyncThrowingStream<ImagesGenerateStreamResult, Error> {
-        let url = try client.getServerUrl(path: "/images/generations")
+        let url = try clientOption.getServerUrl(path: "/images/generations")
         var streamingParameters = parameters
         streamingParameters.stream = true
         return try OpenAISession.shared.SyncStreamResponse(
             url,
             payload: streamingParameters,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .post
         )
     }
@@ -43,14 +43,14 @@ public extension OpenAISyncAPIResource.ImagesSyncResource {
         parameters: ImageEditParameters,
         requestOptions: RequestOptions? = nil
     ) throws -> ImageEditResult {
-        let url = try client.getServerUrl(path: "/images/edits")
+        let url = try clientOption.getServerUrl(path: "/images/edits")
         var nostreamingParameters = parameters
         nostreamingParameters.stream = false
         return try OpenAISession.shared.SyncResponse(
             url,
             payload: nostreamingParameters,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .post
         )
     }
@@ -58,14 +58,14 @@ public extension OpenAISyncAPIResource.ImagesSyncResource {
         parameters: ImageEditParameters,
         requestOptions: RequestOptions? = nil
     ) throws -> SyncThrowingStream<ImagesEditStreamResult, Error> {
-        let url = try client.getServerUrl(path: "/images/edits")
+        let url = try clientOption.getServerUrl(path: "/images/edits")
         var streamingParameters = parameters
         streamingParameters.stream = true
         return try OpenAISession.shared.SyncStreamResponse(
             url,
             payload: streamingParameters,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .post
         )
     }

@@ -12,12 +12,12 @@ public extension OpenAIAsyncAPIResource.FilesAsyncResource {
         parameters: FilesCreateParameters,
         requestOptions: RequestOptions? = nil
     ) async throws -> FileResult {
-        let url = try client.getServerUrl(path: "/files")
+        let url = try clientOption.getServerUrl(path: "/files")
         return try await OpenAISession.shared.AsyncResponse(
             url,
             payload: parameters,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .post,
             hasFile: true
         )
@@ -26,7 +26,7 @@ public extension OpenAIAsyncAPIResource.FilesAsyncResource {
         parameters: FilesListParameters? = nil,
         requestOptions: RequestOptions? = nil
     ) async throws -> AsyncThrowingPages<FileResult> {
-        let url = try client.getServerUrl(path: "/files")
+        let url = try clientOption.getServerUrl(path: "/files")
         var nextAfter = parameters?.after
         var currentParams = parameters ?? FilesListParameters()
         return AsyncThrowingPages {
@@ -35,7 +35,7 @@ public extension OpenAIAsyncAPIResource.FilesAsyncResource {
                 url,
                 payload: currentParams,
                 requestOptions: requestOptions,
-                client: self.client,
+                clientOption: self.clientOption,
                 method: .get
             )
             if let last = result.data.last {
@@ -48,12 +48,12 @@ public extension OpenAIAsyncAPIResource.FilesAsyncResource {
         file_id: String,
         requestOptions: RequestOptions? = nil
     ) async throws -> FileResult {
-        let url = try client.getServerUrl(path: "/files/\(file_id)")
+        let url = try clientOption.getServerUrl(path: "/files/\(file_id)")
         return try await OpenAISession.shared.AsyncResponse(
             url,
             payload: nil as String?,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .get
         )
     }
@@ -61,12 +61,12 @@ public extension OpenAIAsyncAPIResource.FilesAsyncResource {
         file_id: String,
         requestOptions: RequestOptions? = nil
     ) async throws -> FileDeleted {
-        let url = try client.getServerUrl(path: "/files/\(file_id)")
+        let url = try clientOption.getServerUrl(path: "/files/\(file_id)")
         return try await OpenAISession.shared.AsyncResponse(
             url,
             payload: nil as String?,
             requestOptions: requestOptions,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .delete
         )
     }

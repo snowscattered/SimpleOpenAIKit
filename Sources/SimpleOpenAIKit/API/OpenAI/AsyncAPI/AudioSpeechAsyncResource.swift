@@ -12,7 +12,7 @@ public extension OpenAIAsyncAPIResource.AudioSpeechAsyncResource {
         parameters: AudioSpeechParameters,
         requestOptions: RequestOptions? = nil
     ) async throws -> Data {
-        let url = try client.getServerUrl(path: "/audio/speech")
+        let url = try clientOption.getServerUrl(path: "/audio/speech")
         var options = requestOptions ?? RequestOptions()
         if options.extra_headers["Accept"] == nil {
             options.extra_headers["Accept"] = "application/octet-stream"
@@ -21,7 +21,7 @@ public extension OpenAIAsyncAPIResource.AudioSpeechAsyncResource {
             url,
             payload: parameters,
             requestOptions: options,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .post
         )
     }
@@ -29,7 +29,7 @@ public extension OpenAIAsyncAPIResource.AudioSpeechAsyncResource {
         parameters: AudioSpeechParameters,
         requestOptions: RequestOptions? = nil
     ) async throws -> AsyncThrowingStream<Data, Error> {
-        let url = try client.getServerUrl(path: "/audio/speech")
+        let url = try clientOption.getServerUrl(path: "/audio/speech")
         var options = requestOptions ?? RequestOptions()
         if options.extra_headers["Accept"] == nil {
             options.extra_headers["Accept"] = "application/octet-stream"
@@ -38,7 +38,7 @@ public extension OpenAIAsyncAPIResource.AudioSpeechAsyncResource {
             url,
             payload: parameters,
             requestOptions: options,
-            client: self.client,
+            clientOption: self.clientOption,
             method: .post
         )
     }

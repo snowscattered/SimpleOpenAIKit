@@ -8,7 +8,7 @@
 import Foundation
 
 struct AnthropicSession: Sendable, SessionProtocol {
-    typealias Client = AnthropicClient
+    typealias ClientOption = AnthropicClientOption
     static let shared: AnthropicSession = AnthropicSession()
     init() { }
     

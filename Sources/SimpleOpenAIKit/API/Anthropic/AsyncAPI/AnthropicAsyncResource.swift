@@ -6,9 +6,9 @@
 //
 
 public class AnthropicAsyncAPIResource {
-    unowned let client: AsyncAnthropic
-    init(_ client: AsyncAnthropic) {
-        self.client = client
+    let clientOption: AnthropicClientOption
+    init(_ clientOption: AnthropicClientOption) {
+        self.clientOption = clientOption
     }
     // MARK: Model
     public final class ModelsAsyncResource: AnthropicAsyncAPIResource { }
