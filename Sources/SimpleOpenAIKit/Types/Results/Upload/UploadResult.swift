@@ -16,6 +16,7 @@ public enum UploadStatus: String {
     case expired
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct UploadResult {
     public static let object: String = "upload"
     public let id: String

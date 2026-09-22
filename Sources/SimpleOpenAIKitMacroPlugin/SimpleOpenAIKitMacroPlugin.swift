@@ -9,6 +9,7 @@ import SwiftCompilerPlugin
 import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
+@_exported import SimpleCodableMacro
 
 @main
 struct SimpleOpenAIMacroPlugin: CompilerPlugin {

@@ -52,7 +52,7 @@ struct SingleOrArrayMacro: ExtensionMacro {
 
         let ext: DeclSyntax = """
             nonisolated extension \(raw: enumName): BaseModel {
-                \(raw: access)init(from decoder: Decoder) throws {
+                \(raw: access)init(from decoder: any Decoder) throws {
                     let container = try decoder.singleValueContainer()
                     if (try? container.decode(\(raw: single.typeName).self)) == nil &&
                         (try? container.decode([BaseType].self)) == nil {
@@ -70,7 +70,7 @@ struct SingleOrArrayMacro: ExtensionMacro {
                     let array = try container.decode([\(raw: array.elementType)].self)
                     self = .\(raw: array.name)(array)
                 }
-                \(raw: access)func encode(to encoder: Encoder) throws {
+                \(raw: access)func encode(to encoder: any Encoder) throws {
                     var container = encoder.singleValueContainer()
                     switch self {
                     case .\(raw: single.name)(let v): try container.encode(v)

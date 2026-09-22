@@ -19,6 +19,7 @@ public enum RealtimeUserContentType: String {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct RealtimeUserContent {
     public var type: RealtimeUserContentType?
     public var audio: String?
@@ -29,6 +30,7 @@ public struct RealtimeUserContent {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct RealtimeUserMessageConversationItem {
     public static let object: String = "realtime.item"
     public static let role: String = "user"

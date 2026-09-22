@@ -8,6 +8,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseFunctionCallArgumentsDeltaEvent {
     public static let type: String = "response.function_call_arguments.delta"
     public let delta: String
@@ -16,6 +17,7 @@ public struct ResponseFunctionCallArgumentsDeltaEvent {
     public let sequence_number: Int
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseFunctionCallArgumentsDoneEvent {
     public static let type: String = "response.function_call_arguments.done"
     public let arguments: String

@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct BetaRealtimeConversationItemInputAudioTranscriptionFailedEvent {
     public static let type: String = "conversation.item.input_audio_transcription.failed"
     public let event_id: String

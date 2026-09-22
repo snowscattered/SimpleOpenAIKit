@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct RealtimeFunctionCallItem {
     public static let object: String = "realtime.item"
     public static let type: String = "function_call"

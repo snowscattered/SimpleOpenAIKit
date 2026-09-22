@@ -18,6 +18,7 @@ public enum MessageBase64ImageSourceMidiaType {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct MessageBase64ImageSource {
     public static let type: String = "base64"
     public var data: String

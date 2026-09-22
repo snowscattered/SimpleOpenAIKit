@@ -8,6 +8,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseFailedEvent {
     public static let type: String = "response.failed"
     public let response: ResponseCreateResult

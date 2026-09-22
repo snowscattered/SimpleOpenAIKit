@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct BetaRealtimeResponseTextDeltaEvent {
     public static let type: String = "response.text.delta"
     public let event_id: String

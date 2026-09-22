@@ -46,7 +46,7 @@ struct CodableStringLiteralWithOtherMacro: ExtensionMacro {
                     case .other(let s): return s
                     }
                 }
-                \(raw: access)init(from decoder: Decoder) throws {
+                \(raw: access)init(from decoder: any Decoder) throws {
                     let container = try decoder.singleValueContainer()
                     let rawValue = try container.decode(String.self)
                     switch rawValue {
@@ -54,7 +54,7 @@ struct CodableStringLiteralWithOtherMacro: ExtensionMacro {
                     default: self = .other(rawValue)
                     }
                 }
-                \(raw: access)func encode(to encoder: Encoder) throws {
+                \(raw: access)func encode(to encoder: any Encoder) throws {
                     var container = encoder.singleValueContainer()
                     try container.encode(rawValue)
                 }

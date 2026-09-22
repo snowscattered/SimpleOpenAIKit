@@ -9,11 +9,13 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseWebSearchFilters {
     public var allowed_domains: [String]?
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseWebSearchUserLocation {
     public let type: String? = "approximate"
     public var city: String?
@@ -28,6 +30,7 @@ public enum ResponseWebSearchContextSizeLiteral: String {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseWebSearchTool {
     public static let type: String = "web_search"
     public var external_web_access: Bool?

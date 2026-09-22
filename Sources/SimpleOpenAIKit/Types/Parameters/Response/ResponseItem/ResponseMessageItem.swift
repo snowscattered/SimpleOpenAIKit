@@ -9,12 +9,14 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseTopLogprob {
     public var token: String
     public var bytes: [Int]
     public var logprob: Float
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseLogprob {
     public var token: String
     public var bytes: [Int]
@@ -22,6 +24,7 @@ public struct ResponseLogprob {
     public var top_logprobs: [ResponseTopLogprob]
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseOutputText: Sendable {
     public static let type: String = "output_text"
     public var text: String
@@ -29,6 +32,7 @@ public struct ResponseOutputText: Sendable {
     public var annotations: [ResponseAnnotation]?
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseOutputRefusal {
     public static let type: String = "refusal"
     public var refusal: String
@@ -67,6 +71,7 @@ public enum ResponseOutputMessageContent {
 }
 // MARK: - MessageItem
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseEasyInputMessage {
     public static let type: String = "message"
     public var role: ResponseEasyInputMessageRoleLiteral
@@ -74,6 +79,7 @@ public struct ResponseEasyInputMessage {
     public var phase: ResponsePhaseLiteral?
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseMessage {
     public static let type: String = "message"
     public var role: ResponseMessageRoleLiteral // No Assistant
@@ -81,6 +87,7 @@ public struct ResponseMessage {
     public var status: ResponseItemStatusLiteral?
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseOutputMessage {
     public static let type: String = "message"
     public static let role: String = "assistant"

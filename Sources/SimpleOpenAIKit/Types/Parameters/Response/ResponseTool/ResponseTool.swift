@@ -15,6 +15,7 @@ public enum ResponseToolAllowedCallers: String {
 }
 
 @BaseModelWithExtra
+@PublicInit
 public struct ResponseBaseTool {
     public var type: String
 }

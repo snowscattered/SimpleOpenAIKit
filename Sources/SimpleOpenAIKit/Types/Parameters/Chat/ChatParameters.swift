@@ -11,6 +11,7 @@ import SimpleCodableMacro
 // MARK: - Stream Options
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ChatStreamOptions {
     public var include_obfuscation: Bool?
     public var include_usage: Bool?
@@ -24,6 +25,7 @@ public enum ChatAudioFormatLiteral: String {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ChatAudio {
     public var voice: String
     public var format: ChatAudioFormatLiteral
@@ -31,6 +33,7 @@ public struct ChatAudio {
 
 // MARK: - FuncionCall
 @BaseModelNoWithExtra
+@PublicInit
 public struct ChatFunctionCallOption {
     public var name: String
 }
@@ -47,6 +50,7 @@ public enum ChatFunctionCall {
 // MARK: - Tool
 /// MARK: FunctionTool
 @BaseModelNoWithExtra
+@PublicInit
 public struct ChatFunction {
     public var name: String
     public var description: String?
@@ -54,12 +58,14 @@ public struct ChatFunction {
     public var strict: Bool?
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ChatFunctionTool {
     public static let type: String = "function"
     public var function: ChatFunction
 }
 /// MARK: CustomTool
 @BaseModelNoWithExtra
+@PublicInit
 public struct ChatCustomTextFormat {
     public static let type: String = "text"
 }
@@ -69,11 +75,13 @@ public enum ChatCustomGrammarFormatSyntax: String {
     case regex
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ChatCustomGrammarFormatGrammar {
     public var definition: String
     public var syntax: ChatCustomGrammarFormatSyntax
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ChatCustomGrammarFormat {
     public static let type: String = "grammar"
     public var grammar: ChatCustomGrammarFormatGrammar
@@ -84,12 +92,14 @@ public enum ChatCustomFormat {
     case grammar(ChatCustomGrammarFormat)
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ChatCustom {
     public var name: String
     public var description: String?
     public var format: ChatCustomFormat
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ChatCustomTool {
     public static let type: String = "custom"
     public var custom: ChatCustom
@@ -111,29 +121,35 @@ public enum ChatAllowedToolsModeLiteral: String {
     case all, required
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ChatAllowedTools {
     public var mode: ChatAllowedToolsModeLiteral
     public var tools: [String: BaseType]
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ChatAllowedToolChoiceType {
     public static let type: String = "allowed_tools"
     public var allowed_tools: ChatAllowedTools
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ChatNamedToolChoiceFunction {
     public var name: String
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ChatNamedToolChoiceCustom {
     public var name: String
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ChatNamedToolChoiceType {
     public static let type: String = "function"
     public var function: ChatNamedToolChoiceFunction
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ChatNamedToolChoiceCustomType {
     public static let type: String = "custom"
     public var custom: ChatNamedToolChoiceCustom
@@ -150,6 +166,7 @@ public enum ChatToolChoice {
 // MARK: - Response Format
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ChatJSONSchema {
     public var name: String
     public var description: String
@@ -158,17 +175,20 @@ public struct ChatJSONSchema {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ChatResponseFormatText {
     public static let type: String = "text"
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ChatResponseFormatJSONSchema {
     public static let type: String = "json_schema"
     public var json_schema: ChatJSONSchema
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ChatResponseFormatJSONObject {
     public static let type: String = "json_object"
 }
@@ -183,6 +203,7 @@ public enum ChatResponseFormat {
 // MARK: - Prediction Content
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ChatPredictionContent {
     public static let type: String = "content"
     public var content: ChatStringOrContentPartText
@@ -191,6 +212,7 @@ public struct ChatPredictionContent {
 // MARK: - Web Search Option
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ChatWebSearchUserLocationApproximate {
     public var city: String
     public var country: String
@@ -199,6 +221,7 @@ public struct ChatWebSearchUserLocationApproximate {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ChatWebSearchUserLocation {
     public static let type: String = "approximate"
     public var approximate: ChatWebSearchUserLocationApproximate
@@ -210,6 +233,7 @@ public enum ChatSearchContextSizeLiteral: String {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ChatWebSearchOption {
     public var search_context_size: ChatSearchContextSizeLiteral?
     public var user_location: ChatWebSearchUserLocation?
@@ -242,6 +266,7 @@ public enum ChatVerbosityLiteral: String {
 public typealias ChatMetaData = OpenAIMetaData
 
 @BaseModelWithExtra
+@PublicInit
 public struct ChatParameters {
     public var model: String
     public var messages: [ChatMessage]

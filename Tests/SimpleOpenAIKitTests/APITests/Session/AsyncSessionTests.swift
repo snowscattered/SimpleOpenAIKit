@@ -17,13 +17,17 @@ struct OBJ: Codable & Sendable {
 @Suite("AsyncSessionTests")
 struct AsyncSessionTests {
     let url = URL(string: "https://api.deepseek.com/chat/completions")!
-    var payload: ChatParameters = .init(
-        model: "deepseek-v4-pro",
-        messages: [
-            .user("你是谁？"),
-        ],
-        extra: ["thinking": ["type": "disabled"]]
-    )
+    var payload: ChatParameters = {
+        var payload: ChatParameters = .init(
+            model: "deepseek-v4-pro",
+            messages: [
+                .user("你是谁？"),
+            ]
+        )
+        // `extra` is the decode fallback slot, so it is assigned instead of passed to the init.
+        payload.extra = ["thinking": ["type": "disabled"]]
+        return payload
+    }()
 
     let client: OpenAIClientOption = .init(
         api_key: "NoKey",

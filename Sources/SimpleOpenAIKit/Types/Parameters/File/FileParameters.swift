@@ -155,6 +155,7 @@ nonisolated extension FileParameters: BaseModel {
 }
 #else
 @BaseModelNoWithExtra
+@PublicInit
 public struct FileParameters {
     public var raw: Data
     public var name: String = "upload"
@@ -208,11 +209,13 @@ public enum FilesPurposeLiteral {
     case other(String)
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct FilesExpiresAfter {
     public static let anchor: String = "created_at"
     public var seconds: Int
 }
 @BaseModelWithExtra
+@PublicInit
 public struct FilesCreateParameters {
     public var file: FileParameters
     public var purpose: FilesPurposeLiteral?
@@ -225,6 +228,7 @@ public enum ListOrder: String {
     case asc, desc
 }
 @BaseModelWithExtra
+@PublicInit
 public struct FilesListParameters {
     public var after: String?
     public var limit: Int?
@@ -234,12 +238,14 @@ public struct FilesListParameters {
 
 // MARK: - Retrieve
 @BaseModelWithExtra
+@PublicInit
 public struct FilesRetrieveParameter {
     @transient public var file_id: String
 }
 
 // MARK: - Delete
 @BaseModelWithExtra
+@PublicInit
 public struct FilesDeleteParameter {
     @transient public var file_id: String
 }

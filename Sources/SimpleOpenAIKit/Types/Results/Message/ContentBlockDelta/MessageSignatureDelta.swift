@@ -8,6 +8,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct MessageSignatureDelta {
     public static let type: String = "signature_delta"
     public let signature: String

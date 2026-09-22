@@ -15,30 +15,7 @@ struct BaseModelWithExtraMacro: MemberMacro, ExtensionMacro {
 
         let access = declAccessModifier(of: structDecl)
         let extraProperty: DeclSyntax = "\(raw: access)var extra: [String : BaseType] = [:]"
-
-        // Skip when the struct declares its own init, otherwise overloads become ambiguous.
-        guard !structDecl.memberBlock.members.contains(where: { $0.decl.is(InitializerDeclSyntax.self) }) else {
-            return [extraProperty]
-        }
-
-        // MARK: - Init
-        let stored = collectStoredProperties(of: structDecl).filter { !$0.isStatic && !$0.isImmutableWithDefault }
-        var initParams = stored.map { prop -> String in
-            prop.isOptional ? "\(prop.name): \(prop.typeName)? = nil" : "\(prop.name): \(prop.typeName)"
-        }
-        var initBody = stored.map { "self.\($0.name) = \($0.name)" }
-        // `extra` is added by this macro, so it becomes the last parameter.
-        initParams.append("extra: [String : BaseType] = [:]")
-        initBody.append("self.extra = extra")
-
-        let initDecl: DeclSyntax = """
-            \(raw: access)init(
-                \(raw: initParams.joined(separator: ",\n"))
-            ) {
-                \(raw: initBody.joined(separator: "\n"))
-            }
-            """
-        return [extraProperty, initDecl]
+        return [extraProperty]
     }
     
     static func expansion(
@@ -112,7 +89,7 @@ struct BaseModelWithExtraMacro: MemberMacro, ExtensionMacro {
             nonisolated extension \(raw: typeName): BaseModelWithExtra {
                 \(raw: codingKeysDecl)
 
-                \(raw: access)init(from decoder: Decoder) throws {
+                \(raw: access)init(from decoder: any Decoder) throws {
                     \(raw: decodeDecl)
             
                     let c = try decoder.singleValueContainer()
@@ -122,7 +99,7 @@ struct BaseModelWithExtraMacro: MemberMacro, ExtensionMacro {
                     try self.after()
                 }
 
-                \(raw: access)func encode(to encoder: Encoder) throws {
+                \(raw: access)func encode(to encoder: any Encoder) throws {
                     \(raw: encodeDecl)
 
                     var c = encoder.singleValueContainer()

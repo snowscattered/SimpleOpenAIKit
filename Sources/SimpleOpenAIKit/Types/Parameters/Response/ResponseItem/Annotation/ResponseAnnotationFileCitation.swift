@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseAnnotationFileCitation {
     public static let type: String = "file_citation"
     public var file_id: String

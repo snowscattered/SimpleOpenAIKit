@@ -10,6 +10,7 @@ import SimpleCodableMacro
 
 /// Extension Anthropic API
 @BaseModelNoWithExtra
+@PublicInit
 public struct MessageVideoBlock {
     public static let type: String = "video"
     public var source: MessageSource

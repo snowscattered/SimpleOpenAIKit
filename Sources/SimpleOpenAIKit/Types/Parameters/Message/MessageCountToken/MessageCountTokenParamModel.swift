@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelWithExtra
+@PublicInit
 public struct MessageCountTokenParameters {
     public var model: String
     public var system: MessageSystem?

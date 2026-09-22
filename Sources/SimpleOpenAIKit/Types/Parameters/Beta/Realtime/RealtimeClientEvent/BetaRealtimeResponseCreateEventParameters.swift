@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct BataRealtimeTool {
     public static let type: String = "function"
     public var description: String?
@@ -17,6 +18,7 @@ public struct BataRealtimeTool {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct BetaRealtimeResponse : Sendable{
     public var conversation: String?
     public var input: [BetaRealtimeConversationItem]?
@@ -31,6 +33,7 @@ public struct BetaRealtimeResponse : Sendable{
     public var voice: String?
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct BetaRealtimeResponseCreateEventParameters {
     public static let type: String = "response.create"
     public var event_id: String?

@@ -8,6 +8,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct AudioTranscriptionTextSegmentEvent {
     public static let type: String = "transcript.text.segment"
     public let id: String
@@ -17,6 +18,7 @@ public struct AudioTranscriptionTextSegmentEvent {
     public let text: String
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct AudioTranscriptionTextDeltaEvent {
     public static let type: String = "transcript.text.delta"
     public let delta: String
@@ -25,6 +27,7 @@ public struct AudioTranscriptionTextDeltaEvent {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct AudioTranscriptionTextDoneEvent {
     public static let type: String = "transcript.text.done"
     public let text: String

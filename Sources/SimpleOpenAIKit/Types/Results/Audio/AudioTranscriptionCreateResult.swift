@@ -9,6 +9,7 @@ import SimpleCodableMacro
 
 //
 @BaseModelNoWithExtra
+@PublicInit
 public struct AudioTranscription {
     public let text: String
     public let logprobs: [AudioTranscriptionLogprob]?
@@ -16,6 +17,7 @@ public struct AudioTranscription {
 }
 //
 @BaseModelNoWithExtra
+@PublicInit
 public struct AudioTranscriptionDiarizedSegment {
     public static let type: String = "transcript.text.segment"
     public let id: String
@@ -25,6 +27,7 @@ public struct AudioTranscriptionDiarizedSegment {
     public let text: String
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct AudioTranscriptionDiarized {
     public static let task: String = "transcribe"
     public let duration: Float
@@ -34,6 +37,7 @@ public struct AudioTranscriptionDiarized {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct AudioTranscriptionSegment {
     public let id: Int
     public let avg_logprob: Float
@@ -47,12 +51,14 @@ public struct AudioTranscriptionSegment {
     public let tokens: [Int]
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct AudioTranscriptionWord {
     public let end: Float
     public let start: Float
     public let word: String
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct AudioTranscriptionVerbose {
     public let duration: Float
     public let language: String

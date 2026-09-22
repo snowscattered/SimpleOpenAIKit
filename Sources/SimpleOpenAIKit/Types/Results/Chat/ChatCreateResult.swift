@@ -10,6 +10,7 @@ import SimpleCodableMacro
 public typealias ChatCreateMessage = ChatAssistantMessage
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ChatCreateChoice {
     public let index: Int
     public let message: ChatCreateMessage
@@ -18,6 +19,7 @@ public struct ChatCreateChoice {
 }
 // ChatResult
 @BaseModelNoWithExtra
+@PublicInit
 public struct ChatCreateResult {
     public let id: String
     public let choices: [ChatCreateChoice]

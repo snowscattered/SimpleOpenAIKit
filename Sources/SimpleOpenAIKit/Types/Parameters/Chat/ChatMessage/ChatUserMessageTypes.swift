@@ -19,6 +19,7 @@ extension ChatStringOrContentPart: ExpressibleByStringLiteral, ExpressibleByArra
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ChatUserMessage {
     public static let role: String = "user"
     public var content: ChatStringOrContentPart

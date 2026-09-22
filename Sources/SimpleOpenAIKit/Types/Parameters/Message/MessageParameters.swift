@@ -11,6 +11,7 @@ import SimpleCodableMacro
 // MARK: - Message Parameters
 
 @BaseModelWithExtra
+@PublicInit
 public struct MessageParameters {
     public var model: String
     public var system: MessageSystem?

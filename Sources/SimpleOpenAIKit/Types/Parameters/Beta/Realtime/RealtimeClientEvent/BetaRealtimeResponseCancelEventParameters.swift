@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct BetaRealtimeResponseCancelEventParameters {
     public static let type: String = "response.cancel"
     public var event_id: String?

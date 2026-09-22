@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct BetaRealtimeTranscriptionSession {
     public var client_secret: BetaRealtimeClientSecret?
     public var input_audio_format: BetaRealtimeInputAudioFormat?
@@ -21,6 +22,7 @@ public struct BetaRealtimeTranscriptionSession {
 
 // MARK: Main
 @BaseModelNoWithExtra
+@PublicInit
 public struct BetaRealtimeTranscriptionSessionUpdateEventParameters {
     public static let type: String = "transcription_session.update"
     public var event_id: String?

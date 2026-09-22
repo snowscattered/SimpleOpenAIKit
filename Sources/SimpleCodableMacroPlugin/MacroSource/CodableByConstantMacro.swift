@@ -113,7 +113,7 @@ struct CodableByConstantMacro: ExtensionMacro {
         let ext: DeclSyntax = """
             nonisolated extension \(raw: enumName): BaseModel {
                 private enum CodingKeys: String, CodingKey { case \(raw: field) }
-                \(raw: access)init(from decoder: Decoder) throws {
+                \(raw: access)init(from decoder: any Decoder) throws {
                     
             
                     let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -126,7 +126,7 @@ struct CodableByConstantMacro: ExtensionMacro {
                     }
                 }
 
-                \(raw: access)func encode(to encoder: Encoder) throws {
+                \(raw: access)func encode(to encoder: any Encoder) throws {
                     var c = encoder.singleValueContainer()
                     switch self {
                     \(raw: encodeCases)

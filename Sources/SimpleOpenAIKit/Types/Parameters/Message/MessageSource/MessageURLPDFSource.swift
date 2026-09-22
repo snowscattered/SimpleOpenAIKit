@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct MessageURLPDFSource {
     public static let type: String = "url"
     public var url: String

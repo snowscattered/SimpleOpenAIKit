@@ -8,17 +8,20 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseTextTopLogprob {
     public let token: String?
     public let logprob: Float?
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseTextLogprob {
     public let token: String
     public let logprob: Float
     public let top_logprobs: [ResponseTextTopLogprob]?
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseTextDeltaEvent {
     public static let type: String = "response.output_text.delta"
     public let content_index: Int
@@ -29,6 +32,7 @@ public struct ResponseTextDeltaEvent {
     public let logprobs: [ResponseTextLogprob]?
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseTextDoneEvent {
     public static let type: String = "response.output_text.done"
     public let content_index: Int

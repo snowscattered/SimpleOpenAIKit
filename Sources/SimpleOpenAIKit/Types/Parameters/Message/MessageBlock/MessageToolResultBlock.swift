@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct MessageToolReference {
     public static let type: String = "tool_reference"
     public var tool_name: String
@@ -37,6 +38,7 @@ extension MessageToolResultContent: ExpressibleByStringLiteral, ExpressibleByArr
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct MessageToolResultBlock {
     public static let type: String = "tool_result"
     public var tool_use_id: String

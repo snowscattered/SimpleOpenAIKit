@@ -21,6 +21,7 @@ extension ResponseCustomToolCallOutput: ExpressibleByStringLiteral {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseCustomToolCallOutputItem {
     public static let type: String = "custom_tool_call_output"
     public var id: String?

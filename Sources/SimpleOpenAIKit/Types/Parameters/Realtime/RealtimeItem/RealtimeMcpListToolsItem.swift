@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct RealtimeMCPTool {
     public var input_schema: BaseType
     public var name: String
@@ -17,6 +18,7 @@ public struct RealtimeMCPTool {
 }
 
 @BaseModelWithExtra
+@PublicInit
 public struct RealtimeMcpListToolsItem {
     public static let type: String = "mcp_list_tools"
     public var id: String?

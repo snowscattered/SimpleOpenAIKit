@@ -8,6 +8,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct MessageThinkingDelta {
     public static let type: String = "thinking_delta"
     public let thinking: String

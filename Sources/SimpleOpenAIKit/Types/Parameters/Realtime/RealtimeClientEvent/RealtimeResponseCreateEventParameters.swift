@@ -11,12 +11,14 @@ import SimpleCodableMacro
 
 // MARK: Output
 @BaseModelNoWithExtra
+@PublicInit
 public struct RealtimeResponseAudioOutput {
     public var format: RealtimeAudioFormat
     public var voice: String
 }
 // MARK: Function Tool
 @BaseModelNoWithExtra
+@PublicInit
 public struct RealtimeFunctionTool {
     public static let type: String = "function"
     public var description: String?
@@ -25,6 +27,7 @@ public struct RealtimeFunctionTool {
 }
 // MARK: MCP Tool
 @BaseModelNoWithExtra
+@PublicInit
 public struct RealtimeAllowedToolsMcpToolFilter {
     public var read_only: Bool?
     public var tool_names: [String]?
@@ -55,6 +58,7 @@ public enum RealtimeMCPToolApprovalFilterLiteral: String {
     case allways, never
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct RealtimeMCPToolApprovalFilter {
     public var always: RealtimeAllowedToolsMcpToolFilter?
     public var never: RealtimeAllowedToolsMcpToolFilter?
@@ -65,6 +69,7 @@ public enum RealtimeMCPToolMcpToolApproval {
     case filter(RealtimeMCPToolApprovalFilter)
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct RealtimeMcpTool {
     public static let type: String = "mcp"
     public var server_label: String
@@ -85,6 +90,7 @@ public enum RealtimeResponseTool {
 }
 // MARK: Main
 @BaseModelNoWithExtra
+@PublicInit
 public struct RealtimeResponse {
     public var instructions: String?
     public var prompt: ResponsePrompt?
@@ -99,6 +105,7 @@ public struct RealtimeResponse {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct RealtimeResponseCreateEventParameters {
     public static let type: String = "response.create"
     public var event_id: String?

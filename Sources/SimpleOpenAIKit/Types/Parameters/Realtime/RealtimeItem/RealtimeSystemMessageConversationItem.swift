@@ -13,12 +13,14 @@ public enum RealtimeSystemContentType: String {
     case input_text
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct RealtimeSystemContent {
     public var text: String?
     public var type: RealtimeSystemContentType?
 }
 
 @BaseModelWithExtra
+@PublicInit
 public struct RealtimeSystemMessageConversationItem {
     public static let object: String = "realtime.item"
     public static let role: String = "system"

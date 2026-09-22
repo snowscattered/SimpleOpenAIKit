@@ -14,6 +14,7 @@ public enum ResponseComparisonTypeLiteral: String {
     case eq, ne, gt, gte, lt, lte
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseComparisonFilter {
     public var type: ResponseComparisonTypeLiteral
     public var key: String
@@ -25,6 +26,7 @@ public enum ResponseCompoundFilterTypeLiteral: String {
     case and, or
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseCompoundFilter {
     public var type: ResponseCompoundFilterTypeLiteral
     public var filters: [BaseType]
@@ -39,6 +41,7 @@ public enum ResponseFilters {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseRankingOptionsHybridSearch {
     public var embedding_weight: Double?
     public var text_weight: Double?
@@ -49,6 +52,7 @@ public enum ResponseRankerLiteral: String {
     case default_2024_11_15 = "default-2024-11-15"
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseRankingOptions {
     public var hybrid_search: ResponseRankingOptionsHybridSearch?
     public var ranker: ResponseRankerLiteral?
@@ -56,6 +60,7 @@ public struct ResponseRankingOptions {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseFileSearchTool {
     public static let type: String = "file_search"
     public var vector_store_ids: [String]

@@ -15,6 +15,7 @@ public enum ResponseSimpleTool {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseNamespaceTool {
     public static let type: String = "namespace"
     public var description: String

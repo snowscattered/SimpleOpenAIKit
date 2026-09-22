@@ -10,11 +10,13 @@ import SimpleCodableMacro
 
 // MARK: - ActionSearchSource
 @BaseModelNoWithExtra
+@PublicInit
 public struct WebSearchActionSearchSource {
     public static let type: String = "url"
     public var url: String
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct WebSearchActionSearch {
     public static let type: String = "search"
     public var query: String
@@ -22,11 +24,13 @@ public struct WebSearchActionSearch {
     public var sources: [WebSearchActionSearchSource]?
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct WebSearchActionOpenPage {
     public static let type: String = "open_page"
     public var url: String?
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct WebSearchActionFind {
     public static let type: String = "find_in_page"
     public var pattern: String
@@ -48,6 +52,7 @@ public enum WebSearchStatus: String {
 
 // MARK: - ResponseFunctionWebSearchParam
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseWebSearchItem {
     public static let type: String = "web_search_call"
     public var id: String

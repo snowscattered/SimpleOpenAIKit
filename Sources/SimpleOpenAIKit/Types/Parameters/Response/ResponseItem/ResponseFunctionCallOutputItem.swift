@@ -21,6 +21,7 @@ extension ResponseFunctionCallOutput: ExpressibleByStringLiteral, ExpressibleByA
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseFunctionCallOutputItem {
     public static let type: String = "function_call_output"
     public var id: String?

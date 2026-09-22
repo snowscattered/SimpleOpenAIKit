@@ -8,6 +8,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseOutputItemAddedEvent {
     public static let type: String = "response.output_item.added"
     public let item: ResponseOutputItem
@@ -15,6 +16,7 @@ public struct ResponseOutputItemAddedEvent {
     public let sequence_number: Int
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseOutputItemDoneEvent {
     public static let type: String = "response.output_item.done"
     public let item: ResponseOutputItem

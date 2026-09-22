@@ -8,6 +8,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct MessageStartEvent {
     public static let type: String = "message_start"
     public let message: MessageCreateResult

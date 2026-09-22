@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct RealtimeMcpProtocolError {
     public static let type: String = "protocol_error"
     public var code: Int
@@ -16,12 +17,14 @@ public struct RealtimeMcpProtocolError {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct RealtimeMcpToolExecutionError {
     public static let type: String = "tool_execution_error"
     public var message: String
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct RealtimeMcphttpError {
     public static let type: String = "http_error"
     public var code: Int
@@ -36,6 +39,7 @@ public enum McpToolCallError {
 }
 
 @BaseModelWithExtra
+@PublicInit
 public struct RealtimeMcpToolCallItem {
     public static let type: String = "mcp_call"
     public var approval_request_id: String?

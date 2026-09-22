@@ -8,6 +8,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseReasoningTextDeltaEvent {
     public static let type: String = "response.reasoning_text.delta"
     public let content_index: Int
@@ -17,6 +18,7 @@ public struct ResponseReasoningTextDeltaEvent {
     public let sequence_number: Int
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseReasoningTextDoneEvent {
     public static let type: String = "response.reasoning_text.done"
     public let content_index: Int

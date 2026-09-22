@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct RealtimeInputAudioBufferCommittedEvent {
     public static let type: String = "input_audio_buffer.committed"
     public let event_id: String

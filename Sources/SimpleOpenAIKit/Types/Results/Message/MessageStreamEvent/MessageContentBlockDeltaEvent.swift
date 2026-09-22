@@ -8,6 +8,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct MessageContentBlockDeltaEvent {
     public static let type: String = "content_block_delta"
     public let delta: MessageContentBlockDelta

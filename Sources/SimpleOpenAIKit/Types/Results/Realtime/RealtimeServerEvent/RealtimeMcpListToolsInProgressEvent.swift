@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct RealtimeMcpListToolsInProgressEvent {
     public static let type: String = "mcp_list_tools.in_progress"
     public let event_id: String

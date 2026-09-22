@@ -8,6 +8,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct MessageContentBlockStartEvent {
     public static let type: String = "content_block_start"
     public let content_block: MessageBlock

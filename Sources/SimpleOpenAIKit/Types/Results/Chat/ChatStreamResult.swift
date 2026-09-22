@@ -18,16 +18,19 @@ public enum ChatStreamChoiceRole: String {
     case tool
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ChatFunctionCallDelta {
     public let arguments: String?
     public let name: String?
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ChatToolCallFunctionDelta {
     public let arguments: String?
     public let name: String?
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ChatToolCallDelta {
     public var type: String? = "function"
     public let index: Int
@@ -35,6 +38,7 @@ public struct ChatToolCallDelta {
     public let function: ChatFunctionCallDelta?
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ChatDelta{
     public let content: String?
     public let function_call: ChatToolCallFunctionDelta?
@@ -45,6 +49,7 @@ public struct ChatDelta{
     public let reasoning_content: String?
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ChatStreamChoice{
     public let delta: ChatDelta
     public let finish_reason: ChatChoiceFinshReasonLiteral?
@@ -54,6 +59,7 @@ public struct ChatStreamChoice{
 
 // StreamResult
 @BaseModelNoWithExtra
+@PublicInit
 public struct ChatStreamResult {
     public static let object: String = "chat.completion"
     public let id: String

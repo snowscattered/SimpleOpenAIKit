@@ -10,6 +10,7 @@ import SimpleCodableMacro
 
 // Codex Agent
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseEncryptedContent {
     public static let type: String = "encrypted_content"
     public var encrypted_content: String

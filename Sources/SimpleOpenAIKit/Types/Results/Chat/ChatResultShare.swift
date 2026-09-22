@@ -9,12 +9,14 @@ import SimpleCodableMacro
 
 // ChatResult.Choice.Logprobs
 @BaseModelNoWithExtra
+@PublicInit
 public struct ChatTopLogprob {
     public let token: String
     public let bytes: [Int]?
     public let logprob: Float
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ChatTokenLogprob {
     public let token: String
     public let bytes: [Int]?
@@ -22,6 +24,7 @@ public struct ChatTokenLogprob {
     public let top_logprobs: [ChatTopLogprob]
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ChatLogprobs {
     public let content: [ChatTokenLogprob]?
     public let refusal: [ChatTokenLogprob]?
@@ -49,6 +52,7 @@ public enum ChatServiceTier: String {
 
 // ChatResult.Usage
 @BaseModelNoWithExtra
+@PublicInit
 public struct ChatCompletionTokensDetails {
     public let accepted_prediction_tokens: Int?
     public let audio_tokens: Int?
@@ -56,11 +60,13 @@ public struct ChatCompletionTokensDetails {
     public let rejected_prediction_tokens: Int?
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ChatPromptTokensDetails {
     public let audio_tokens: Int?
     public let cached_tokens: Int?
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ChatUsage {
     public let completion_tokens: Int
     public let prompt_tokens: Int

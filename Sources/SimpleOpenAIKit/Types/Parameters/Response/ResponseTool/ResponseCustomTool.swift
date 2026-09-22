@@ -14,11 +14,13 @@ public enum ResponseGrammarSyntaxLiteral: String {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseCustomFormatText {
     public static let type: String = "text"
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseCustomFormatGrammar {
     public static let type: String = "grammar"
     public var definition: String
@@ -32,6 +34,7 @@ public enum ResponseCustomToolInputFormat {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseCustomTool {
     public static let type: String = "custom"
     public var name: String

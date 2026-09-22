@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseVideoContent {
     public static let type: String = "input_video"
     public var video_url: String

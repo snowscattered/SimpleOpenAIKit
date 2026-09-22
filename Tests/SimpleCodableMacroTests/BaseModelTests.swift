@@ -10,6 +10,18 @@ import Testing
 import SimpleCodableMacro
 
 @Suite struct BaseModelTests {
+    @Test("PublicInit Using") func PublicInitMacroTest() throws {
+        let model = PublicInitModel(name: "test", count: nil)
+        let instance = PublicInitClass(name: "class", count: 1)
+
+        #expect(model.name == "test")
+        #expect(model.count == nil)
+        #expect(model.object == "public_init")
+        #expect(instance.name == "class")
+        #expect(instance.count == 1)
+        #expect(instance.object == "public_init_class")
+    }
+
     @Test("BaseModelNoWithExtra Using") func BaseModelNoWithExtraMacroTest() throws {
         let JSON = #"""
             {

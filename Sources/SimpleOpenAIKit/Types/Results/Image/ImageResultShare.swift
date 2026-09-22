@@ -15,6 +15,7 @@ public enum ImageResultQualityLiteral: String {
 
 // Shared Image type
 @BaseModelNoWithExtra
+@PublicInit
 public struct ImageResultImage {
     public let b64_json: String?
     public let revised_prompt: String?
@@ -23,16 +24,19 @@ public struct ImageResultImage {
 
 // Shared Token Details
 @BaseModelNoWithExtra
+@PublicInit
 public struct ImageInputTokensDetails {
     public let image_tokens: Int
     public let text_tokens: Int
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ImageOutputTokensDetails {
     public let image_tokens: Int
     public let text_tokens: Int
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ImagesUsage {
     public let input_tokens: Int
     public let output_tokens: Int

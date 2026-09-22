@@ -8,12 +8,14 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseAudioDeltaEvent {
     public static let type: String = "response.audio.delta"
     public let delta: String
     public let sequence_number: Int
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseAudioDoneEvent {
     public static let type: String = "response.audio.done"
     public let sequence_number: Int

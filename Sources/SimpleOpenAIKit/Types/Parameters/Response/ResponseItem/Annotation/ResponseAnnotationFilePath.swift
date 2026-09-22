@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseAnnotationFilePath {
     public static let type: String = "file_path"
     public var file_id: String

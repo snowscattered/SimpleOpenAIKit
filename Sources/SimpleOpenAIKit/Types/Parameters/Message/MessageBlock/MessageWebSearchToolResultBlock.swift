@@ -18,11 +18,13 @@ public enum WebSearchToolResultErrorCode: String {
     case request_too_large
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct WebSearchToolRequestErrorBlock {
     public static let type: String = "web_search_tool_result_error"
     public var error_code: WebSearchToolResultErrorCode
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct WebSearchBlock {
     public static let type: String = "web_search_result"
     public var url: String
@@ -36,6 +38,7 @@ public enum WebSearchResultContent {
     case error(WebSearchToolRequestErrorBlock)
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct MessageWebSearchToolResultBlock {
     public static let type: String = "web_search_tool_result"
     public var content: WebSearchResultContent

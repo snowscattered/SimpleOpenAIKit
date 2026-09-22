@@ -11,6 +11,7 @@ import SimpleCodableMacro
 // MARK: - Chunking Strategy
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct AudioTranscriptionChunkingStrategy {
     public static let type: String = "auto"
     public var prefix_padding_ms: Int?
@@ -38,6 +39,7 @@ public enum AudioTranscriptionIncludeLiteral: String {
 // MARK: - Audio Transcription Param Model
 
 @BaseModelWithExtra
+@PublicInit
 public struct AudioTranscriptionParameters {
     public var model: String
     public var file: FileParameters

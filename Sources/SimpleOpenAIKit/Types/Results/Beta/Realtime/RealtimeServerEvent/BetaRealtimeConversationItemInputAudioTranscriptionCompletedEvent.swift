@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct BetaRealtimeConversationItemInputAudioTranscriptionCompletedEvent {
     public static let type: String = "conversation.item.input_audio_transcription.completed"
     public let content_index: Int

@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct BetaRealtimeInputAudioBufferSpeechStartedEvent {
     public static let type: String = "input_audio_buffer.speech_started"
     public let event_id: String

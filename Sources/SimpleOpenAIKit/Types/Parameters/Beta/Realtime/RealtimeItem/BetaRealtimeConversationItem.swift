@@ -33,6 +33,7 @@ public enum BetaRealtimeItemStatus: String {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct BetaRealtimeContent {
     public var id: String?
     public var audio: String?
@@ -42,6 +43,7 @@ public struct BetaRealtimeContent {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct BetaRealtimeConversationItem {
     public static let object: String = "realtime.item"
     public var type: BetaRealtimeConversationItemLiteral?

@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct RealtimeConversationItemRetrieveEventParameters {
     public static let type: String = "conversation.item.retrieve"
     public var event_id: String?

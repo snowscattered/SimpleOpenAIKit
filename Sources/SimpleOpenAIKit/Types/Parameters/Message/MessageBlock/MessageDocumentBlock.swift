@@ -10,6 +10,7 @@ import SimpleCodableMacro
 
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct MessageDocumentBlock {
     public static let type: String = "document"
     public var source: MessageDocumentBlockSource

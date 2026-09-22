@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ChatSystemMessage {
     public static let role: String = "system"
     public var content: ChatStringOrContentPartText

@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelWithExtra
+@PublicInit
 public struct ResponseCreateParameters {
     public var model: String
     public var instructions: String?

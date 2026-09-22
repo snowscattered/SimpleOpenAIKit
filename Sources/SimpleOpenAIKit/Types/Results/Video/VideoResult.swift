@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct VideoCreateError {
     public var code: String
     public var message: String
@@ -22,6 +23,7 @@ public enum VideoStatus: String {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct VideoResult {
     public static let object: String = "video"
     public var id: String
@@ -39,6 +41,7 @@ public struct VideoResult {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct VideoDeleteResult {
     public static let object: String = "video.deleted"
     public var id: String

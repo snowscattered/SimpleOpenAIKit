@@ -15,6 +15,7 @@ public enum MessageAllowedCaller: String {
    case code_execution_20260120
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct MessageUserLocation {
     public static let type: String = "approximate"
     public var city: String?

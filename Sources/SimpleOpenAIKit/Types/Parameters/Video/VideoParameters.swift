@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct VideoImageInputReference {
     public var file_id: String?
     public var image_url: String?
@@ -24,6 +25,7 @@ public enum VideoSeconds {
     case other(String)
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct VideoReferenceInputParam {
     public var id: String
 }
@@ -35,6 +37,7 @@ public enum VideoVideo {
 
 // MARK: - Create
 @BaseModelWithExtra
+@PublicInit
 public struct VideoCreateParamerters {
     public var model: String?
     public var prompt: String
@@ -45,18 +48,21 @@ public struct VideoCreateParamerters {
 
 // MARK: - Retrieve
 @BaseModelWithExtra
+@PublicInit
 public struct VideoRetrieveParameter {
     @transient public var video_id: String
 }
 
 // MARK: - Delete
 @BaseModelWithExtra
+@PublicInit
 public struct VideoDeleteParameter {
     @transient public var video_id: String
 }
 
 // MARK: - List
 @BaseModelWithExtra
+@PublicInit
 public struct VideoListParameter {
     public var after: String?
     public var limit: Int?
@@ -67,6 +73,7 @@ public struct VideoListParameter {
 
 // MARK: - Edit
 @BaseModelWithExtra
+@PublicInit
 public struct VideoEditParameter {
     public var prompt: String
     public var video: VideoVideo
@@ -74,6 +81,7 @@ public struct VideoEditParameter {
 
 // MARK: - Extend
 @BaseModelWithExtra
+@PublicInit
 public struct VideoExtendParameter {
     public var prompt: String
     public var seconds: VideoSeconds
@@ -82,6 +90,7 @@ public struct VideoExtendParameter {
 
 // MARK: - Remix
 @BaseModelWithExtra
+@PublicInit
 public struct VideoRemixParameter {
     @transient public var video_id: String
     public var prompt: String
@@ -94,6 +103,7 @@ public enum VideoDownloadContentVariant: String {
     case video, thumbnail, spritesheet
 }
 @BaseModelWithExtra
+@PublicInit
 public struct VideoDownloadContentParameter {
     @transient public var video_id: String
     public var variant: VideoDownloadContentVariant?

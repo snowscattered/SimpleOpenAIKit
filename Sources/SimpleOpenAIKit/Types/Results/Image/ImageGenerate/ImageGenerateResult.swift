@@ -8,6 +8,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ImageGenerateResult {
     public let created: Int
     public let background: ImageBackgroundLiteral?

@@ -14,6 +14,7 @@ public enum UploadFile {
     case url(URL)
 }
 @BaseModelWithExtra
+@PublicInit
 public struct UploadFileParameters {
     public var file: UploadFile
     public var bytes: Int?
@@ -26,6 +27,7 @@ public struct UploadFileParameters {
 }
 
 @BaseModelWithExtra
+@PublicInit
 public struct UploadCreateParameters {
     public var bytes: Int
     public var filename: String
@@ -36,11 +38,13 @@ public struct UploadCreateParameters {
 }
 
 @BaseModelWithExtra
+@PublicInit
 public struct UploadCancelParameters {
     @transient public var upload_id: String
 }
 
 @BaseModelWithExtra
+@PublicInit
 public struct UploadCompleParameters {
     @transient public var upload_id: String
     public var part_ids: [String]

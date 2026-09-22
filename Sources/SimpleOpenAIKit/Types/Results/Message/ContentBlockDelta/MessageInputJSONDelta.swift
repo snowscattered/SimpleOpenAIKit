@@ -8,6 +8,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct MessageInputJSONDelta {
     public static let type: String = "input_json_delta"
     public let partial_json: String

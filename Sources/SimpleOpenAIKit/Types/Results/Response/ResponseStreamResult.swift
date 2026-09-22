@@ -8,6 +8,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelWithExtra
+@PublicInit
 public struct UnknownEvent {
     public var type: String
 }

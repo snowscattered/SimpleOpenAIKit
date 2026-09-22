@@ -21,6 +21,7 @@ extension ResponseAgentMessageItemContent: ExpressibleByStringLiteral, Expressib
 
 // Codex Agent
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseAgentMessageItem {
     public static let type: String = "agent_message"
     public var id: String?

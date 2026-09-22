@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct RealtimeResponseMcpCallInProgressEvent {
     public static let type: String = "response.mcp_call.in_progress"
     public let event_id: String

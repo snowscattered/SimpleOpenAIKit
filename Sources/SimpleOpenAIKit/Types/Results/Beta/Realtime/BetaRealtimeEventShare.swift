@@ -14,6 +14,7 @@ public enum BetaRealtimeContentPartLiteral: String {
     case text, audio
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct BetaRealtimePart {
     public let audio: String?
     public let text: String?
@@ -23,6 +24,7 @@ public struct BetaRealtimePart {
 
 // MARK: LogProbProperties
 @BaseModelNoWithExtra
+@PublicInit
 public struct BetaRealtimeLogProbProperties {
     public let token: String
     public let bytes: [Int]
@@ -30,11 +32,13 @@ public struct BetaRealtimeLogProbProperties {
 }
 // MARK: Usage
 @BaseModelNoWithExtra
+@PublicInit
 public struct BetaRealtimeUsageTranscriptTextUsageTokensInputTokenDetails {
     public let audio_tokens: Int?
     public let text_tokens: Int?
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct BetaRealtimeUsageTranscriptTextUsageTokens {
     public static let type: String = "tokens"
     public let input_tokens: Int
@@ -43,6 +47,7 @@ public struct BetaRealtimeUsageTranscriptTextUsageTokens {
     public let input_token_details: BetaRealtimeUsageTranscriptTextUsageTokensInputTokenDetails?
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct BetaRealtimeUsageTranscriptTextUsageDuration {
     public static let type: String = "duration"
     public let seconds: Double
@@ -54,6 +59,7 @@ public enum BetaRealtimeUsage: Codable {
 }
 // MARK: Error
 @BaseModelNoWithExtra
+@PublicInit
 public struct BetaRealtimeError {
     public let event_id: String?
     public let code: String?
@@ -86,12 +92,14 @@ public enum BetaRealtimeResponseStatusType: String {
     case failed
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct BetaRealtimeResponseStatusDetails {
     public let error: BetaRealtimeError?
     public let reason: BetaRealtimeResponseStatusReason?
     public let type: BetaRealtimeResponseStatusType?
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct BetaRealtimeResponseResult {
     public static let object: String = "realtime.response"
     public let id: String?

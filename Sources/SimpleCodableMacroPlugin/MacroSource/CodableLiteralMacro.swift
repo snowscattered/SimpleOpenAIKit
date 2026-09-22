@@ -38,7 +38,7 @@ struct CodableLiteralMacro: ExtensionMacro {
         let expectedValues = cases.map { #""\#($0)""# }.joined(separator: ", ")
         let ext: DeclSyntax = """
             extension \(raw: enumName): BaseModel {
-                \(raw: access)init(from decoder: Decoder) throws {
+                \(raw: access)init(from decoder: any Decoder) throws {
                     let container = try decoder.singleValueContainer()
                     let rawValue = try container.decode(\(raw: rawTypeName).self)
                     guard let value = Self(rawValue: rawValue) else {

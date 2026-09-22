@@ -63,6 +63,7 @@ public enum MessageRole: String {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct MessageMessages {
     public let role: MessageRole
     public let content: MessageContentInput

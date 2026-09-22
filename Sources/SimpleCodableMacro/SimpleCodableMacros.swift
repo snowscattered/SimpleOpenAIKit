@@ -55,16 +55,20 @@ public macro MultiConstant(_ values: [String]) = #externalMacro(module: "SimpleC
 @attached(peer)
 public macro transient() = #externalMacro(module: "SimpleCodableMacroPlugin", type: "TransientMacro")
 
+/// A macro that generates a `public` memberwise initializer for a struct or root class.
+/// Properties that are `static` or `let` with an initial value are skipped.
+@attached(member, names: named(init))
+public macro PublicInit() = #externalMacro(module: "SimpleCodableMacroPlugin", type: "PublicInitMacro")
+
 /// A macro that generates a `nonisolated extension` conforming to `BaseModelNoWithExtra`.
 /// The annotated type must already be `Codable & Sendable`.
-/// A memberwise `init` is also generated in the struct body.
-@attached(member, names: named(init))
+/// Combine it with `@PublicInit` to get the memberwise `init`.
 @attached(extension, conformances: BaseModelNoWithExtra, names: named(CodingKeys), named(init(from:)), named(encode(to:)))
 public macro BaseModelNoWithExtra() = #externalMacro(module: "SimpleCodableMacroPlugin", type: "BaseModelNoWithExtraMacro")
 
 /// A macro applied to a struct to generate `BaseModel: Codable & Sendable` conformance
 /// with an `extra` dictionary capturing unknown JSON keys.
-/// A memberwise `init` (including `extra`) is also generated in the struct body.
-@attached(member, names: named(extra), named(init))
+/// `extra` is a decode-only fallback and is not part of the generated `init`.
+@attached(member, names: named(extra))
 @attached(extension, conformances: BaseModelWithExtra, names: named(CodingKeys), named(init(from:)), named(encode(to:)))
 public macro BaseModelWithExtra() = #externalMacro(module: "SimpleCodableMacroPlugin", type: "BaseModelWithExtraMacro")

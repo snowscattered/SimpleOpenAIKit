@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelWithExtra
+@PublicInit
 public struct RealtimeMcpApprovalResponseItem {
     public static let type: String = "mcp_approval_response"
     public var id: String
