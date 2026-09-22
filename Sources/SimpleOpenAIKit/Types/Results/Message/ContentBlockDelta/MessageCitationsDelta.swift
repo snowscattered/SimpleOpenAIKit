@@ -8,6 +8,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct MessageCitationsDelta {
     public static let type: String = "citations_delta"
     public let citation: MessageCitation

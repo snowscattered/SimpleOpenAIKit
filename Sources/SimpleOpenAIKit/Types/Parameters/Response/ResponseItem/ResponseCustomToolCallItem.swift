@@ -13,6 +13,7 @@ public typealias ResponseCustomCallerProgram = ResopnseFunctionCallerProgram
 public typealias ResponseCustomCaller = ResponseFunctionCaller
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseCustomToolCallItem {
     public static let type: String = "custom_tool_call"
     public var id: String?

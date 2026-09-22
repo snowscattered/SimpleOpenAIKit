@@ -8,6 +8,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct MessageContentBlockStopEvent {
     public static let type: String = "content_block_stop"
     public let index: Int

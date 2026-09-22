@@ -54,7 +54,7 @@ let package = Package(
         ),
         .target(
             name: "SimpleOpenAIKitMacro",
-            dependencies: ["SimpleOpenAIKitMacroPlugin"],
+            dependencies: ["SimpleOpenAIKitMacroPlugin", "SimpleCodableMacro"],
             path: "Sources/SimpleOpenAIKitMacro"
         ),
         .testTarget(

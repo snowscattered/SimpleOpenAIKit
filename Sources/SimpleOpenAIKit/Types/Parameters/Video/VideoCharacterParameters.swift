@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct VideoCharacterCreateParameter {
     public var name: String
     public var video: FileParameters

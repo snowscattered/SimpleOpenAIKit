@@ -15,6 +15,7 @@ public enum ResponseAudioFormatLiteral {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseAudioContent {
     public static let type: String = "input_audio"
     public var data: String

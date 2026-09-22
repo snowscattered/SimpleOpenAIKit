@@ -11,6 +11,7 @@ import SimpleCodableMacro
 // MARK: - Stream Options
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct CompletionStreamOptions {
     public var include_obfuscation: Bool?
     public var include_usage: Bool?
@@ -42,6 +43,7 @@ extension CompletionStop: ExpressibleByStringLiteral, ExpressibleByArrayLiteral 
 // MARK: - Completion Param Model
 
 @BaseModelWithExtra
+@PublicInit
 public struct CompletionParameters {
     public var model: String
     public var prompt: CompletionPrompt?

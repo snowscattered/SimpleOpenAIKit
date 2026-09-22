@@ -10,6 +10,7 @@ import SimpleCodableMacro
 
 // MARK: - ResponseWebSearchCallInProgressEvent
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseWebSearchCallInProgressEvent {
     public static let type: String = "response.web_search_call.in_progress"
     public let item_id: String
@@ -19,6 +20,7 @@ public struct ResponseWebSearchCallInProgressEvent {
 
 // MARK: - ResponseWebSearchCallSearchingEvent
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseWebSearchCallSearchingEvent {
     public static let type: String = "response.web_search_call.searching"
     public let item_id: String
@@ -28,6 +30,7 @@ public struct ResponseWebSearchCallSearchingEvent {
 
 // MARK: - ResponseWebSearchCallCompletedEvent
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseWebSearchCallCompletedEvent {
     public static let type: String = "response.web_search_call.completed"
     public let item_id: String

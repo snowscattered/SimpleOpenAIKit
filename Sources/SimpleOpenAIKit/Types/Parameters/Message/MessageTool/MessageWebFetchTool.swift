@@ -19,6 +19,7 @@ public enum MessageWebFetchType: String {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct MessageWebFetchTool {
     public var name: MessageWebFetchType
     public var type: MessageWebFetchToolTypeLiteral

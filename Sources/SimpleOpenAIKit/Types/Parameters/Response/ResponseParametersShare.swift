@@ -25,6 +25,7 @@ public enum ResponseItemStatusLiteral: String {
 
 // MARK: - Conversation
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseConversationStruct {
     public var id: String
 }
@@ -45,6 +46,7 @@ public enum ResponseToolChoiceAllowedModel: String {
     case auto, required
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseToolChoiceAllowed {
     public static let type: String = "allowed_tools"
     public var mode: ResponseToolChoiceAllowedModel
@@ -59,30 +61,36 @@ public enum ResponseToolChoiceTypesType: String {
     case code_interpreter
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseToolChoiceTypes {
     public var type: ResponseToolChoiceTypesType
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseToolChoiceFunction {
     public static let type: String = "function"
     public let name: String
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseToolChoiceMcp {
     public static let type: String = "mcp"
     public let server_label: String
     public let name: String
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseToolChoiceCustom {
     public static let type: String = "custom"
     public var name: String
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseToolChoiceApplyPatch {
     public static let type: String = "apply_patch"
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseToolChoiceShell {
     public static let type: String = "shell"
 }
@@ -111,6 +119,7 @@ public enum ResponseReasoningContext: String {
     case auto, current_turn, all_turns
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseReasoning {
     public var effort: ResponseReasoningEffortLiteral? = ResponseReasoningEffortLiteral.none
     public var context: ResponseReasoningContext?
@@ -135,6 +144,7 @@ public enum ResponseIncludeLiteral: String {
 // MARK: - Context Management
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseContextManagement {
     public var type: String
     public var compact_threshold: Int?
@@ -143,6 +153,7 @@ public struct ResponseContextManagement {
 // MARK: - Stream Options
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseStreamOptions {
     public var include_obfuscation: Bool?
     public var include_usage: Bool?
@@ -151,11 +162,13 @@ public struct ResponseStreamOptions {
 // MARK: - Response Format & Text Config
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseFormatText {
     public static let type: String = "text"
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseFormatJSONSchema {
     public static let type: String = "json_schema"
     public var name: String
@@ -165,6 +178,7 @@ public struct ResponseFormatJSONSchema {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseFormatJSONObject {
     public static let type: String = "json_object"
 }
@@ -183,6 +197,7 @@ public enum ResponseVerbosityLiteral: String {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseTextConfig {
     public var format: ResponseFormatTextConfig?
     public var verbosity: ResponseVerbosityLiteral?
@@ -196,22 +211,26 @@ public enum ResponseModerationMode: String {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseModerationPolicyInput {
     public var mode: ResponseModerationMode
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseModerationPolicyOutput {
     public var mode: ResponseModerationMode
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseModerationPolicy {
     public var input: ResponseModerationPolicyInput?
     public var output: ResponseModerationPolicyOutput?
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseModeration {
     public var model: String
     public var policy: ResponseModerationPolicy?
@@ -220,6 +239,7 @@ public struct ResponseModeration {
 // MARK: - Prompt
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponsePrompt {
     public var id: String
     public var variables: [String: ResponseContent]?
@@ -239,6 +259,7 @@ public enum ResponsePromptCacheTTL: String {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponsePromptCacheOption {
     public var mode: ResponsePromptCacheMode?
     public var ttl: ResponsePromptCacheTTL?

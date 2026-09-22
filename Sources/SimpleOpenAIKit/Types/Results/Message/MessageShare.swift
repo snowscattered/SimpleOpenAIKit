@@ -9,6 +9,7 @@ import SimpleCodableMacro
 
 // MessageCreateResult.Container
 @BaseModelNoWithExtra
+@PublicInit
 public struct MessageContainer {
     public let id: String
     public let expires_at: String
@@ -16,6 +17,7 @@ public struct MessageContainer {
 
 // MessageCreateResult.StopDetails
 @BaseModelNoWithExtra
+@PublicInit
 public struct MessageRefusalStopDetails {
     public let category: String?
     public let explanation: String?
@@ -35,6 +37,7 @@ public enum MessageStopReason: String {
 
 // MessageCreateResult.Usage (shared: MessageUsage, MessageDeltaUsage)
 @BaseModelNoWithExtra
+@PublicInit
 public struct MessageServerToolUsage {
     public let web_fetch_requests: Int?
     public let web_search_requests: Int?

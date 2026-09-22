@@ -14,16 +14,19 @@ public enum RealtimeNoiseReductionLiteral: String {
     case near_field, far_field
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct RealtimeNoiseReduction {
     public var type: RealtimeNoiseReductionLiteral?
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct RealtimeAudioTranscription {
     public var model: String?
     public var language: String?
     public var prompt: String?
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct RealtimeServerVad {
     public static let type: String = "server_vad"
     public var create_response: Bool?
@@ -38,6 +41,7 @@ public enum RealtimeSemanticVadEagerness: String {
     case auto, low, medium, high
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct RealtimeSemanticVad {
     public static let type: String = "semantic_vad"
     public var create_response: Bool?
@@ -50,6 +54,7 @@ public enum RealtimeAudioInputTurnDetection {
     case semantic_vad(RealtimeSemanticVad)
 }
 @BaseModelWithExtra
+@PublicInit
 public struct RealtimeInputAudioConfig {
     public var format: RealtimeAudioFormat?
     public var noise_reduction: RealtimeNoiseReduction?
@@ -58,6 +63,7 @@ public struct RealtimeInputAudioConfig {
 }
 // MARK: Output Config
 @BaseModelNoWithExtra
+@PublicInit
 public struct RealtimeOutputAudioConfig {
     public var format: RealtimeAudioFormat?
     public var speed: Float?
@@ -65,6 +71,7 @@ public struct RealtimeOutputAudioConfig {
 }
 // MARK: Audio Config
 @BaseModelNoWithExtra
+@PublicInit
 public struct RealtimeAudioConfig {
     public var input: RealtimeInputAudioConfig?
     public var output: RealtimeOutputAudioConfig?
@@ -75,6 +82,7 @@ public enum RealtimeInclude: String {
 }
 // MARK: Tracing
 @BaseModelNoWithExtra
+@PublicInit
 public struct RealtimeTracing{
     public var group_id: String?
     public var metadata: BaseType?
@@ -86,10 +94,12 @@ public enum RealtimeTruncationLiteral: String {
     case auto, disable
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct RealtimeTokenLimits {
     public var post_instructions: Int?
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct RealtimeTruncationRetentionRatio {
     public static let type: String = "retention_ratio"
     public var retention_ratio: Double
@@ -103,6 +113,7 @@ public enum RealtimeTruncation {
 }
 // MARK: Realtime
 @BaseModelWithExtra
+@PublicInit
 public struct RealtimeSessionCreateRequest {
     public static let type: String = "realtime"
     public var model: String?
@@ -120,16 +131,19 @@ public struct RealtimeSessionCreateRequest {
 
 // MARK: - RealtimeTranscription
 @BaseModelNoWithExtra
+@PublicInit
 public struct RealtimeTranscriptionSessionAudioInput {
     public var format: RealtimeAudioFormat?
     public var noise_reduction: RealtimeNoiseReduction?
     public var turn_detection: RealtimeAudioInputTurnDetection?
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct RealtimeTranscriptionSessionAudio {
     public var input: RealtimeTranscriptionSessionAudioInput?
 }
 @BaseModelWithExtra
+@PublicInit
 public struct RealtimeTranscriptionSessionCreateRequest {
     public static let type: String = "transcription"
     public var audio: RealtimeTranscriptionSessionAudio?
@@ -142,6 +156,7 @@ public enum RealtimeSession {
 }
 // MARK: Main
 @BaseModelNoWithExtra
+@PublicInit
 public struct RealtimeSessionUpdateEventParameters {
     public static let type: String = "session.update"
     public var event_id: String?

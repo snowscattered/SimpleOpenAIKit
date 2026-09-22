@@ -9,11 +9,13 @@ import SimpleCodableMacro
 
 // MessageCreateResult.Usage
 @BaseModelNoWithExtra
+@PublicInit
 public struct MessageCacheCreation {
     public let ephemeral_1h_input_tokens: Int
     public let ephemeral_5m_input_tokens: Int
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct MessageUsage {
     public let cache_creation: MessageCacheCreation?
     public let cache_creation_input_tokens: Int?
@@ -26,6 +28,7 @@ public struct MessageUsage {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct MessageCreateResult {
     public static let role: String = "assistant"
     public static let type: String = "message"

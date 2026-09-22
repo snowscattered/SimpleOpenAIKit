@@ -9,11 +9,13 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseFunctionCallerDirect {
     public static let type: String = "direct"
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResopnseFunctionCallerProgram {
     public static let type: String = "program"
     public var caller_id: String
@@ -25,6 +27,7 @@ public enum ResponseFunctionCaller: Codable {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseFunctionCallItem {
     public static let type: String = "function_call"
     public var id: String?

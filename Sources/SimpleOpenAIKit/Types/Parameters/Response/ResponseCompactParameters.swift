@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelWithExtra
+@PublicInit
 public struct ResponseCompactParameters {
     public var model: String?
     public var input: ResponseInputOrItems?

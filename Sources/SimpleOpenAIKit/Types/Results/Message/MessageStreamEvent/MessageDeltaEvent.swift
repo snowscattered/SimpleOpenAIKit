@@ -8,6 +8,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct MessageDelta {
     public let container: MessageContainer?
     public let stop_details: MessageRefusalStopDetails?
@@ -15,6 +16,7 @@ public struct MessageDelta {
     public let stop_sequence: String?
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct MessageDeltaUsage {
     public let cache_creation_input_tokens: Int?
     public let cache_read_input_tokens: Int?
@@ -23,6 +25,7 @@ public struct MessageDeltaUsage {
     public let server_tool_use: MessageServerToolUsage?
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct MessageDeltaEvent {
     public static let type: String = "message_delta"
     public let delta: MessageDelta

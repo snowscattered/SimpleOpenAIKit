@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct MessageBase64PDFSource {
     public static let type: String = "base64"
     public static let media_type: String = "application/pdf"

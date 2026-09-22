@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct MessageCitationPageLocation {
     public static let type: String = "page_location"
     public var cited_text: String

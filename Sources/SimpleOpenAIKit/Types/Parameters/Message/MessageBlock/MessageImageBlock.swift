@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct MessageImageBlock {
     public static let type: String = "image"
     public var source: MessageSource

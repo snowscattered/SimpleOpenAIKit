@@ -20,6 +20,7 @@ public enum AudioSpeechStreamFormatLiteral: String {
 }
 
 @BaseModelWithExtra
+@PublicInit
 public struct AudioSpeechParameters {
     public var model: String
     public var input: String

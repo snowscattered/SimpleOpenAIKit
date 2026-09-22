@@ -9,18 +9,21 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseReasoningContent {
     public static let type: String = "reasoning_text"
     public var text: String
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseReasoningSummary {
     public static let type: String = "summary_text"
     public var text: String
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseReasoningItem {
     public static let type: String = "reasoning"
     public var id: String?

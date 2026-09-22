@@ -9,15 +9,18 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct MessageDirectCaller {
     public static let type: String = "direct"
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct MessageServerToolCaller {
     public static let type: String = "code_execution_20250825"
     public var tool_id: String
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct MessageServerToolCaller20260120 {
     public static let type: String = "code_execution_20260120"
     public var tool_id: String

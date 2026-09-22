@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ChatToolMessage {
     public static let role: String = "tool"
     public var tool_call_id: String

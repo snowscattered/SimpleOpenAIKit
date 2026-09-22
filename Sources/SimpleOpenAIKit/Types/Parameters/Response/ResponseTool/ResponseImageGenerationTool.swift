@@ -34,6 +34,7 @@ public enum ResponseImageGenQualityLiteral: String {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseImageGenerationInputImageMask {
     public var file_id: String
     public var image_url: String
@@ -44,6 +45,7 @@ public enum ResponseImageGenerationToolAction: String {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseImageGenerationTool {
     public static let type: String = "image_generation"
     public var model: String?

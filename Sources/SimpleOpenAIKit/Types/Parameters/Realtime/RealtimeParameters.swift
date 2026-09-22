@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelWithExtra
+@PublicInit
 public struct RealtimeParameters {
     public var model: String
     public var call_id: String?

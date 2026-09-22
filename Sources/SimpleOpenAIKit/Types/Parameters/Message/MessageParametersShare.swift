@@ -15,6 +15,7 @@ public enum MessageCacheControlTTL: String {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct MessageCacheControlEphemeral {
     public static let type: String = "ephemeral"
     public var ttl: MessageCacheControlTTL
@@ -38,6 +39,7 @@ public enum MessageToolChoiceType: String {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct MessageToolChoice {
     public var type: MessageToolChoiceType
     public var disable_parallel_tool_use: Bool?
@@ -56,6 +58,7 @@ public enum MessageThinkingDisplay: String {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct MessageThinking {
     public var type: MessageThinkingType
     public var budget_tokens: Int?
@@ -64,6 +67,7 @@ public struct MessageThinking {
 
 // MARK: - Metadata
 @BaseModelNoWithExtra
+@PublicInit
 public struct MessageMetadata {
     public var user_id: String?
 }
@@ -75,12 +79,14 @@ public enum MessageEffortLiteral: String {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct MessageJSONOutputFormat {
     public static let type: String = "json_schema"
     public var schema: [String: BaseType]
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct MessageOutputConfig {
     public let effort: MessageEffortLiteral
     public let format: MessageJSONOutputFormat?
@@ -88,6 +94,7 @@ public struct MessageOutputConfig {
 
 // MARK: - DocumentBlock | MessageTool
 @BaseModelNoWithExtra
+@PublicInit
 public struct MessageCitationsConfig {
     public let enabled: Bool
 }

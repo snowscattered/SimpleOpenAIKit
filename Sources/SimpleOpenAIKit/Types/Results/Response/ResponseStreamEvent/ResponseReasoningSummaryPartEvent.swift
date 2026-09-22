@@ -9,11 +9,13 @@ import SimpleCodableMacro
 
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseSummaryTextPart {
     public let text: String
     public static let type: String = "summary_text"
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseReasoningSummaryPartAddedEvent {
     public static let type: String = "response.reasoning_summary_part.added"
     public let item_id: String
@@ -23,6 +25,7 @@ public struct ResponseReasoningSummaryPartAddedEvent {
     public let summary_index: Int
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseReasoningSummaryPartDoneEvent {
     public static let type: String = "response.reasoning_summary_part.done"
     public let item_id: String

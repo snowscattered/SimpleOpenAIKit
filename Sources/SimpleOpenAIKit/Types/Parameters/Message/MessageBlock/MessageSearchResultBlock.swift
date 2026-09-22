@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct MessageSearchResultBlock {
     public static let type: String = "search_result"
     public var content: [MessageTextBlock]

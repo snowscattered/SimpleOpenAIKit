@@ -9,11 +9,13 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct BetaRealtimeClientSecretExpiresAfter {
     public static let anchor: String = "created_at"
     public var seconds: Int?
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct BetaRealtimeClientSecret {
     public var expires_after: BetaRealtimeClientSecretExpiresAfter?
 }
@@ -22,16 +24,19 @@ public enum BetaRealtimeInputAudioNoiseReductionLiteral: String {
     case near_field, far_field
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct BetaRealtimeInputAudioNoiseReduction {
     public var type: BetaRealtimeInputAudioNoiseReductionLiteral?
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct BetaRealtimeInputAudioTranscription {
     public var language: String?
     public var model: String?
     public var prompt: String?
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct BetaReamtimeTracingTracingConfiguration {
     public var group_id: String?
     public var metadata: BaseType?
@@ -59,6 +64,7 @@ public enum BetaRealtimeTurnDetectionEagerness: String {
     case auto
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct BetaRealtimeTurnDetection {
     public var type: BetaRealtimeTurnDetectionType?
     public var create_response: Bool?
@@ -70,6 +76,7 @@ public struct BetaRealtimeTurnDetection {
 }
 
 @BaseModelWithExtra
+@PublicInit
 public struct BetaRealtimeSession {
     public private(set) var id: String?
     public var model: String?
@@ -91,6 +98,7 @@ public struct BetaRealtimeSession {
 }
 // MARK: Main
 @BaseModelNoWithExtra
+@PublicInit
 public struct BetaRealtimeSessionUpdateEventParameters {
     public static let type: String = "session.update"
     public var event_id: String?

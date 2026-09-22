@@ -21,6 +21,7 @@ public enum ServerToolUseName: String {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct MessageServerToolUseBlock {
     public static let type: String = "server_tool_use"
     public var id: String

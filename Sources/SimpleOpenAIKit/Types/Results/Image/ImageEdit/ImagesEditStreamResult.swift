@@ -8,6 +8,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ImageEditPartialImageEvent {
     public static let type: String = "image_edit.partial_image"
     public let b64_json: String
@@ -19,6 +20,7 @@ public struct ImageEditPartialImageEvent {
     public let size: String
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ImageEditCompletedEvent {
     public static let type: String = "image_edit.completed"
     public let b64_json: String

@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct BetaRealtimeConversationItemDeleteEventParameters {
     public static let type: String = "conversation.item.delete"
     public var event_id: String?

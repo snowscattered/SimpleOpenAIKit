@@ -14,6 +14,7 @@ public enum ResponseIncompleteReason: String {
     case content_filter
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseIncompleteDetails {
     public let reason: ResponseIncompleteReason?
 }
@@ -43,6 +44,7 @@ public enum ResponseErrorCode: String {
     case image_file_not_found
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseError {
     public let code: ResponseErrorCode
     public let message: String
@@ -50,6 +52,7 @@ public struct ResponseError {
 
 // ResponseCreateResult.Conversation
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseResultConversation {
     public let id: String
 }
@@ -65,15 +68,18 @@ public enum ResponseStatus: String {
 }
 // ResponseCreateResult.Usage
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseInputTokensDetails {
     public let cached_tokens: Int
     public var cache_write_tokens: Int = 0  // In OpenAI, is must
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseOutputTokensDetails {
     public let reasoning_tokens: Int
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseUsage {
     public let input_tokens: Int
     public let output_tokens: Int
@@ -115,6 +121,7 @@ extension ResponseOutputItem {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseCreateResult {
     public static let object: String = "response"
     public let id: String

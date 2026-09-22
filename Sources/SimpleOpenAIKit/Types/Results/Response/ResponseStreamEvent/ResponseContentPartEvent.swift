@@ -15,6 +15,7 @@ public enum ResponseContentPart {
     case refusal(ResponseOutputRefusal)
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseContentPartAddedEvent {
     public static let type: String = "response.content_part.added"
     public let content_index: Int
@@ -24,6 +25,7 @@ public struct ResponseContentPartAddedEvent {
     public let sequence_number: Int
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseContentPartDoneEvent {
     public static let type: String = "response.content_part.done"
     public let content_index: Int

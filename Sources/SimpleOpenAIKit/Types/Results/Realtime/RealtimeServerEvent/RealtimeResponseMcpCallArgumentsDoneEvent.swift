@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct RealtimeResponseMcpCallArgumentsDoneEvent {
     public static let type: String = "response.mcp_call_arguments.done"
     public let event_id: String

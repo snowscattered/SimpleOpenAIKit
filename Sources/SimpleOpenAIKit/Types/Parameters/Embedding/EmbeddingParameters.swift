@@ -24,6 +24,7 @@ public enum EmbeddingEncoderFormatLiteral: String {
 }
 
 @BaseModelWithExtra
+@PublicInit
 public struct EmbeddingParameters {
     public var model: String
     public var input: EmbeddingInput

@@ -11,6 +11,7 @@ import SimpleCodableMacro
 // MARK: - Input Schema
 
 @BaseModelWithExtra
+@PublicInit
 public struct MessageInputSchemaTyped {
     public static let type: String = "object"
     public var properties: [String: BaseType]?
@@ -29,6 +30,7 @@ public enum MessageBaseToolType: String {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct MessageBaseTool {
     public var type: MessageBaseToolType?
     public var name: String

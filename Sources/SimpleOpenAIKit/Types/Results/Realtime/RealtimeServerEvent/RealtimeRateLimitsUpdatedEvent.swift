@@ -14,6 +14,7 @@ public enum RealtimeRateLimitName: String {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct RealtimeRateLimit {
     public let limit: Int?
     public let name: RealtimeRateLimitName?
@@ -22,6 +23,7 @@ public struct RealtimeRateLimit {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct RealtimeRateLimitsUpdatedEvent {
     public static let type: String = "rate_limits.updated"
     public let event_id: String

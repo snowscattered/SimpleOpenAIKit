@@ -14,6 +14,7 @@ public enum ResponseImageDetailLiteral: String {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseImageContent {
     public static let type: String = "input_image"
     public var image_url: String

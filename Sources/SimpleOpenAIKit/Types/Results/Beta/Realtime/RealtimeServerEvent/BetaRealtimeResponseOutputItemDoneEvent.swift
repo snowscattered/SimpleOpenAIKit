@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct BetaRealtimeResponseOutputItemDoneEvent {
     public static let type: String = "response.output_item.done"
     public let event_id: String

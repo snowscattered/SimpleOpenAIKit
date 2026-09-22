@@ -8,6 +8,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseCompletedEvent {
     public static let type: String = "response.completed"
     public let response: ResponseCreateResult

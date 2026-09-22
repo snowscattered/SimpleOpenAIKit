@@ -10,6 +10,7 @@ import SimpleCodableMacro
 
 // CompletionResult.choice
 @BaseModelNoWithExtra
+@PublicInit
 public struct CompletionChoiceLogprobs {
     public let text_offset: [Int]?
     public let token_logprobs: [Float]?
@@ -21,6 +22,7 @@ public enum CompletionChoiceFinishReason: String {
     case stop, length, content_filter
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct CompletionResultChoice {
     public let finish_reason: CompletionChoiceFinishReason?
     public let index: Int
@@ -29,6 +31,7 @@ public struct CompletionResultChoice {
 }
 // CompletionResult.Usage
 @BaseModelNoWithExtra
+@PublicInit
 public struct CompletionTokensDetails {
     public let accepted_prediction_tokens: Int?
     public let audio_tokens: Int?
@@ -36,11 +39,13 @@ public struct CompletionTokensDetails {
     public let rejected_prediction_tokens: Int?
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct CompletionPromptTokensDetails {
     public let audio_tokens: Int?
     public let cached_tokens: Int?
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct CompletionUsage {
     public let completion_tokens: Int
     public let prompt_tokens: Int
@@ -50,6 +55,7 @@ public struct CompletionUsage {
 }
 // CompletionResult
 @BaseModelNoWithExtra
+@PublicInit
 public struct CompletionCreateResult {
     public let id: String
     public let choices: [CompletionResultChoice]

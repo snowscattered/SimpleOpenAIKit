@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelWithExtra
+@PublicInit
 public struct ResponseRetrieveParameters {
     @transient public var response_id: String
     public var stream: Bool?

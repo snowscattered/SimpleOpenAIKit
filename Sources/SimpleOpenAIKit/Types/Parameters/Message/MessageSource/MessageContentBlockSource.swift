@@ -25,6 +25,7 @@ extension MessageContentBlockSourceContent: ExpressibleByStringLiteral, Expressi
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct MessageContentBlockSource {
     public static let type: String = "content"
     public var content: MessageContentBlockSourceContent

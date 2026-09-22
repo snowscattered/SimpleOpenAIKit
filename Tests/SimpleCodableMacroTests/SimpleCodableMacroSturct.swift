@@ -34,6 +34,7 @@ enum Input {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 struct A {
     static let role: String = "A"
     let name: String
@@ -56,23 +57,27 @@ public class PublicInitClass {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 struct B {
     static let role: String = "B"
     let age: Int
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 struct C {
     static let role: String = "C"
     let score: Double
 }
 
 @BaseModelWithExtra
+@PublicInit
 struct Other: Codable {
     var role: String
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 struct OptionModel {
     var d: Int? = 0
 }
@@ -94,17 +99,20 @@ enum CodableTraversalStruct {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 struct Fast {
     let A: Int
     @transient let B: Int
 }
 
 @BaseModelWithExtra
+@PublicInit
 struct Extra {
     let A: Int
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 struct After {
     var A: Int
 }
@@ -116,6 +124,7 @@ extension After {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 struct MultiRole {
     let role: String
 }

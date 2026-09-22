@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelWithExtra
+@PublicInit
 public struct UploadPartParameters {
     @transient public var upload_id: String
     public var data: FileParameters

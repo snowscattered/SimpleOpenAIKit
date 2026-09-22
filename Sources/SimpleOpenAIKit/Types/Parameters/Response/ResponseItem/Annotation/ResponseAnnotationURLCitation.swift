@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseAnnotationURLCitation {
     public static let type: String = "url_citation"
     public var end_index: Int

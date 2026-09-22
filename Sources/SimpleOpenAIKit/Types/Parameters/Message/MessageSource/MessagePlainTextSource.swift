@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct MessagePlainTextSource {
     public static let media_type: String = "text/plain"
     public static let type: String = "text"

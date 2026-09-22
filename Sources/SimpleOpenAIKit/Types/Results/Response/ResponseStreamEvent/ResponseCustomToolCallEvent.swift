@@ -8,6 +8,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseCustomToolCallInputDeltaEvent {
     public static let type: String = "response.custom_tool_call_input.delta"
     public let delta: String
@@ -16,6 +17,7 @@ public struct ResponseCustomToolCallInputDeltaEvent {
     public let sequence_number: Int
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseCustomToolCallInputDoneEvent {
     public static let type: String = "response.custom_tool_call_input.done"
     public let input: String

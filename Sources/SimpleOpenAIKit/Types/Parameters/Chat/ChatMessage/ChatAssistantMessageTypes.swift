@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ChatAssistantAudio {
     public var id: String
     /// Result Field
@@ -33,18 +34,21 @@ extension ChatStringOrContentAssistentPart: ExpressibleByStringLiteral, Expressi
 }
 
 @BaseModelWithExtra
+@PublicInit
 public struct ChatAssistantFunctionCall {
     public var name: String
     public var arguments: String
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ChatAssistantFunction {
     public var name: String
     public var arguments: String
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ChatFunctionToolCall {
     public static let type: String = "function"
     public var id: String
@@ -52,12 +56,14 @@ public struct ChatFunctionToolCall {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ChatAssistantCustom {
     public var input: String
     public var name: String
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ChatCustomToolCall {
     public static let type: String = "custom"
     public var id: String
@@ -71,6 +77,7 @@ public enum ChatToolCall {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ChatAnnotationURLCitation {
     public var end_index: Int
     public var start_index: Int
@@ -78,12 +85,14 @@ public struct ChatAnnotationURLCitation {
     public var url: String
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ChatAnnotation {
     public static let type: String = "url_citation"
     public var url_citation: ChatAnnotationURLCitation
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ChatAssistantMessage {
     public static let role: String = "assistant"
     public var audio: ChatAssistantAudio?

@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct VideoCharacterResult {
     public var id: String?
     public var created_at: Int

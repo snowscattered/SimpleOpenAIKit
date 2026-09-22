@@ -14,6 +14,7 @@ public enum RealtimeAssistantContentType: String {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct RealtimeAssistantContent {
     public var audio: String?
     public var text: String?
@@ -22,6 +23,7 @@ public struct RealtimeAssistantContent {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct RealtimeAssistantMessageConversationItem {
     public static let object: String = "realtime.item"
     public static let role: String = "assistant"

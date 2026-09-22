@@ -13,6 +13,7 @@ public enum FileStatusLiteral: String {
     case uploaded, processed, error
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct FileResult {
     public static let object: String = "file"
     public let id: String
@@ -25,6 +26,7 @@ public struct FileResult {
     public let status_details: String?
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct FileDeleted {
     public static let object: String = "file"
     public let id: String

@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct UploadPartResult {
     public static let object: String = "upload.part"
     public let id: String

@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelWithExtra
+@PublicInit
 public struct ResponseClientEventParameters {
     public static let type: String = "response.create"
     public var model: String

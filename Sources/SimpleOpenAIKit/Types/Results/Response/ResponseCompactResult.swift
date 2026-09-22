@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseCompactResult {
     public static let object: String = "response.compaction"
     public var id: String

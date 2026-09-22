@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelWithExtra
+@PublicInit
 public struct PageStruct<T: Codable & Sendable> {
     public let data: [T]
     public let has_more: Bool?

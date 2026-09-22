@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct MessageToolUseBlock {
     public static let type: String = "tool_use"
     public var id: String

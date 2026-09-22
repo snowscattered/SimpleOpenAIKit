@@ -8,6 +8,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ModelResult {
 //    public static let object: String = "model"
     public let object: String
@@ -17,6 +18,7 @@ public struct ModelResult {
     public let shutdown_date: String?
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct ModelDeletedResult {
     public let id: String
     public let deleted: Bool

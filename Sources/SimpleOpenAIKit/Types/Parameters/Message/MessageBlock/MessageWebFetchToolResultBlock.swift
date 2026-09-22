@@ -20,11 +20,13 @@ public enum WebFetchToolResultErrorCode: String {
     case unavailable
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct WebFetchToolResultErrorBlock {
     public static let type: String = "web_fetch_tool_result_error"
     public var error_code: WebFetchToolResultErrorCode
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct WebFetchBlock {
     public static let type: String = "web_fetch_result"
     public var content: MessageDocumentBlock
@@ -37,6 +39,7 @@ public enum WebFetchResultContent {
     case error(WebFetchToolResultErrorBlock)
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct MessageWebFetchToolResultBlock {
     public static let type: String = "web_fetch_tool_result"
     public var content: WebFetchResultContent

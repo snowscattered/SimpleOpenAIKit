@@ -96,9 +96,7 @@ extension BaseType {
     }
 }
 // MARK: - BaseModel
-public protocol BaseModel: Codable & Sendable {
-    init(from decoder: Decoder) throws
-}
+public protocol BaseModel: Codable & Sendable { }
 public extension BaseModel {
     func after() throws -> Void { }
     func json() throws -> String {

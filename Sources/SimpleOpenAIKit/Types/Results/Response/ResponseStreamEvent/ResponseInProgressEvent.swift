@@ -8,6 +8,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct ResponseInProgressEvent {
     public static let type: String = "response.in_progress"
     public let response: ResponseCreateResult

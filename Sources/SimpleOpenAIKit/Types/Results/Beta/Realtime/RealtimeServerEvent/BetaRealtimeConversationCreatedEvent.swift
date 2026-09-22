@@ -9,12 +9,14 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct BetaRealtimeConversation {
     public static let object: String = "realtime.conversation"
     public let id: String?
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct BetaRealtimeConversationCreatedEvent {
     public static let type: String = "conversation.created"
     public let conversation: BetaRealtimeConversation

@@ -19,6 +19,7 @@ public enum MessageWebSearchType: String {
 }
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct MessageWebSearchTool {
     public var name: MessageWebSearchType
     public var type: MessageWebSearchToolTypeLiteral

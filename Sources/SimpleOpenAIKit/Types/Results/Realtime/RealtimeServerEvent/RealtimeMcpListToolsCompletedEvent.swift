@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct RealtimeMcpListToolsCompletedEvent {
     public static let type: String = "mcp_list_tools.completed"
     public let event_id: String

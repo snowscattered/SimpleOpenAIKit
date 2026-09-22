@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct BetaRealtimeTranscriptionSessionUpdatedEvent {
     public static let type: String = "realtime.updated"
     public let event_id: String

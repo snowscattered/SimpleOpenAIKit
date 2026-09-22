@@ -9,6 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @BaseModelNoWithExtra
+@PublicInit
 public struct MessageThinkingBlock {
     public static let type: String = "thinking"
     public var thinking: String

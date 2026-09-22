@@ -14,6 +14,7 @@ public enum RealtimeContentPartLiteral: String {
     case text, audio
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct RealtimePart {
     public let audio: String?
     public let text: String?
@@ -23,6 +24,7 @@ public struct RealtimePart {
 
 // MARK: LogProbProperties
 @BaseModelNoWithExtra
+@PublicInit
 public struct RealtimeLogProbProperties {
     public let token: String
     public let bytes: [Int]
@@ -30,11 +32,13 @@ public struct RealtimeLogProbProperties {
 }
 // MARK: Usage
 @BaseModelNoWithExtra
+@PublicInit
 public struct RealtimeUsageTranscriptTextUsageTokensInputTokenDetails {
     public let audio_tokens: Int?
     public let text_tokens: Int?
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct RealtimeUsageTranscriptTextUsageTokens {
     public static let type: String = "tokens"
     public let input_tokens: Int
@@ -43,6 +47,7 @@ public struct RealtimeUsageTranscriptTextUsageTokens {
     public let input_token_details: RealtimeUsageTranscriptTextUsageTokensInputTokenDetails?
 }
 @BaseModelNoWithExtra
+@PublicInit
 public struct RealtimeUsageTranscriptTextUsageDuration {
     public static let type: String = "duration"
     public let seconds: Double
@@ -54,6 +59,7 @@ public enum RealtimeUsage: Codable {
 }
 // MARK: Error
 @BaseModelNoWithExtra
+@PublicInit
 public struct RealtimeError {
     public let event_id: String?
     public let code: String?
