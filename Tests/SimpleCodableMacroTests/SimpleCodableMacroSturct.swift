@@ -39,6 +39,22 @@ struct A {
     let name: String
 }
 
+@PublicInit
+public struct PublicInitModel {
+    public let name: String
+    public var count: Int?
+    public let object: String = "public_init"
+    public static let role: String = "public_init"
+}
+
+@PublicInit
+public class PublicInitClass {
+    public let name: String
+    public var count: Int?
+    public let object: String = "public_init_class"
+    public static let role: String = "public_init_class"
+}
+
 @BaseModelNoWithExtra
 struct B {
     static let role: String = "B"

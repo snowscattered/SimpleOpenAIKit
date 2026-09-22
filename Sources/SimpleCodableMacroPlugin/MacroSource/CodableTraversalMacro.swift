@@ -63,11 +63,11 @@ struct CodableTraversalMacro: ExtensionMacro {
 
         let ext: DeclSyntax = """
             nonisolated extension \(raw: enumName): BaseModel {
-                \(raw: access)init(from decoder: Decoder) throws {
+                \(raw: access)init(from decoder: any Decoder) throws {
                     \(raw: decodeBody)
                 }
 
-                \(raw: access)func encode(to encoder: Encoder) throws {
+                \(raw: access)func encode(to encoder: any Encoder) throws {
                     var container = encoder.singleValueContainer()
                     switch self {
                     \(raw: encodeCases)

@@ -16,5 +16,6 @@ struct SimpleCodableMacroPlugin: CompilerPlugin {
         MultiConstMacro.self,
         BaseModelWithExtraMacro.self,
         BaseModelNoWithExtraMacro.self,
+        PublicInitMacro.self,
     ]
 }

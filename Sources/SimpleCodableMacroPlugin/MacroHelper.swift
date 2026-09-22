@@ -64,8 +64,8 @@ package func multiConstantValues(from caseDecl: EnumCaseDeclSyntax) throws -> [S
     return try attributes.first.map { try multiConstantValues(from: $0) }
 }
 
-package func collectStoredProperties(of structDecl: StructDeclSyntax) -> [StoredProperty] {
-    structDecl.memberBlock.members.compactMap { member in
+package func collectStoredProperties(of declaration: some DeclGroupSyntax) -> [StoredProperty] {
+    declaration.memberBlock.members.compactMap { member in
         guard let varDecl = member.decl.as(VariableDeclSyntax.self),
                 (varDecl.bindingSpecifier.tokenKind == .keyword(.let) || varDecl.bindingSpecifier.tokenKind == .keyword(.var)),
               let binding = varDecl.bindings.first,

@@ -55,6 +55,11 @@ public macro MultiConstant(_ values: [String]) = #externalMacro(module: "SimpleC
 @attached(peer)
 public macro transient() = #externalMacro(module: "SimpleCodableMacroPlugin", type: "TransientMacro")
 
+/// A macro that generates a `public` memberwise initializer for a struct or root class.
+/// Properties that are `static` or `let` with an initial value are skipped.
+@attached(member, names: named(init))
+public macro PublicInit() = #externalMacro(module: "SimpleCodableMacroPlugin", type: "PublicInitMacro")
+
 /// A macro that generates a `nonisolated extension` conforming to `BaseModelNoWithExtra`.
 /// The annotated type must already be `Codable & Sendable`.
 /// A memberwise `init` is also generated in the struct body.

@@ -114,13 +114,13 @@ struct BaseModelNoWithExtraMacro: MemberMacro, ExtensionMacro {
             nonisolated extension \(raw: typeName): BaseModelNoWithExtra {
                 \(raw: codingKeysDecl)
 
-                \(raw: access)init(from decoder: Decoder) throws {
+                \(raw: access)init(from decoder: any Decoder) throws {
                     \(raw: decodeDecl)
             
                     try self.after()
                 }
 
-                \(raw: access)func encode(to encoder: Encoder) throws {
+                \(raw: access)func encode(to encoder: any Encoder) throws {
                     \(raw: encodeDecl)
                 }
             }
