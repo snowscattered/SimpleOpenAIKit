@@ -29,4 +29,15 @@ nonisolated(unsafe) let anthropicAsyncClient = AsyncAnthropic(
     base_url: anthropicClient.base_url,
     max_retries: 1
 )
+
+nonisolated(unsafe) let typeSafeClient = TypeSafeClient(
+    api_key: "NoKey",
+    base_url: URL(string: "https://api.typesafe.ai")!,
+    max_retries: 1
+)
+nonisolated(unsafe) let asyncTypeSafeClient = AsyncTypeSafeClient(
+    api_key: typeSafeClient.api_key,
+    base_url: typeSafeClient.base_url,
+    max_retries: 1
+)
 let bundle = Bundle.module

@@ -30,6 +30,9 @@
 - [Anthropic](#anthropic)
   - [支持列表](#anthropic-支持列表)
   - [Message](#message)
+- [TypeSafe](#typesafe)
+  - [支持列表](#typesafe-支持列表)
+  - [System One](#system-one)
 - [License](#license)
 
 ## 简介
@@ -574,13 +577,13 @@ func openAIAsyncBetaRealtime() async throws {
 
 ### Anthropic 支持列表
 
-项目同时支持 Anthropic Message API，入口位于 `AsyncAnthropic` / `Anthropic`：
+以下列表以 `Sources/SimpleOpenAIKit/Clinet/Anthropic/Anthropic.swift` 中的顶层属性为基准；`✅` 表示已启用，`❌` 表示在该文件中仍被注释、尚未支持。`AsyncAnthropic.swift` 使用同一套命名空间的 Async 版本。
 
-| 命名空间 | 客户端 | 当前提供的主要方法 |
+| 命名空间 | Anthropic.swift 状态 | 当前提供的主要方法 |
 | --- | --- | --- |
-| `messages` | `AsyncAnthropic` / `Anthropic` | `create`, `stream` |
-| `models` | `AsyncAnthropic` / `Anthropic` | `list`, `retrieve` |
-| `completions` | `AsyncAnthropic` / `Anthropic` | `create`, `stream` |
+| `models` | ✅ | `list`, `retrieve` |
+| `completions` | ✅ | `create`, `stream` |
+| `messages` | ✅ | `create`, `stream`, `count_tokens` |
 
 ### Message
 
@@ -602,3 +605,48 @@ func anthropicMessageStream() async throws {
     }
 }
 ```
+
+## TypeSafe
+
+### TypeSafe 支持列表
+
+以下列表以 `Sources/SimpleOpenAIKit/Clinet/TypeSafe/TypeSafeClient.swift` 中的顶层属性为基准；`✅` 表示已启用，`❌` 表示在该文件中仍被注释、尚未支持。`AsyncTypeSafeClient.swift` 使用同一套命名空间的 Async 版本。
+
+| 命名空间 | TypeSafeClient.swift 状态 | 当前提供的主要方法 |
+| --- | --- | --- |
+| `systemOne` | ✅ | `system_one` |
+| `models` | ✅ | `list` |
+
+`systemOne` 保持模块内可见，并在 client 上做了桥接，所以调用写成 `client.system_one(parameters:)`。创建 client 时传入 `api_key`；请求没有写 `SystemOneParameters.model` 时使用 client 的 `model`（默认 `jev-latest`），`base_url` 默认是 `https://api.typesafe.ai`。
+
+### System One
+
+一次请求把同一个 `state` 交给一组带类型的 `questions` 评估，答案按提问时用的 key 返回。彼此独立的问题并行执行、也看不到彼此的答案，流程仍然由代码掌握，模型只给出概率。
+
+```swift
+func typeSafeSystemOne() async throws {
+    let client = AsyncTypeSafeClient(api_key: "YOUR_TYPESAFE_API_KEY")
+    let response = try await client.system_one(
+        parameters: .init(
+            state: ["document": "I was charged twice. Please fix this ASAP."],
+            questions: [
+                "billing": .noul(instructions: "Is this ticket about billing?"),
+                "tone": .choice(
+                    instructions: "What is the customer's tone?",
+                    criteria: ["calm": nil, "frustrated": nil, "angry": nil]
+                ),
+                "urgency": .score(
+                    instructions: "How urgent is this ticket?",
+                    criteria: ["can wait", "this week", "today"]
+                ),
+            ]
+        )
+    )
+
+    print(response.nouls["billing"]?.noul ?? "None")
+    print(response.choices["tone"]?.choice ?? "None")
+    print(response.scores["urgency"]?.score ?? "None")
+}
+```
+
+`nouls`、`choices`、`scores` 按问题类型分组取答案，`answers` 保留每个提问 key 的原始答案，`usage` 给出 token 用量。Score 答案另有 `probability(forLevel:)`、`legend(forLevel:)` 与 `levels`；Choice 和 Score 答案带 `confidence`，Noul 答案没有单独的置信度，因为它的概率本身就已经说明了不确定性。
