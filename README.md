@@ -30,6 +30,9 @@ English | [中文](README.zh-CN.md)
 - [Anthropic](#anthropic)
   - [Supported Resources](#anthropic-supported-resources)
   - [Message](#message)
+- [TypeSafe](#typesafe)
+  - [Supported Resources](#typesafe-supported-resources)
+  - [System One](#system-one)
 - [License](#license)
 
 ## Introduction
@@ -574,13 +577,13 @@ func openAIAsyncBetaRealtime() async throws {
 
 ### Anthropic Supported Resources
 
-Anthropic Message API is supported through `AsyncAnthropic` / `Anthropic`:
+The following list is based on the top-level properties in `Sources/SimpleOpenAIKit/Clinet/Anthropic/Anthropic.swift`; `✅` means enabled, `❌` means still commented out and not yet supported. `AsyncAnthropic.swift` exposes the same namespace list in its Async variants.
 
-| Namespace | Client | Primary Methods |
+| Namespace | Anthropic.swift Status | Primary Methods |
 | --- | --- | --- |
-| `messages` | `AsyncAnthropic` / `Anthropic` | `create`, `stream` |
-| `models` | `AsyncAnthropic` / `Anthropic` | `list`, `retrieve` |
-| `completions` | `AsyncAnthropic` / `Anthropic` | `create`, `stream` |
+| `models` | ✅ | `list`, `retrieve` |
+| `completions` | ✅ | `create`, `stream` |
+| `messages` | ✅ | `create`, `stream`, `count_tokens` |
 
 ### Message
 
@@ -602,3 +605,48 @@ func anthropicMessageStream() async throws {
     }
 }
 ```
+
+## TypeSafe
+
+### TypeSafe Supported Resources
+
+The following list is based on the top-level properties in `Sources/SimpleOpenAIKit/Clinet/TypeSafe/TypeSafeClient.swift`; `✅` means enabled, `❌` means still commented out and not yet supported. `AsyncTypeSafeClient.swift` exposes the same namespace list in its Async variants.
+
+| Namespace | TypeSafeClient.swift Status | Primary Methods |
+| --- | --- | --- |
+| `systemOne` | ✅ | `system_one` |
+| `models` | ✅ | `list` |
+
+`systemOne` stays module-internal and is bridged onto the client, so the call reads `client.system_one(parameters:)`. A client is built with `api_key`, and every request falls back to the client's `model` (default `jev-latest`) unless `SystemOneParameters.model` names one itself. `base_url` defaults to `https://api.typesafe.ai`.
+
+### System One
+
+One `state` is evaluated against a map of typed questions in a single request, and the answers come back under the same keys. Independent questions run in parallel; code keeps the workflow and reads the probabilities.
+
+```swift
+func typeSafeSystemOne() async throws {
+    let client = AsyncTypeSafeClient(api_key: "YOUR_TYPESAFE_API_KEY")
+    let response = try await client.system_one(
+        parameters: .init(
+            state: ["document": "I was charged twice. Please fix this ASAP."],
+            questions: [
+                "billing": .noul(instructions: "Is this ticket about billing?"),
+                "tone": .choice(
+                    instructions: "What is the customer's tone?",
+                    criteria: ["calm": nil, "frustrated": nil, "angry": nil]
+                ),
+                "urgency": .score(
+                    instructions: "How urgent is this ticket?",
+                    criteria: ["can wait", "this week", "today"]
+                ),
+            ]
+        )
+    )
+
+    print(response.nouls["billing"]?.noul ?? "None")
+    print(response.choices["tone"]?.choice ?? "None")
+    print(response.scores["urgency"]?.score ?? "None")
+}
+```
+
+`nouls`, `choices` and `scores` group the answers by question kind, `answers` keeps every answer under its question key, and `usage` carries the token counts. A Score answer also exposes `probability(forLevel:)`, `legend(forLevel:)` and `levels`; Choice and Score answers carry `confidence`, a Noul answer carries none because its probability already holds the uncertainty.
