@@ -110,28 +110,33 @@ struct CodableByConstantMacro: ExtensionMacro {
             "case .\(Case.caseName)(let v): try c.encode(v)"
         }.joined(separator: "\n")
 
+        let members = memberNames(of: enumDecl)
+        let decodeDecl = members.contains("init(from:)") ? "// Customized By you" : """
+            \(access)init(from decoder: any Decoder) throws {
+                let container = try decoder.container(keyedBy: CodingKeys.self)
+                let field = try container.decodeIfPresent(String.self, forKey: .\(field))
+                let c = try decoder.singleValueContainer()
+                switch field {
+                \(nilBranch)
+                \(decodeCases)
+                \(defaultBranch)
+                }
+            }
+            """
+        let encodeDecl = members.contains("encode(to:)") ? "// Customized By you" : """
+            \(access)func encode(to encoder: any Encoder) throws {
+                var c = encoder.singleValueContainer()
+                switch self {
+                \(encodeCases)
+                }
+            }
+            """
         let ext: DeclSyntax = """
             nonisolated extension \(raw: enumName): BaseModel {
                 private enum CodingKeys: String, CodingKey { case \(raw: field) }
-                \(raw: access)init(from decoder: any Decoder) throws {
-                    
-            
-                    let container = try decoder.container(keyedBy: CodingKeys.self)
-                    let field = try container.decodeIfPresent(String.self, forKey: .\(raw: field))
-                    let c = try decoder.singleValueContainer()
-                    switch field {
-                    \(raw: nilBranch)
-                    \(raw: decodeCases)
-                    \(raw: defaultBranch)
-                    }
-                }
+                \(raw: decodeDecl)
 
-                \(raw: access)func encode(to encoder: any Encoder) throws {
-                    var c = encoder.singleValueContainer()
-                    switch self {
-                    \(raw: encodeCases)
-                    }
-                }
+                \(raw: encodeDecl)
             }
             """
 

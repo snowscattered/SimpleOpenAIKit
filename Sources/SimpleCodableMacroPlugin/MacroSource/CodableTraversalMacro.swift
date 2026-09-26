@@ -61,18 +61,25 @@ struct CodableTraversalMacro: ExtensionMacro {
             "case .\(c.caseName)(let v): try container.encode(v)"
         }.joined(separator: "\n")
 
+        let members = memberNames(of: enumDecl)
+        let decodeDecl = members.contains("init(from:)") ? "// Customized By you" : """
+            \(access)init(from decoder: any Decoder) throws {
+                \(decodeBody)
+            }
+            """
+        let encodeDecl = members.contains("encode(to:)") ? "// Customized By you" : """
+            \(access)func encode(to encoder: any Encoder) throws {
+                var container = encoder.singleValueContainer()
+                switch self {
+                \(encodeCases)
+                }
+            }
+            """
         let ext: DeclSyntax = """
             nonisolated extension \(raw: enumName): BaseModel {
-                \(raw: access)init(from decoder: any Decoder) throws {
-                    \(raw: decodeBody)
-                }
+                \(raw: decodeDecl)
 
-                \(raw: access)func encode(to encoder: any Encoder) throws {
-                    var container = encoder.singleValueContainer()
-                    switch self {
-                    \(raw: encodeCases)
-                    }
-                }
+                \(raw: encodeDecl)
             }
             """
 

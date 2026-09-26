@@ -36,19 +36,23 @@ struct CodableLiteralMacro: ExtensionMacro {
 
         // Build the expected values string for the error message, e.g. ["float", "base64"]
         let expectedValues = cases.map { #""\#($0)""# }.joined(separator: ", ")
+        let members = memberNames(of: enumDecl)
+        let decodeDecl = members.contains("init(from:)") ? "// Customized By you" : """
+            \(access)init(from decoder: any Decoder) throws {
+                let container = try decoder.singleValueContainer()
+                let rawValue = try container.decode(\(rawTypeName).self)
+                guard let value = Self(rawValue: rawValue) else {
+                    throw DecodingError.dataCorruptedError(
+                        in: container,
+                        debugDescription: #"Expected Literal[\(expectedValues)] but got \\#(rawValue)"#
+                    )
+                }
+                self = value
+            }
+            """
         let ext: DeclSyntax = """
             extension \(raw: enumName): BaseModel {
-                \(raw: access)init(from decoder: any Decoder) throws {
-                    let container = try decoder.singleValueContainer()
-                    let rawValue = try container.decode(\(raw: rawTypeName).self)
-                    guard let value = Self(rawValue: rawValue) else {
-                        throw DecodingError.dataCorruptedError(
-                            in: container,
-                            debugDescription: #"Expected Literal[\(raw: expectedValues)] but got \\#(rawValue)"#
-                        )
-                    }
-                    self = value
-                }
+                \(raw: decodeDecl)
             }
             """
 

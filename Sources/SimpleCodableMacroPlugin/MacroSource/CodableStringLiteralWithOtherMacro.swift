@@ -38,6 +38,23 @@ struct CodableStringLiteralWithOtherMacro: ExtensionMacro {
         let decodeCases = cases
             .map { #"case "\#(unquote(fromCaseName: $0))": self = .\#($0)"# }
             .joined(separator: "\n")
+        let members = memberNames(of: enumDecl)
+        let decodeDecl = members.contains("init(from:)") ? "// Customized By you" : """
+            \(access)init(from decoder: any Decoder) throws {
+                let container = try decoder.singleValueContainer()
+                let rawValue = try container.decode(String.self)
+                switch rawValue {
+                \(decodeCases)
+                default: self = .other(rawValue)
+                }
+            }
+            """
+        let encodeDecl = members.contains("encode(to:)") ? "// Customized By you" : """
+            \(access)func encode(to encoder: any Encoder) throws {
+                var container = encoder.singleValueContainer()
+                try container.encode(rawValue)
+            }
+            """
         let ext: DeclSyntax = """
             extension \(raw: enumName): BaseModel {
                 \(raw: access)var rawValue: String {
@@ -46,18 +63,8 @@ struct CodableStringLiteralWithOtherMacro: ExtensionMacro {
                     case .other(let s): return s
                     }
                 }
-                \(raw: access)init(from decoder: any Decoder) throws {
-                    let container = try decoder.singleValueContainer()
-                    let rawValue = try container.decode(String.self)
-                    switch rawValue {
-                    \(raw: decodeCases)
-                    default: self = .other(rawValue)
-                    }
-                }
-                \(raw: access)func encode(to encoder: any Encoder) throws {
-                    var container = encoder.singleValueContainer()
-                    try container.encode(rawValue)
-                }
+                \(raw: decodeDecl)
+                \(raw: encodeDecl)
             }
             """
         guard let extensionDecl = ext.as(ExtensionDeclSyntax.self) else {

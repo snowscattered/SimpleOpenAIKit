@@ -101,6 +101,35 @@ package func collectStoredProperties(of declaration: some DeclGroupSyntax) -> [S
     }
 }
 
+package func memberNames(of declaration: some DeclGroupSyntax, in name: String? = nil) -> [String] {
+    let signature: (FunctionSignatureSyntax) -> String = {
+        guard let first = $0.parameterClause.parameters.first else { return "()" }
+        return "(\(first.firstName.text):)"
+    }
+    let members: MemberBlockItemListSyntax
+    if let name {
+        guard let nested = declaration.memberBlock.members
+            .compactMap({ $0.decl.asProtocol(DeclGroupSyntax.self) })
+            .first(where: { $0.asProtocol(NamedDeclSyntax.self)?.name.text == name })
+        else { return [] }
+        members = nested.memberBlock.members
+    } else {
+        members = declaration.memberBlock.members
+    }
+    return members.flatMap { member -> [String] in
+        if let caseDecl = member.decl.as(EnumCaseDeclSyntax.self) {
+            return caseDecl.elements.map { unquote(fromCaseName: $0.name.text) }
+        }
+        if let initDecl = member.decl.as(InitializerDeclSyntax.self) {
+            return ["init" + signature(initDecl.signature)]
+        }
+        if let funcDecl = member.decl.as(FunctionDeclSyntax.self) {
+            return [funcDecl.name.text + signature(funcDecl.signature)]
+        }
+        return member.decl.asProtocol(NamedDeclSyntax.self).map { [unquote(fromCaseName: $0.name.text)] } ?? []
+    }
+}
+
 // MARK: - Macro Error
 public enum MacroError: Error, CustomStringConvertible {
     case message(String)
