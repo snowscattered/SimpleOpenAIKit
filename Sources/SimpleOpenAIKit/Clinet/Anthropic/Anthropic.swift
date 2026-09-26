@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Anthropic {
+public class Anthropic {
     private var clientOption: AnthropicClientOption
     public var api_key: String { clientOption.api_key }
     public var auth_token: String? { clientOption.auth_token }
@@ -45,9 +45,9 @@ public struct Anthropic {
             default_headers: default_headers,
             default_query: default_query
         )
-        self.clientOption = clientOption
         self.models      = .init(clientOption)
         self.completions = .init(clientOption)
         self.messages    = .init(clientOption)
+        self.clientOption = clientOption
     }
 }

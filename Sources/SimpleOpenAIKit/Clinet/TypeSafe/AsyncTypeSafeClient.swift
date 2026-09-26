@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct AsyncTypeSafeClient {
+public class AsyncTypeSafeClient {
     private var clientOption: TypeSafeClientOption
     public var api_key: String { clientOption.api_key }
     public var model: String { clientOption.model }
@@ -44,8 +44,8 @@ public struct AsyncTypeSafeClient {
             default_headers: default_headers,
             default_query: default_query
         )
-        self.clientOption = clientOption
         self.systemOne = .init(clientOption)
         self.models    = .init(clientOption)
+        self.clientOption = clientOption
     }
 }

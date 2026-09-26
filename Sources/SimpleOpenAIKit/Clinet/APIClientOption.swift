@@ -7,7 +7,7 @@
 
 import Foundation
 
-public protocol APIClientOption {
+public protocol APIClientOption: ~Copyable {
     var api_key: String { get }
     var base_url: URL { get }
     var timeout: TimeInterval { get }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct OpenAI {
+public class OpenAI {
     private var clientOption: OpenAIClientOption
     public var api_key: String { clientOption.api_key }
     public var organization: String? { clientOption.organization }
@@ -75,7 +75,7 @@ public struct OpenAI {
             default_headers: default_headers,
             default_query: default_query
         )
-        self.clientOption = clientOption
+        
         self.models      = .init(clientOption)
         self.completions = .init(clientOption)
         self.chat        = .init(clientOption)
@@ -88,5 +88,6 @@ public struct OpenAI {
         self.videos      = .init(clientOption)
         self.realtime    = .init(clientOption)
         self.beta        = .init(clientOption)
+        self.clientOption = clientOption
     }
 }
