@@ -8,7 +8,7 @@
 import Foundation
 
 public class Anthropic {
-    private var clientOption: AnthropicClientOption
+    private let clientOption: AnthropicClientOption
     public var api_key: String { clientOption.api_key }
     public var auth_token: String? { clientOption.auth_token }
 

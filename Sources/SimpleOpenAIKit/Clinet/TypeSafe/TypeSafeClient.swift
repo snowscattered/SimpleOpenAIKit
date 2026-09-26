@@ -8,7 +8,7 @@
 import Foundation
 
 public class TypeSafeClient {
-    private var clientOption: TypeSafeClientOption
+    private let clientOption: TypeSafeClientOption
     public var api_key: String { clientOption.api_key }
     public var model: String { clientOption.model }
 

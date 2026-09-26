@@ -8,7 +8,7 @@
 import Foundation
 
 public class OpenAI {
-    private var clientOption: OpenAIClientOption
+    private let clientOption: OpenAIClientOption
     public var api_key: String { clientOption.api_key }
     public var organization: String? { clientOption.organization }
     public var project: String? { clientOption.project }
