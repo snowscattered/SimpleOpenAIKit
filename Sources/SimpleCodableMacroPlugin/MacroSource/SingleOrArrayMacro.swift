@@ -50,33 +50,40 @@ struct SingleOrArrayMacro: ExtensionMacro {
             throw MacroError("@SingleOrArray requires one case with a single value and one with an array of the same element type")
         }
 
+        let members = memberNames(of: enumDecl)
+        let decodeDecl = members.contains("init(from:)") ? "// Customized By you" : """
+            \(access)init(from decoder: any Decoder) throws {
+                let container = try decoder.singleValueContainer()
+                if (try? container.decode(\(single.typeName).self)) == nil &&
+                    (try? container.decode([BaseType].self)) == nil {
+                    throw DecodingError.typeMismatch(
+                        \(single.typeName).self, .init(
+                        codingPath: container.codingPath,
+                        debugDescription: "Expected \(single.typeName) or Array[\(array.elementType)]"
+                    ))
+                }
+
+                if let s = try? container.decode(\(single.typeName).self) {
+                    self = .\(single.name)(s)
+                    return
+                }
+                let array = try container.decode([\(array.elementType)].self)
+                self = .\(array.name)(array)
+            }
+            """
+        let encodeDecl = members.contains("encode(to:)") ? "// Customized By you" : """
+            \(access)func encode(to encoder: any Encoder) throws {
+                var container = encoder.singleValueContainer()
+                switch self {
+                case .\(single.name)(let v): try container.encode(v)
+                case .\(array.name)(let v):  try container.encode(v)
+                }
+            }
+            """
         let ext: DeclSyntax = """
             nonisolated extension \(raw: enumName): BaseModel {
-                \(raw: access)init(from decoder: any Decoder) throws {
-                    let container = try decoder.singleValueContainer()
-                    if (try? container.decode(\(raw: single.typeName).self)) == nil &&
-                        (try? container.decode([BaseType].self)) == nil {
-                        throw DecodingError.typeMismatch(
-                            \(raw: single.typeName).self, .init(
-                            codingPath: container.codingPath,
-                            debugDescription: "Expected \(raw: single.typeName) or Array[\(raw: array.elementType)]"
-                        ))
-                    }
-
-                    if let s = try? container.decode(\(raw: single.typeName).self) {
-                        self = .\(raw: single.name)(s)
-                        return
-                    }
-                    let array = try container.decode([\(raw: array.elementType)].self)
-                    self = .\(raw: array.name)(array)
-                }
-                \(raw: access)func encode(to encoder: any Encoder) throws {
-                    var container = encoder.singleValueContainer()
-                    switch self {
-                    case .\(raw: single.name)(let v): try container.encode(v)
-                    case .\(raw: array.name)(let v):  try container.encode(v)
-                    }
-                }
+                \(raw: decodeDecl)
+                \(raw: encodeDecl)
             }
             """
 

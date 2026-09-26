@@ -30,8 +30,17 @@ struct BaseModelNoWithExtraMacro: ExtensionMacro {
         }
 
         let codingKeysCases = stored.map { "case \($0.name)" }.joined(separator: "\n")
+        let members = memberNames(of: structDecl)
+        let customKeys = memberNames(of: structDecl, in: "CodingKeys")  // Undefined is empty
+        let coding = customKeys.isEmpty ? stored : stored.filter { customKeys.contains(unquote(fromCaseName: $0.name)) }
+        // MARK: - CodingKey
+        let codingKeysDecl = customKeys.isEmpty && !coding.isEmpty ? """
+            enum CodingKeys: String, CodingKey, CaseIterable {
+            \(codingKeysCases)
+            }
+            """ : "// Customized By you"
         // MARK: - Decode
-        let decodable = stored.filter { !$0.isStatic && !$0.isImmutableWithDefault }
+        let decodable = coding.filter { !$0.isStatic && !$0.isImmutableWithDefault }
         let decodeBody = decodable.map { prop -> String in
             // `var` with a default value: `decodeIfPresent` alone would turn a missing key
             // into nil, and `decode` would throw, so keep the default when the key is absent.
@@ -51,12 +60,19 @@ struct BaseModelNoWithExtraMacro: ExtensionMacro {
                 return "self.\(prop.name) = try container.decode(\(prop.typeName).self, forKey: .\(prop.name))"
             }
         }.joined(separator: "\n")
-        let decodeDecl = decodeBody.isEmpty ? "// No Decodable properties" : """
+        let decodeContainer = decodeBody.isEmpty ? "// No Decodable properties" : """
         let container = try decoder.container(keyedBy: CodingKeys.self)
         \(decodeBody)
         """
+        let decodeDecl = members.contains("init(from:)") ? "// Customized By you" : """
+            \(access)init(from decoder: any Decoder) throws {
+                \(decodeContainer)
+
+                try self.after()
+            }
+            """
         // MARK: - Encode
-        let encodable = stored.filter { !$0.isTransient }
+        let encodable = coding.filter { !$0.isTransient }
         let encodeBody = encodable.map { prop in
             let accessor = prop.isStatic ? "Self" : "self"
             if prop.isOptional {
@@ -65,14 +81,13 @@ struct BaseModelNoWithExtraMacro: ExtensionMacro {
                 return "try container.encode(\(accessor).\(prop.name), forKey: .\(prop.name))"
             }
         }.joined(separator: "\n")
-        let encodeDecl = encodeBody.isEmpty ? "// No Encodable properties" : """
+        let encodeContainer = encodeBody.isEmpty ? "// No Encodable properties" : """
         var container = encoder.container(keyedBy: CodingKeys.self)
         \(encodeBody)
         """
-        // MARK: - CodingKey
-        let codingKeysDecl = stored.isEmpty ? "" : """
-            enum CodingKeys: String, CodingKey, CaseIterable {
-            \(codingKeysCases)
+        let encodeDecl = members.contains("encode(to:)") ? "// Customized By you" : """
+            \(access)func encode(to encoder: any Encoder) throws {
+                \(encodeContainer)
             }
             """
         // MARK: - EXT
@@ -80,15 +95,9 @@ struct BaseModelNoWithExtraMacro: ExtensionMacro {
             nonisolated extension \(raw: typeName): BaseModelNoWithExtra {
                 \(raw: codingKeysDecl)
 
-                \(raw: access)init(from decoder: any Decoder) throws {
-                    \(raw: decodeDecl)
-            
-                    try self.after()
-                }
+                \(raw: decodeDecl)
 
-                \(raw: access)func encode(to encoder: any Encoder) throws {
-                    \(raw: encodeDecl)
-                }
+                \(raw: encodeDecl)
             }
             """
 
