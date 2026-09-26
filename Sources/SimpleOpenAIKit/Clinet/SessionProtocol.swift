@@ -14,13 +14,13 @@ public enum HTTPMethod: String {
     case delete = "DELETE"
 }
 public protocol SessionProtocol {
-    associatedtype ClientOption: APIClientOption
+    associatedtype ClientOption: APIClientOption, ~Copyable
     static var shared: Self { get }
     func getRequest<Payload: Encodable>(
         _ url: URL,
         payload: Payload?,
         requestOptions: RequestOptions?,
-        clientOption: ClientOption,
+        clientOption: borrowing ClientOption,
         method: HTTPMethod,
         hasFile: Bool,
     ) throws -> URLRequest
@@ -34,7 +34,7 @@ public extension SessionProtocol {
         _ url: URL,
         payload: Payload?,
         requestOptions: RequestOptions?,
-        clientOption: ClientOption,
+        clientOption: borrowing ClientOption,
         method: HTTPMethod,
         hasFile: Bool = false,
     ) throws -> URLRequest {
@@ -98,7 +98,7 @@ public extension SessionProtocol {
         _ url: URL,
         payload: Payload?,
         requestOptions: RequestOptions?,
-        clientOption: ClientOption,
+        clientOption: borrowing ClientOption,
         method: HTTPMethod,
         hasFile: Bool = false,
     ) throws -> T {
@@ -118,7 +118,7 @@ public extension SessionProtocol {
         _ url: URL,
         payload: Payload?,
         requestOptions: RequestOptions?,
-        clientOption: ClientOption,
+        clientOption: borrowing ClientOption,
         method: HTTPMethod,
         hasFile: Bool = false,
     ) throws -> SyncThrowingStream<T, Error> {
@@ -139,7 +139,7 @@ public extension SessionProtocol {
         _ url: URL,
         payload: Payload?,
         requestOptions: RequestOptions?,
-        clientOption: ClientOption,
+        clientOption: borrowing ClientOption,
         method: HTTPMethod,
         hasFile: Bool = false,
     ) async throws -> T {
@@ -159,7 +159,7 @@ public extension SessionProtocol {
         _ url: URL,
         payload: Payload?,
         requestOptions: RequestOptions?,
-        clientOption: ClientOption,
+        clientOption: borrowing ClientOption,
         method: HTTPMethod,
         hasFile: Bool = false,
     ) async throws -> AsyncThrowingStream<T, Error> {
@@ -180,7 +180,7 @@ public extension SessionProtocol {
         _ url: URL,
         payload: Payload?,
         requestOptions: RequestOptions?,
-        clientOption: ClientOption,
+        clientOption: borrowing ClientOption,
         method: HTTPMethod,
         hasFile: Bool = false,
     ) throws -> URLSessionWebSocketTask {
