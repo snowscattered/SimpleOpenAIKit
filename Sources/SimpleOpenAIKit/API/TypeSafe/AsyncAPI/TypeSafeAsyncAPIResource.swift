@@ -5,14 +5,17 @@
 //  Created by snow on 9/23/26.
 //
 
-public class TypeSafeAsyncAPIResource {
-    let clientOption: TypeSafeClientOption
-    init(_ clientOption: TypeSafeClientOption) {
-        self.clientOption = clientOption
-    }
+public enum TypeSafeAsyncAPIResource {
 
     // MARK: SystemOne
-    public final class SystemOneAsyncResource: TypeSafeAsyncAPIResource { }
+    public struct SystemOneAsyncResource: ~Copyable {
+        let clientOption: TypeSafeClientOption
+        init(_ clientOption: TypeSafeClientOption) { self.clientOption = clientOption }
+    }
+
     // MARK: Model
-    public final class ModelsAsyncResource: TypeSafeAsyncAPIResource { }
+    public struct ModelsAsyncResource: ~Copyable {
+        let clientOption: TypeSafeClientOption
+        init(_ clientOption: TypeSafeClientOption) { self.clientOption = clientOption }
+    }
 }

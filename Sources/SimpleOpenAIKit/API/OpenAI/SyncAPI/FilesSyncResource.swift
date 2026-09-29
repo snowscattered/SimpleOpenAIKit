@@ -29,13 +29,13 @@ public extension OpenAISyncAPIResource.FilesSyncResource {
         let url = try clientOption.getServerUrl(path: "/files")
         var nextAfter = parameters?.after
         var currentParams = parameters ?? FilesListParameters()
-        return SyncThrowingPages {
+        return SyncThrowingPages { [clientOption] in
             currentParams.after = nextAfter
             let result: PageStruct<FileResult> = try OpenAISession.shared.SyncResponse(
                 url,
                 payload: currentParams,
                 requestOptions: requestOptions,
-                clientOption: self.clientOption,
+                clientOption: clientOption,
                 method: .get
             )
             if let last = result.data.last {

@@ -28,7 +28,7 @@ public extension OpenAISyncAPIResource.VideosSyncResource {
     ) throws -> SyncThrowingPages<VideoResult> {
         let url = try clientOption.getServerUrl(path: "/videos")
         var nextAfter = parameters?.after
-        return SyncThrowingPages {
+        return SyncThrowingPages { [clientOption] in
             var currentParams = parameters ?? VideoListParameter()
             currentParams.after = nextAfter
             
@@ -36,7 +36,7 @@ public extension OpenAISyncAPIResource.VideosSyncResource {
                 url,
                 payload: currentParams,
                 requestOptions: requestOptions,
-                clientOption: self.clientOption,
+                clientOption: clientOption,
                 method: .get
             )
             if let last = result.data.last {

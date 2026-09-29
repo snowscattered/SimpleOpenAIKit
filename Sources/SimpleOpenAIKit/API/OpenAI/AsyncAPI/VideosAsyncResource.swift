@@ -27,16 +27,15 @@ public extension OpenAIAsyncAPIResource.VideosAsyncResource {
         requestOptions: RequestOptions? = nil
     ) async throws -> AsyncThrowingPages<VideoResult> {
         let url = try clientOption.getServerUrl(path: "/videos")
+        var currentParams = parameters ?? VideoListParameter()
         var nextAfter = parameters?.after
-        return AsyncThrowingPages {
-            var currentParams = parameters ?? VideoListParameter()
+        return AsyncThrowingPages { [clientOption] in
             currentParams.after = nextAfter
-            
             let result: PageStruct<VideoResult> = try await OpenAISession.shared.AsyncResponse(
                 url,
                 payload: currentParams,
                 requestOptions: requestOptions,
-                clientOption: self.clientOption,
+                clientOption: clientOption,
                 method: .get
             )
             if let last = result.data.last {

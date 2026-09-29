@@ -27,15 +27,15 @@ public extension OpenAIAsyncAPIResource.FilesAsyncResource {
         requestOptions: RequestOptions? = nil
     ) async throws -> AsyncThrowingPages<FileResult> {
         let url = try clientOption.getServerUrl(path: "/files")
-        var nextAfter = parameters?.after
         var currentParams = parameters ?? FilesListParameters()
-        return AsyncThrowingPages {
+        var nextAfter = parameters?.after
+        return AsyncThrowingPages { [clientOption] in
             currentParams.after = nextAfter
             let result: PageStruct<FileResult> = try await OpenAISession.shared.AsyncResponse(
                 url,
                 payload: currentParams,
                 requestOptions: requestOptions,
-                clientOption: self.clientOption,
+                clientOption: clientOption,
                 method: .get
             )
             if let last = result.data.last {

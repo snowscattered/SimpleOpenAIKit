@@ -5,63 +5,152 @@
 //  Created by snow on 5/31/26.
 //
 
-public class OpenAISyncAPIResource {
-    let clientOption: OpenAIClientOption
-    init(_ clientOption: OpenAIClientOption) {
-        self.clientOption = clientOption
+public enum OpenAISyncAPIResource {
+    // MARK: Model
+    public struct ModelsSyncResource: ~Copyable {
+        let clientOption: OpenAIClientOption
+        init(_ clientOption: OpenAIClientOption) { self.clientOption = clientOption }
     }
 
-    // MARK: Model
-    public final class ModelsSyncResource: OpenAISyncAPIResource { }
     // MARK: Completions
-    public final class CompletionsSyncResource: OpenAISyncAPIResource { }
+    public struct CompletionsSyncResource: ~Copyable {
+        let clientOption: OpenAIClientOption
+        init(_ clientOption: OpenAIClientOption) { self.clientOption = clientOption }
+    }
+
     // MARK: Chat
-    public final class ChatCompletionsSyncResource: OpenAISyncAPIResource { }
-    public final class ChatsSyncResource: OpenAISyncAPIResource {
-        public lazy var completions = ChatCompletionsSyncResource(clientOption)
+    public struct ChatCompletionsSyncResource: ~Copyable {
+        let clientOption: OpenAIClientOption
+        init(_ clientOption: OpenAIClientOption) { self.clientOption = clientOption }
     }
+
+    public struct ChatsSyncResource: ~Copyable {
+        let clientOption: OpenAIClientOption
+        public let completions: ChatCompletionsSyncResource
+        init(_ clientOption: OpenAIClientOption) {
+            self.clientOption = clientOption
+            self.completions = ChatCompletionsSyncResource(clientOption)
+        }
+    }
+
     // MARK: Embedding
-    public final class EmbeddingsSyncResource: OpenAISyncAPIResource { }
+    public struct EmbeddingsSyncResource: ~Copyable {
+        let clientOption: OpenAIClientOption
+        init(_ clientOption: OpenAIClientOption) { self.clientOption = clientOption }
+    }
+
     // MARK: Image
-    public final class ImageGenerateSyncResource: OpenAISyncAPIResource { }
-    public final class ImageEditSyncResource: OpenAISyncAPIResource { }
-    public final class ImagesSyncResource: OpenAISyncAPIResource {
-        public lazy var generate = ImageGenerateSyncResource(clientOption)
-        public lazy var edit = ImageEditSyncResource(clientOption)
+    public struct ImageGenerateSyncResource: ~Copyable {
+        let clientOption: OpenAIClientOption
+        init(_ clientOption: OpenAIClientOption) { self.clientOption = clientOption }
     }
+
+    public struct ImageEditSyncResource: ~Copyable {
+        let clientOption: OpenAIClientOption
+        init(_ clientOption: OpenAIClientOption) { self.clientOption = clientOption }
+    }
+
+    public struct ImagesSyncResource: ~Copyable {
+        let clientOption: OpenAIClientOption
+        public let generate: ImageGenerateSyncResource
+        public let edit: ImageEditSyncResource
+        init(_ clientOption: OpenAIClientOption) {
+            self.clientOption = clientOption
+            self.generate = ImageGenerateSyncResource(clientOption)
+            self.edit = ImageEditSyncResource(clientOption)
+        }
+    }
+
     // MARK: Audio
-    public final class AudioSpeechSyncResource: OpenAISyncAPIResource { }
-    public final class AudioTranscriptionsSyncResource: OpenAISyncAPIResource { }
-    public final class AudioSyncResource: OpenAISyncAPIResource {
-        public lazy var speech = AudioSpeechSyncResource(clientOption)
-        public lazy var transcriptions = AudioTranscriptionsSyncResource(clientOption)
+    public struct AudioSpeechSyncResource: ~Copyable {
+        let clientOption: OpenAIClientOption
+        init(_ clientOption: OpenAIClientOption) { self.clientOption = clientOption }
     }
+
+    public struct AudioTranscriptionsSyncResource: ~Copyable {
+        let clientOption: OpenAIClientOption
+        init(_ clientOption: OpenAIClientOption) { self.clientOption = clientOption }
+    }
+
+    public struct AudioSyncResource: ~Copyable {
+        let clientOption: OpenAIClientOption
+        public let speech: AudioSpeechSyncResource
+        public let transcriptions: AudioTranscriptionsSyncResource
+        init(_ clientOption: OpenAIClientOption) {
+            self.clientOption = clientOption
+            self.speech = AudioSpeechSyncResource(clientOption)
+            self.transcriptions = AudioTranscriptionsSyncResource(clientOption)
+        }
+    }
+
     // MARK: Response
-    public final class ResponsesInputItemsSyncResource: OpenAISyncAPIResource { }
-    public final class ResponsesInputTokensSyncResource: OpenAISyncAPIResource { }
-    public final class ResponsesSyncResource: OpenAISyncAPIResource {
-        public lazy var inputItems = ResponsesInputItemsSyncResource(clientOption)
-        public lazy var inputTokens = ResponsesInputTokensSyncResource(clientOption)
+    public struct ResponsesInputItemsSyncResource: ~Copyable {
+        let clientOption: OpenAIClientOption
+        init(_ clientOption: OpenAIClientOption) { self.clientOption = clientOption }
     }
+
+    public struct ResponsesInputTokensSyncResource: ~Copyable {
+        let clientOption: OpenAIClientOption
+        init(_ clientOption: OpenAIClientOption) { self.clientOption = clientOption }
+    }
+
+    public struct ResponsesSyncResource: ~Copyable {
+        let clientOption: OpenAIClientOption
+        public let inputItems: ResponsesInputItemsSyncResource
+        public let inputTokens: ResponsesInputTokensSyncResource
+        init(_ clientOption: OpenAIClientOption) {
+            self.clientOption = clientOption
+            self.inputItems = ResponsesInputItemsSyncResource(clientOption)
+            self.inputTokens = ResponsesInputTokensSyncResource(clientOption)
+        }
+    }
+
     // MARK: File
-    public final class FilesSyncResource: OpenAISyncAPIResource { }
+    public struct FilesSyncResource: ~Copyable {
+        let clientOption: OpenAIClientOption
+        init(_ clientOption: OpenAIClientOption) { self.clientOption = clientOption }
+    }
     
     // MARK: Upload
-    public final class UploadsPartSyncResource: OpenAISyncAPIResource { }
-    public final class UploadsSyncResource: OpenAISyncAPIResource {
-        public lazy var part = UploadsPartSyncResource(clientOption)
+    public struct UploadsPartSyncResource: ~Copyable {
+        let clientOption: OpenAIClientOption
+        init(_ clientOption: OpenAIClientOption) { self.clientOption = clientOption }
+    }
+
+    public struct UploadsSyncResource: ~Copyable {
+        let clientOption: OpenAIClientOption
+        public let part: UploadsPartSyncResource
+        init(_ clientOption: OpenAIClientOption) {
+            self.clientOption = clientOption
+            self.part = UploadsPartSyncResource(clientOption)
+        }
     }
 
     // MARK: Video
-    public final class VideosSyncResource: OpenAISyncAPIResource { }
+    public struct VideosSyncResource: ~Copyable {
+        let clientOption: OpenAIClientOption
+        init(_ clientOption: OpenAIClientOption) { self.clientOption = clientOption }
+    }
 
     // MARK: Realtime
-    public final class RealtimeSyncResource: OpenAISyncAPIResource { }
+    public struct RealtimeSyncResource: ~Copyable {
+        let clientOption: OpenAIClientOption
+        init(_ clientOption: OpenAIClientOption) { self.clientOption = clientOption }
+    }
     
     
     // MARK: Beta
-    public final class BetaRealtimeSyncResource: OpenAISyncAPIResource { }
-    public final class BetaSyncResource: OpenAISyncAPIResource {
-        public lazy var realtime = BetaRealtimeSyncResource(clientOption)
+    public struct BetaRealtimeSyncResource: ~Copyable {
+        let clientOption: OpenAIClientOption
+        init(_ clientOption: OpenAIClientOption) { self.clientOption = clientOption }
+    }
+
+    public struct BetaSyncResource: ~Copyable {
+        let clientOption: OpenAIClientOption
+        public let realtime: BetaRealtimeSyncResource
+        init(_ clientOption: OpenAIClientOption) {
+            self.clientOption = clientOption
+            self.realtime = BetaRealtimeSyncResource(clientOption)
+        }
     }
 }
