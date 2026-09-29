@@ -17,7 +17,7 @@ private struct AnyCodingKey: CodingKey {
 }
  
 // MARK: - CodingKey Path Extension
-private extension Array where Element == CodingKey {
+private extension Array where Element == any CodingKey {
     var pathString: String {
         guard let first = self.first else { return "" }
         var result = first.stringValue
@@ -38,7 +38,7 @@ private enum MultipartFormPart {
 }
 // MARK: - MultipartFormDataEncoder
 public class MultipartFormDataEncodeContainer {
-    private var codingPath: [CodingKey] = []
+    private var codingPath: [any CodingKey] = []
     private var parts: [String: MultipartFormPart] = [:]
 
     let boundary: String
@@ -112,11 +112,11 @@ extension MultipartFormDataEncodeContainer {
  
 // MARK: - Internal Encoder Proxy
 private class MultipartEncoder: Encoder {
-    var codingPath: [CodingKey]
+    var codingPath: [any CodingKey]
     var userInfo: [CodingUserInfoKey : Any] = [:]
     let encoder: MultipartFormDataEncodeContainer
     
-    init(codingPath: [CodingKey], encoder: MultipartFormDataEncodeContainer) {
+    init(codingPath: [any CodingKey], encoder: MultipartFormDataEncodeContainer) {
         self.codingPath = codingPath
         self.encoder = encoder
     }
@@ -126,11 +126,11 @@ private class MultipartEncoder: Encoder {
         return KeyedEncodingContainer(container)
     }
     
-    func unkeyedContainer() -> UnkeyedEncodingContainer {
+    func unkeyedContainer() -> any UnkeyedEncodingContainer {
         return MultipartUnkeyedEncodingContainer(codingPath: codingPath, encoder: encoder)
     }
     
-    func singleValueContainer() -> SingleValueEncodingContainer {
+    func singleValueContainer() -> any SingleValueEncodingContainer {
         return MultipartSingleValueEncodingContainer(codingPath: codingPath, encoder: encoder)
     }
 }
@@ -139,10 +139,10 @@ private class MultipartEncoder: Encoder {
 private extension MultipartEncoder {
     private struct MultipartKeyedEncodingContainer<K: CodingKey>: KeyedEncodingContainerProtocol {
         typealias Key = K
-        var codingPath: [CodingKey]
+        var codingPath: [any CodingKey]
         let encoder: MultipartFormDataEncodeContainer
         
-        func nestedPath(forKey key: K) -> [CodingKey] { codingPath + [key] }
+        func nestedPath(forKey key: K) -> [any CodingKey] { codingPath + [key] }
         func unionPath(_ name: String) -> String {
             (codingPath + [AnyCodingKey(stringValue: name)!]).pathString
         }
@@ -169,25 +169,25 @@ private extension MultipartEncoder {
             return nestedEncoder.container(keyedBy: keyType)
         }
         
-        func nestedUnkeyedContainer(forKey key: K) -> UnkeyedEncodingContainer {
+        func nestedUnkeyedContainer(forKey key: K) -> any UnkeyedEncodingContainer {
             let nestedEncoder = MultipartEncoder(codingPath: nestedPath(forKey: key), encoder: encoder)
             return nestedEncoder.unkeyedContainer()
         }
         
         //    mutating func superEncoder() -> Encoder { return MultipartEncoder(codingPath: nestedPath(forKey: AnyCodingKey(stringValue: "super") as! K), encoder: encoder) }
-        func superEncoder() -> Encoder { return MultipartEncoder(codingPath: codingPath, encoder: encoder) }
-        func superEncoder(forKey key: K) -> Encoder { return MultipartEncoder(codingPath: nestedPath(forKey: key), encoder: encoder) }
+        func superEncoder() -> any Encoder { return MultipartEncoder(codingPath: codingPath, encoder: encoder) }
+        func superEncoder(forKey key: K) -> any Encoder { return MultipartEncoder(codingPath: nestedPath(forKey: key), encoder: encoder) }
     }
 }
 
 // MARK: - UnkeyedContainer
 private extension MultipartEncoder {
     private struct MultipartUnkeyedEncodingContainer: UnkeyedEncodingContainer {
-        var codingPath: [CodingKey]
+        var codingPath: [any CodingKey]
         let encoder: MultipartFormDataEncodeContainer
         var count: Int = 0
         
-        mutating func nextPath() -> [CodingKey] {
+        mutating func nextPath() -> [any CodingKey] {
             defer { count += 1 }
             return codingPath + [AnyCodingKey(intValue: count)!]
         }
@@ -212,18 +212,18 @@ private extension MultipartEncoder {
             return MultipartEncoder(codingPath: nextPath(), encoder: encoder).container(keyedBy: keyType)
         }
         
-        mutating func nestedUnkeyedContainer() -> UnkeyedEncodingContainer {
+        mutating func nestedUnkeyedContainer() -> any UnkeyedEncodingContainer {
             return MultipartEncoder(codingPath: nextPath(), encoder: encoder).unkeyedContainer()
         }
         
-        mutating func superEncoder() -> Encoder { return MultipartEncoder(codingPath: nextPath(), encoder: encoder) }
+        mutating func superEncoder() -> any Encoder { return MultipartEncoder(codingPath: nextPath(), encoder: encoder) }
     }
 }
 
 // MARK: - SingleValueContainer
 private extension MultipartEncoder {
     private struct MultipartSingleValueEncodingContainer: SingleValueEncodingContainer {
-        var codingPath: [CodingKey]
+        var codingPath: [any CodingKey]
         let encoder: MultipartFormDataEncodeContainer
         
         func encodeNil() throws { }

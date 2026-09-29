@@ -20,7 +20,7 @@ public extension OpenAIAsyncAPIResource.CompletionsAsyncResource {
             method: .post
         )
     }
-    func stream(parameters: CompletionParameters, requestOptions: RequestOptions? = nil) async throws -> AsyncThrowingStream<CompletionCreateResult, Error> {
+    func stream(parameters: CompletionParameters, requestOptions: RequestOptions? = nil) async throws -> AsyncThrowingStream<CompletionCreateResult, any Error> {
         let url = try clientOption.getServerUrl(path: "/completions")
         var streamingParameters = parameters
         streamingParameters.stream = true

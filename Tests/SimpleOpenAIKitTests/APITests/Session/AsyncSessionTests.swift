@@ -70,7 +70,7 @@ struct AsyncSessionTests {
     }
     @Test mutating func asyncStream() async throws {
         payload.stream = true
-        let Streram: AsyncThrowingStream<BaseType, Error> = try await OpenAISession.shared.AsyncStreamResponse(
+        let Streram: AsyncThrowingStream<BaseType, any Error> = try await OpenAISession.shared.AsyncStreamResponse(
             url,
             payload: payload,
             requestOptions: nil,

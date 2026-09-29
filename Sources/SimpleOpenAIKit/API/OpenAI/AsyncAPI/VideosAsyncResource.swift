@@ -179,7 +179,7 @@ public extension OpenAIAsyncAPIResource.VideosAsyncResource {
         video_id: String,
         variant: VideoDownloadContentVariant?,
         requestOptions: RequestOptions? = nil
-    ) async throws -> AsyncThrowingStream<Data, Error> {
+    ) async throws -> AsyncThrowingStream<Data, any Error> {
         let url = try clientOption.getServerUrl(path: "/videos/\(video_id)/content")
         let parameters: VideoDownloadContentParameter = .init(video_id: video_id, variant: variant)
         var options = requestOptions ?? RequestOptions()

@@ -12,7 +12,7 @@ struct AnthropicSession: Sendable, SessionProtocol {
     static let shared: AnthropicSession = AnthropicSession()
     init() { }
     
-    func retryErrorHandler(error: Error) -> Bool {
+    func retryErrorHandler(error: any Error) -> Bool {
         if let error = error as? AnthropicAPIError {
             switch error {
             case .rateLimit: return true
@@ -65,7 +65,7 @@ struct AnthropicSession: Sendable, SessionProtocol {
         default: return .unexpectedStatusCode(statusCode: statusCode, payload: payload, request, response)
         }
     }
-    func wrapError(error: Error) -> Error {
+    func wrapError(error: any Error) -> any Error {
         if case let NetworkError.statusError(data, request, response) = error {
             return AnthropicStatusError(data: data, request: request, response: response)
         }

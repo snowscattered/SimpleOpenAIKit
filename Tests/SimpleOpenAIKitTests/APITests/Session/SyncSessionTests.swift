@@ -37,7 +37,7 @@ struct SyncSessionTests {
     }
     @Test mutating func syncStream() throws {
         payload.stream = true
-        let Streram: SyncThrowingStream<BaseType, Error> = try OpenAISession.shared.SyncStreamResponse(
+        let Streram: SyncThrowingStream<BaseType, any Error> = try OpenAISession.shared.SyncStreamResponse(
             url,
             payload: payload,
             requestOptions: .init(

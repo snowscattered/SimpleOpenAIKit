@@ -12,7 +12,7 @@ struct OpenAISession: Sendable, SessionProtocol {
     static let shared: OpenAISession = OpenAISession()
     init() { }
     
-    func retryErrorHandler(error: Error) -> Bool {
+    func retryErrorHandler(error: any Error) -> Bool {
         if let error = error as? OpenAIAPIError {
             switch error {
             case .rateLimit: return true
@@ -57,7 +57,7 @@ struct OpenAISession: Sendable, SessionProtocol {
         default: return .unexpectedStatusCode(statusCode: statusCode, payload: payload, request, response)
         }
     }
-    func wrapError(error: Error) -> Error {
+    func wrapError(error: any Error) -> any Error {
         if case let NetworkError.statusError(data, request, response) = error {
             return OpenAIStatusError(data: data, request: request, response: response)
         }

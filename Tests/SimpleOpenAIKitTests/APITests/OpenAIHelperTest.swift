@@ -19,7 +19,7 @@ struct OpenAIHelperTest {
             bitDepth: .pcmFormatInt16,
             interleaved: false
         )
-        let helper: MicrophoneHelper = AVMicrophoneHelper(
+        let helper: any MicrophoneHelper = AVMicrophoneHelper(
             targetFormat: format,
             timeout: 5
         )

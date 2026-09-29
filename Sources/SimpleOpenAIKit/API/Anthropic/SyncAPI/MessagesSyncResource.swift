@@ -27,7 +27,7 @@ public extension AnthropicSyncAPIResource.MessagesSyncResource {
     func stream(
         parameters: MessageParameters,
         requestOptions: RequestOptions? = nil
-    ) throws -> SyncThrowingStream<MessageStreamResult, Error> {
+    ) throws -> SyncThrowingStream<MessageStreamResult, any Error> {
         let url = try clientOption.getServerUrl(path: "/v1/messages")
         var streamingParameters = parameters
         streamingParameters.stream = true

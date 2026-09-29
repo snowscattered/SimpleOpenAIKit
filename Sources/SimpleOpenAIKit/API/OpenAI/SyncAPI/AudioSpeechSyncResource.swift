@@ -29,7 +29,7 @@ public extension OpenAISyncAPIResource.AudioSpeechSyncResource {
     func stream(
         parameters: AudioSpeechParameters,
         requestOptions: RequestOptions? = nil
-    ) throws -> SyncThrowingStream<Data, Error> {
+    ) throws -> SyncThrowingStream<Data, any Error> {
         let url = try clientOption.getServerUrl(path: "/audio/speech")
         var options = requestOptions ?? RequestOptions()
         if options.extra_headers["Accept"] == nil {

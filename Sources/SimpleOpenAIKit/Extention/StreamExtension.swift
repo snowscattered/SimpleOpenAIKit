@@ -41,8 +41,8 @@ public extension AsyncSequence {
     }
     func conversion<T>(
         _ transform: @escaping @Sendable (Element) async throws -> StreamAction<T>
-    ) -> AsyncThrowingStream<T, Error> where Self: Sendable, T: Sendable {
-        AsyncThrowingStream<T, Error> { continuation in
+    ) -> AsyncThrowingStream<T, any Error> where Self: Sendable, T: Sendable {
+        AsyncThrowingStream<T, any Error> { continuation in
             let task = Task.detached {
                 do {
                     for try await value in self {
@@ -102,7 +102,7 @@ public extension SyncSequence {
     }
     func conversion<T>(
         _ transform: @escaping @Sendable (Element) throws -> StreamAction<T>
-    ) -> SyncThrowingStream<T, Error> where Self: Sendable, T: Sendable {
+    ) -> SyncThrowingStream<T, any Error> where Self: Sendable, T: Sendable {
         SyncThrowingStream<T, any Error> { continuation in
             let task = Task.detached(priority: Task.currentPriority) {
                 var iterator = self.makeIterator()

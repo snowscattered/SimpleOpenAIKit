@@ -12,7 +12,7 @@ struct TypeSafeSession: Sendable, SessionProtocol {
     static let shared: TypeSafeSession = TypeSafeSession()
     init() { }
 
-    func retryErrorHandler(error: Error) -> Bool {
+    func retryErrorHandler(error: any Error) -> Bool {
         if let error = error as? TypeSafeAPIError {
             switch error {
             case .rateLimit, .overloaded, .internalServer: return true
@@ -49,7 +49,7 @@ struct TypeSafeSession: Sendable, SessionProtocol {
         default: return .unexpectedStatusCode(statusCode: statusCode, payload: payload, request, response)
         }
     }
-    func wrapError(error: Error) -> Error {
+    func wrapError(error: any Error) -> any Error {
         if case let NetworkError.statusError(data, request, response) = error {
             return TypeSafeStatusError(data: data, request: request, response: response)
         }

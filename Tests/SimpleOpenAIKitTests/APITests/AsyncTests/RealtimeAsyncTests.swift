@@ -24,7 +24,7 @@ struct RealtimeAsyncTests {
             )))
             Task {
                 do {
-                    let helper: MicrophoneHelper = AVMicrophoneHelper(
+                    let helper: any MicrophoneHelper = AVMicrophoneHelper(
                         targetFormat: .init(
                             sampleRate: 24_000,
                             channelCount: 1,
@@ -62,7 +62,7 @@ struct RealtimeAsyncTests {
             ))
             Task {
                 do {
-                    let helper: MicrophoneHelper = AVMicrophoneHelper(
+                    let helper: any MicrophoneHelper = AVMicrophoneHelper(
                         targetFormat: .init(
                             sampleRate: 24_000,
                             channelCount: 1,

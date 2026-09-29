@@ -27,7 +27,7 @@ public extension AnthropicAsyncAPIResource.MessagesAsyncResource {
     func stream(
         parameters: MessageParameters,
         requestOptions: RequestOptions? = nil
-    ) async throws -> AsyncThrowingStream<MessageStreamResult, Error> {
+    ) async throws -> AsyncThrowingStream<MessageStreamResult, any Error> {
         let url = try clientOption.getServerUrl(path: "/v1/messages")
         var streamingParameters = parameters
         streamingParameters.stream = true

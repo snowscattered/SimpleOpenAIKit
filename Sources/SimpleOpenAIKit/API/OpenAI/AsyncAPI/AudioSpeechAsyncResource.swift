@@ -28,7 +28,7 @@ public extension OpenAIAsyncAPIResource.AudioSpeechAsyncResource {
     func stream(
         parameters: AudioSpeechParameters,
         requestOptions: RequestOptions? = nil
-    ) async throws -> AsyncThrowingStream<Data, Error> {
+    ) async throws -> AsyncThrowingStream<Data, any Error> {
         let url = try clientOption.getServerUrl(path: "/audio/speech")
         var options = requestOptions ?? RequestOptions()
         if options.extra_headers["Accept"] == nil {

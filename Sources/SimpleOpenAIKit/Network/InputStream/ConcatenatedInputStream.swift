@@ -18,8 +18,8 @@ final class ConcatenatedInputStream: InputStream {
     
     private var _status: Stream.Status = .notOpen
     override var streamStatus: Stream.Status { return _status }
-    private weak var _delegate: StreamDelegate?
-    override var delegate: StreamDelegate? {
+    private weak var _delegate: (any StreamDelegate)?
+    override var delegate: (any StreamDelegate)? {
         get { return _delegate }
         set { _delegate = newValue }
     }

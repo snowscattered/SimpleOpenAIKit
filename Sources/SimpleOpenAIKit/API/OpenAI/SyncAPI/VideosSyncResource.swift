@@ -180,7 +180,7 @@ public extension OpenAISyncAPIResource.VideosSyncResource {
         video_id: String,
         variant: VideoDownloadContentVariant?,
         requestOptions: RequestOptions? = nil
-    ) throws -> SyncThrowingStream<Data, Error> {
+    ) throws -> SyncThrowingStream<Data, any Error> {
         let url = try clientOption.getServerUrl(path: "/videos/\(video_id)/content")
         let parameters: VideoDownloadContentParameter = .init(video_id: video_id, variant: variant)
         var options = requestOptions ?? RequestOptions()
