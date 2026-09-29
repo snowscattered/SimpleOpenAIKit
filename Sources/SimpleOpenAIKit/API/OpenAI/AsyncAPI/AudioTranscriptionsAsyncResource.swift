@@ -27,7 +27,7 @@ public extension OpenAIAsyncAPIResource.AudioTranscriptionsAsyncResource {
     func stream(
         parameters: AudioTranscriptionParameters,
         requestOptions: RequestOptions? = nil
-    ) async throws -> AsyncThrowingStream<AudioTranscriptionStreamResult, Error> {
+    ) async throws -> AsyncThrowingStream<AudioTranscriptionStreamResult, any Error> {
         let url = try clientOption.getServerUrl(path: "/audio/transcriptions")
         var streamingParameters = parameters
         streamingParameters.stream = true

@@ -20,7 +20,7 @@ public extension AnthropicSyncAPIResource.CompletionsSyncResource {
             method: .post
         )
     }
-    func stream(parameters: CompletionParameters, requestOptions: RequestOptions? = nil) throws -> SyncThrowingStream<CompletionCreateResult, Error> {
+    func stream(parameters: CompletionParameters, requestOptions: RequestOptions? = nil) throws -> SyncThrowingStream<CompletionCreateResult, any Error> {
         let url = try clientOption.getServerUrl(path: "/completions")
         var streamingParameters = parameters
         streamingParameters.stream = true

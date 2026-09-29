@@ -11,7 +11,7 @@ func syncResponse<T: Decodable & Sendable>(
     _ type: T.Type = T.self,
     request: URLRequest,
     maxRetries: Int = 2,
-    shouldRetry: (Error) -> Bool = { error in true }
+    shouldRetry: (any Error) -> Bool = { error in true }
 ) throws -> T {
     return try retry(maxRetries: maxRetries, shouldRetry: shouldRetry) {
         if T.self == Data.self {
@@ -25,7 +25,7 @@ func asyncResponse<T: Decodable & Sendable>(
     _ type: T.Type = T.self,
     request: URLRequest,
     maxRetries: Int = 2,
-    shouldRetry: (Error) -> Bool = { error in true }
+    shouldRetry: (any Error) -> Bool = { error in true }
 ) async throws -> T {
     return try await retry(maxRetries: maxRetries, shouldRetry: shouldRetry) {
         if T.self == Data.self {

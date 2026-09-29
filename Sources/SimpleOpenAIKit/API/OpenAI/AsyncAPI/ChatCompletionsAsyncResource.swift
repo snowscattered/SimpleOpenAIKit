@@ -20,7 +20,7 @@ public extension OpenAIAsyncAPIResource.ChatCompletionsAsyncResource {
             method: .post
         )
     }
-    func stream(parameters: ChatParameters, requestOptions: RequestOptions? = nil) async throws -> AsyncThrowingStream<ChatStreamResult, Error> {
+    func stream(parameters: ChatParameters, requestOptions: RequestOptions? = nil) async throws -> AsyncThrowingStream<ChatStreamResult, any Error> {
         let url = try clientOption.getServerUrl(path: "/chat/completions")
         var streamingParameters = parameters
         streamingParameters.stream = true

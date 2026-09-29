@@ -27,7 +27,7 @@ public extension OpenAISyncAPIResource.ChatCompletionsSyncResource {
     func stream(
         parameters: ChatParameters,
         requestOptions: RequestOptions? = nil
-    ) throws -> SyncThrowingStream<ChatStreamResult, Error> {
+    ) throws -> SyncThrowingStream<ChatStreamResult, any Error> {
         let url = try clientOption.getServerUrl(path: "/chat/completions")
         var streamingParameters = parameters
         streamingParameters.stream = true

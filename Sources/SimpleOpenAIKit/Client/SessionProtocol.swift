@@ -24,12 +24,12 @@ public protocol SessionProtocol {
         method: HTTPMethod,
         hasFile: Bool,
     ) throws -> URLRequest
-    func retryErrorHandler(error: Error) -> Bool
-    func wrapError(error: Error) -> Error
+    func retryErrorHandler(error: any Error) -> Bool
+    func wrapError(error: any Error) -> any Error
 }
 public extension SessionProtocol {
-    func retryErrorHandler(error: Error) -> Bool { return true }
-    func wrapError(error: Error) -> Error { return error }
+    func retryErrorHandler(error: any Error) -> Bool { return true }
+    func wrapError(error: any Error) -> any Error { return error }
     func getRequest<Payload: Encodable>(
         _ url: URL,
         payload: Payload?,
@@ -121,7 +121,7 @@ public extension SessionProtocol {
         clientOption: borrowing ClientOption,
         method: HTTPMethod,
         hasFile: Bool = false,
-    ) throws -> SyncThrowingStream<T, Error> {
+    ) throws -> SyncThrowingStream<T, any Error> {
         let request = try getRequest(
             url,
             payload: payload,
@@ -162,7 +162,7 @@ public extension SessionProtocol {
         clientOption: borrowing ClientOption,
         method: HTTPMethod,
         hasFile: Bool = false,
-    ) async throws -> AsyncThrowingStream<T, Error> {
+    ) async throws -> AsyncThrowingStream<T, any Error> {
         let request = try getRequest(
             url,
             payload: payload,

@@ -28,7 +28,7 @@ public extension OpenAISyncAPIResource.VideosSyncResource {
     ) throws -> SyncThrowingPages<VideoResult> {
         let url = try clientOption.getServerUrl(path: "/videos")
         var nextAfter = parameters?.after
-        return SyncThrowingPages {
+        return SyncThrowingPages { [clientOption] in
             var currentParams = parameters ?? VideoListParameter()
             currentParams.after = nextAfter
             
@@ -36,7 +36,7 @@ public extension OpenAISyncAPIResource.VideosSyncResource {
                 url,
                 payload: currentParams,
                 requestOptions: requestOptions,
-                clientOption: self.clientOption,
+                clientOption: clientOption,
                 method: .get
             )
             if let last = result.data.last {
@@ -180,7 +180,7 @@ public extension OpenAISyncAPIResource.VideosSyncResource {
         video_id: String,
         variant: VideoDownloadContentVariant?,
         requestOptions: RequestOptions? = nil
-    ) throws -> SyncThrowingStream<Data, Error> {
+    ) throws -> SyncThrowingStream<Data, any Error> {
         let url = try clientOption.getServerUrl(path: "/videos/\(video_id)/content")
         let parameters: VideoDownloadContentParameter = .init(video_id: video_id, variant: variant)
         var options = requestOptions ?? RequestOptions()

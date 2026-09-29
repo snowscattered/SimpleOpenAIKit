@@ -11,7 +11,7 @@ private final class ResponseContainer: @unchecked Sendable {
     var data: Data = Data()
     var bytes: URLSession.AsyncBytes?
     var response: URLResponse?
-    var error: Error?
+    var error: any Error?
     var errorData: Data = Data()
 }
 
@@ -107,14 +107,14 @@ extension URLSession {
         }
     }
     // MARK: - StreamSSE
-    func asyncSSE(_ request: URLRequest, parser: CustomParser = EventParser()) async throws -> AsyncStream<Event> {
+    func asyncSSE(_ request: URLRequest, parser: any CustomParser = EventParser()) async throws -> AsyncStream<Event> {
         return try await self.asyncStreamData(request).conversion { chunk in
             let events = parser.parse(chunk)
             if events.isEmpty { return .skip }
             return .yieldMore(events)
         }
     }
-    func syncSSE(_ request: URLRequest, parser: CustomParser = EventParser()) throws -> SyncStream<Event> {
+    func syncSSE(_ request: URLRequest, parser: any CustomParser = EventParser()) throws -> SyncStream<Event> {
         return try self.syncStreamData(request).conversion { chunk in
             let events = parser.parse(chunk)
             if events.isEmpty { return .skip }

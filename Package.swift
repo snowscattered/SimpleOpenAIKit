@@ -4,6 +4,12 @@
 import PackageDescription
 import CompilerPluginSupport
 
+let swiftSettings: [SwiftSetting] = [
+    .enableUpcomingFeature("ExistentialAny"),
+    .enableUpcomingFeature("InferIsolatedConformances"),
+    .enableUpcomingFeature("ImmutableWeakCaptures"),
+]
+
 let package = Package(
     name: "SimpleOpenAIKit",
     // AsyncBytes is v12 support and UTType is v11
@@ -34,12 +40,14 @@ let package = Package(
         .target(
             name: "SimpleCodableMacro",
             dependencies: ["SimpleCodableMacroPlugin"],
-            path: "Sources/SimpleCodableMacro"
+            path: "Sources/SimpleCodableMacro",
+            swiftSettings: swiftSettings
         ),
         .testTarget(
             name: "SimpleCodableMacroTests",
             dependencies: [ "SimpleCodableMacro" ],
-            path: "Tests/SimpleCodableMacroTests"
+            path: "Tests/SimpleCodableMacroTests",
+            swiftSettings: swiftSettings
         ),
         
         // MARK: SimpleOpenAIKitMacro
@@ -55,12 +63,14 @@ let package = Package(
         .target(
             name: "SimpleOpenAIKitMacro",
             dependencies: ["SimpleOpenAIKitMacroPlugin", "SimpleCodableMacro"],
-            path: "Sources/SimpleOpenAIKitMacro"
+            path: "Sources/SimpleOpenAIKitMacro",
+            swiftSettings: swiftSettings
         ),
         .testTarget(
             name: "SimpleOpenAIKitMacroTests",
             dependencies: [ "SimpleOpenAIKitMacro" ],
-            path: "Tests/SimpleOpenAIKitMacroTests"
+            path: "Tests/SimpleOpenAIKitMacroTests",
+            swiftSettings: swiftSettings
         ),
         
         // MARK: SimpleOpenAIKit
@@ -74,13 +84,14 @@ let package = Package(
             swiftSettings: [
                 .define("SelectInputStream"),
 //                .define("HasNetWorkURL"),
-            ]
+            ] + swiftSettings,
         ),
         .testTarget(
             name: "SimpleOpenAIKitTests",
             dependencies: ["SimpleOpenAIKit"],
             path: "Tests/SimpleOpenAIKitTests",
             resources: [.process("Resources")],
+            swiftSettings: swiftSettings
         ),
     ],
     swiftLanguageModes: [.v6]

@@ -26,8 +26,8 @@ func syncStreamResponse<T: Decodable & Sendable>(
     _ type: T.Type = T.self,
     request: URLRequest,
     maxRetries: Int = 2,
-    shouldRetry: (Error) -> Bool = { error in true }
-) throws -> SyncThrowingStream<T, Error> {
+    shouldRetry: (any Error) -> Bool = { error in true }
+) throws -> SyncThrowingStream<T, any Error> {
     return try retry(maxRetries: maxRetries, shouldRetry: shouldRetry) {
         if T.self == Data.self {
             return try URLSession.shared.syncStreamData(request)
@@ -41,8 +41,8 @@ func asyncStreamResponse<T: Decodable & Sendable>(
     _ type: T.Type = T.self,
     request: URLRequest,
     maxRetries: Int = 2,
-    shouldRetry: (Error) -> Bool = { error in true }
-) async throws -> AsyncThrowingStream<T, Error> {
+    shouldRetry: (any Error) -> Bool = { error in true }
+) async throws -> AsyncThrowingStream<T, any Error> {
     return try await retry(maxRetries: maxRetries, shouldRetry: shouldRetry) {
         if T.self == Data.self {
             return try await URLSession.shared.asyncStreamData(request)

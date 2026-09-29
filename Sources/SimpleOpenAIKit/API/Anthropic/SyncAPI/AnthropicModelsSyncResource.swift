@@ -16,7 +16,7 @@ public extension AnthropicSyncAPIResource.ModelsSyncResource {
     ) throws -> SyncThrowingPages<ModelResult> {
         let url = try clientOption.getServerUrl(path: "/models")
         var currentAfter = after_id
-        return SyncThrowingPages {
+        return SyncThrowingPages { [clientOption] in
             var payload: [String: Any] = [:]
             if let currentAfter { payload["after_id"] = currentAfter }
             if let before_id { payload["before_id"] = before_id }
@@ -25,7 +25,7 @@ public extension AnthropicSyncAPIResource.ModelsSyncResource {
                 url,
                 payload: try JSONSerialization.data(withJSONObject: payload),
                 requestOptions: requestOptions,
-                clientOption: self.clientOption,
+                clientOption: clientOption,
                 method: .get
             )
             if let last = result.data.last {

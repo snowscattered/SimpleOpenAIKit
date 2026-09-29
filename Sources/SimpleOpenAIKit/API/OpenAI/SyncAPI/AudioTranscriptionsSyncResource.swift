@@ -27,7 +27,7 @@ public extension OpenAISyncAPIResource.AudioTranscriptionsSyncResource {
     func stream(
         parameters: AudioTranscriptionParameters,
         requestOptions: RequestOptions? = nil
-    ) throws -> SyncThrowingStream<AudioTranscriptionStreamResult, Error> {
+    ) throws -> SyncThrowingStream<AudioTranscriptionStreamResult, any Error> {
         let url = try clientOption.getServerUrl(path: "/audio/transcriptions")
         var streamingParameters = parameters
         streamingParameters.stream = true

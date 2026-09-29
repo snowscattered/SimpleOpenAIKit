@@ -11,7 +11,7 @@ public protocol ArgumentSchema: Codable & Sendable {
     static var ArgumentSchema: [String: BaseType] { get }
 }
 public extension ArgumentSchema {
-    func encode(to encoder: Encoder) throws {
+    func encode(to encoder: any Encoder) throws {
         var container = encoder.singleValueContainer()
         try container.encode(Self.ArgumentSchema)
     }
@@ -23,7 +23,7 @@ public protocol EnumArgument: Codable & Sendable {
     static var ArgumentSchema: [String: BaseType] { get }
 }
 public extension EnumArgument {
-    func encode(to encoder: Encoder) throws {
+    func encode(to encoder: any Encoder) throws {
         var container = encoder.singleValueContainer()
         try container.encode(Self.ArgumentSchema)
     }
@@ -32,7 +32,7 @@ public protocol AnyOfArgument: Codable & Sendable {
     static var ArgumentSchema: [String: BaseType] { get }
 }
 public extension AnyOfArgument {
-    func encode(to encoder: Encoder) throws {
+    func encode(to encoder: any Encoder) throws {
         var container = encoder.singleValueContainer()
         try container.encode(Self.ArgumentSchema)
     }

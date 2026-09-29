@@ -134,7 +134,7 @@ nonisolated extension FileParameters: BaseModel {
         case name
         case mimeType
     }
-    public init(from decoder: Decoder) throws {
+    public init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let data = try container.decode(Data.self, forKey: .raw)
         self.name = try container.decode(String.self, forKey: .name)
@@ -142,7 +142,7 @@ nonisolated extension FileParameters: BaseModel {
         self.mimeType = try container.decode(String.self, forKey: .mimeType)
         self.size = data.count
     }
-    public func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: any Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         var data: Data = Data()
         self.raw.with {

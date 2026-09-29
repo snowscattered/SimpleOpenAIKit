@@ -44,7 +44,7 @@ func AsyncStreamAdd(stream: AsyncStream<Int>) -> AsyncStream<Int> {
 enum StreamError: Error {
     case test
 }
-func AsyncThrowingStreamGenerator() -> AsyncThrowingStream<Int, Error> {
+func AsyncThrowingStreamGenerator() -> AsyncThrowingStream<Int, any Error> {
     AsyncThrowingStream { continuation in
         let task = Task {
             for i in 0...10 {

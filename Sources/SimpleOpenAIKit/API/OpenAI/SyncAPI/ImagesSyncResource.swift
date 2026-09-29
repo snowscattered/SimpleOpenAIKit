@@ -26,7 +26,7 @@ public extension OpenAISyncAPIResource.ImagesSyncResource {
     func generateStream(
         parameters: ImageGenerateParameters,
         requestOptions: RequestOptions? = nil
-    ) throws -> SyncThrowingStream<ImagesGenerateStreamResult, Error> {
+    ) throws -> SyncThrowingStream<ImagesGenerateStreamResult, any Error> {
         let url = try clientOption.getServerUrl(path: "/images/generations")
         var streamingParameters = parameters
         streamingParameters.stream = true
@@ -57,7 +57,7 @@ public extension OpenAISyncAPIResource.ImagesSyncResource {
     func editStream(
         parameters: ImageEditParameters,
         requestOptions: RequestOptions? = nil
-    ) throws -> SyncThrowingStream<ImagesEditStreamResult, Error> {
+    ) throws -> SyncThrowingStream<ImagesEditStreamResult, any Error> {
         let url = try clientOption.getServerUrl(path: "/images/edits")
         var streamingParameters = parameters
         streamingParameters.stream = true

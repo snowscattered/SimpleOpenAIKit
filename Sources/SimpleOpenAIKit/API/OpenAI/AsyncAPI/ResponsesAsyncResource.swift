@@ -27,7 +27,7 @@ public extension OpenAIAsyncAPIResource.ResponsesAsyncResource {
     func stream(
         parameters: ResponseCreateParameters,
         requestOptions: RequestOptions? = nil
-    ) async throws -> AsyncThrowingStream<ResponseStreamResult, Error> {
+    ) async throws -> AsyncThrowingStream<ResponseStreamResult, any Error> {
         let url = try clientOption.getServerUrl(path: "/responses")
         var streamingParameters = parameters
         streamingParameters.stream = true
@@ -56,7 +56,7 @@ public extension OpenAIAsyncAPIResource.ResponsesAsyncResource {
     func retrieveStream(
         parameters: ResponseRetrieveParameters,
         requestOptions: RequestOptions? = nil
-    ) async throws -> AsyncThrowingStream<ResponseStreamResult, Error> {
+    ) async throws -> AsyncThrowingStream<ResponseStreamResult, any Error> {
         let url = try clientOption.getServerUrl(path: "/responses/\(parameters.response_id)")
         var streamingParameters = parameters
         streamingParameters.stream = true

@@ -16,7 +16,7 @@ public indirect enum BaseType: Codable & Sendable {
     case array([BaseType])
     case dict([String: BaseType])
 
-    nonisolated public init(from decoder: Decoder) throws {
+    nonisolated public init(from decoder: any Decoder) throws {
         let c = try decoder.singleValueContainer()
         if c.decodeNil()                                  { self = .null;      return }
         if let v = try? c.decode(Bool.self)               { self = .bool(v);   return }
@@ -28,7 +28,7 @@ public indirect enum BaseType: Codable & Sendable {
         throw DecodingError.dataCorruptedError(in: c, debugDescription: "Unsupported JSON value")
     }
 
-    nonisolated public func encode(to encoder: Encoder) throws {
+    nonisolated public func encode(to encoder: any Encoder) throws {
         var c = encoder.singleValueContainer()
         switch self {
         case .null         : try c.encodeNil()

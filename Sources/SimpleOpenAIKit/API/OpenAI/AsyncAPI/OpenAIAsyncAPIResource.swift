@@ -5,63 +5,151 @@
 //  Created by snow on 6/8/26.
 //
 
-public class OpenAIAsyncAPIResource {
-    let clientOption: OpenAIClientOption
-    init(_ clientOption: OpenAIClientOption) {
-        self.clientOption = clientOption
+public enum OpenAIAsyncAPIResource {
+    // MARK: Model
+    public struct ModelsAsyncResource: ~Copyable {
+        let clientOption: OpenAIClientOption
+        init(_ clientOption: OpenAIClientOption) { self.clientOption = clientOption }
     }
 
-    // MARK: Model
-    public final class ModelsAsyncResource: OpenAIAsyncAPIResource { }
     // MARK: Completions
-    public final class CompletionsAsyncResource: OpenAIAsyncAPIResource { }
+    public struct CompletionsAsyncResource: ~Copyable {
+        let clientOption: OpenAIClientOption
+        init(_ clientOption: OpenAIClientOption) { self.clientOption = clientOption }
+    }
+
     // MARK: Chat
-    public final class ChatCompletionsAsyncResource: OpenAIAsyncAPIResource { }
-    public final class ChatsAsyncResource: OpenAIAsyncAPIResource {
-        public lazy var completions = ChatCompletionsAsyncResource(clientOption)
+    public struct ChatCompletionsAsyncResource: ~Copyable {
+        let clientOption: OpenAIClientOption
+        init(_ clientOption: OpenAIClientOption) { self.clientOption = clientOption }
     }
+
+    public struct ChatsAsyncResource: ~Copyable {
+        let clientOption: OpenAIClientOption
+        public let completions: ChatCompletionsAsyncResource
+        init(_ clientOption: OpenAIClientOption) {
+            self.clientOption = clientOption
+            self.completions = ChatCompletionsAsyncResource(clientOption)
+        }
+    }
+
     // MARK: Embedding
-    public final class EmbeddingsAsyncResource: OpenAIAsyncAPIResource { }
+    public struct EmbeddingsAsyncResource: ~Copyable {
+        let clientOption: OpenAIClientOption
+        init(_ clientOption: OpenAIClientOption) { self.clientOption = clientOption }
+    }
+
     // MARK: Image
-    public final class ImageGenerateAsyncResource: OpenAIAsyncAPIResource { }
-    public final class ImageEditAsyncResource: OpenAIAsyncAPIResource { }
-    public final class ImagesAsyncResource: OpenAIAsyncAPIResource {
-        public lazy var generate = ImageGenerateAsyncResource(clientOption)
-        public lazy var edit = ImageEditAsyncResource(clientOption)
+    public struct ImageGenerateAsyncResource: ~Copyable {
+        let clientOption: OpenAIClientOption
+        init(_ clientOption: OpenAIClientOption) { self.clientOption = clientOption }
     }
+
+    public struct ImageEditAsyncResource: ~Copyable {
+        let clientOption: OpenAIClientOption
+        init(_ clientOption: OpenAIClientOption) { self.clientOption = clientOption }
+    }
+
+    public struct ImagesAsyncResource: ~Copyable {
+        let clientOption: OpenAIClientOption
+        public let generate: ImageGenerateAsyncResource
+        public let edit: ImageEditAsyncResource
+        init(_ clientOption: OpenAIClientOption) {
+            self.clientOption = clientOption
+            self.generate = ImageGenerateAsyncResource(clientOption)
+            self.edit = ImageEditAsyncResource(clientOption)
+        }
+    }
+
     // MARK: Audio
-    public final class AudioSpeechAsyncResource: OpenAIAsyncAPIResource { }
-    public final class AudioTranscriptionsAsyncResource: OpenAIAsyncAPIResource { }
-    public final class AudioAsyncResource: OpenAIAsyncAPIResource {
-        public lazy var speech = AudioSpeechAsyncResource(clientOption)
-        public lazy var transcriptions = AudioTranscriptionsAsyncResource(clientOption)
+    public struct AudioSpeechAsyncResource: ~Copyable {
+        let clientOption: OpenAIClientOption
+        init(_ clientOption: OpenAIClientOption) { self.clientOption = clientOption }
     }
+
+    public struct AudioTranscriptionsAsyncResource: ~Copyable {
+        let clientOption: OpenAIClientOption
+        init(_ clientOption: OpenAIClientOption) { self.clientOption = clientOption }
+    }
+
+    public struct AudioAsyncResource: ~Copyable {
+        let clientOption: OpenAIClientOption
+        public let speech: AudioSpeechAsyncResource
+        public let transcriptions: AudioTranscriptionsAsyncResource
+        init(_ clientOption: OpenAIClientOption) {
+            self.clientOption = clientOption
+            self.speech = AudioSpeechAsyncResource(clientOption)
+            self.transcriptions = AudioTranscriptionsAsyncResource(clientOption)
+        }
+    }
+
     // MARK: Response
-    public final class ResponsesInputItemsAsyncResource: OpenAIAsyncAPIResource { }
-    public final class ResponsesInputTokensAsyncResource: OpenAIAsyncAPIResource { }
-    public final class ResponsesAsyncResource: OpenAIAsyncAPIResource {
-        public lazy var inputItems = ResponsesInputItemsAsyncResource(clientOption)
-        public lazy var inputTokens = ResponsesInputTokensAsyncResource(clientOption)
+    public struct ResponsesInputItemsAsyncResource: ~Copyable {
+        let clientOption: OpenAIClientOption
+        init(_ clientOption: OpenAIClientOption) { self.clientOption = clientOption }
     }
+
+    public struct ResponsesInputTokensAsyncResource: ~Copyable {
+        let clientOption: OpenAIClientOption
+        init(_ clientOption: OpenAIClientOption) { self.clientOption = clientOption }
+    }
+
+    public struct ResponsesAsyncResource: ~Copyable {
+        let clientOption: OpenAIClientOption
+        public let inputItems: ResponsesInputItemsAsyncResource
+        public let inputTokens: ResponsesInputTokensAsyncResource
+        init(_ clientOption: OpenAIClientOption) {
+            self.clientOption = clientOption
+            self.inputItems = ResponsesInputItemsAsyncResource(clientOption)
+            self.inputTokens = ResponsesInputTokensAsyncResource(clientOption)
+        }
+    }
+
     // MARK: File
-    public final class FilesAsyncResource: OpenAIAsyncAPIResource { }
-    
-    // MARK: Upload
-    public final class UploadsPartAsyncResource: OpenAIAsyncAPIResource { }
-    public final class UploadsAsyncResource: OpenAIAsyncAPIResource {
-        public lazy var part = UploadsPartAsyncResource(clientOption)
+    public struct FilesAsyncResource: ~Copyable {
+        let clientOption: OpenAIClientOption
+        init(_ clientOption: OpenAIClientOption) { self.clientOption = clientOption }
     }
-    
-    // MARK: Viideo
-    public final class VideosAsyncResource: OpenAIAsyncAPIResource { }
-    
+
+    // MARK: Upload
+    public struct UploadsPartAsyncResource: ~Copyable {
+        let clientOption: OpenAIClientOption
+        init(_ clientOption: OpenAIClientOption) { self.clientOption = clientOption }
+    }
+
+    public struct UploadsAsyncResource: ~Copyable {
+        let clientOption: OpenAIClientOption
+        public let part: UploadsPartAsyncResource
+        init(_ clientOption: OpenAIClientOption) {
+            self.clientOption = clientOption
+            self.part = UploadsPartAsyncResource(clientOption)
+        }
+    }
+
+    // MARK: Video
+    public struct VideosAsyncResource: ~Copyable {
+        let clientOption: OpenAIClientOption
+        init(_ clientOption: OpenAIClientOption) { self.clientOption = clientOption }
+    }
+
     // MARK: Realtime
-    public final class RealtimeAsyncResource: OpenAIAsyncAPIResource { }
-    
-    
+    public struct RealtimeAsyncResource: ~Copyable {
+        let clientOption: OpenAIClientOption
+        init(_ clientOption: OpenAIClientOption) { self.clientOption = clientOption }
+    }
+
     // MARK: Beta
-    public final class BetaRealtimeAsyncResource: OpenAIAsyncAPIResource { }
-    public final class BetaAsyncResource: OpenAIAsyncAPIResource {
-        public lazy var realtime = BetaRealtimeAsyncResource(clientOption)
+    public struct BetaRealtimeAsyncResource: ~Copyable {
+        let clientOption: OpenAIClientOption
+        init(_ clientOption: OpenAIClientOption) { self.clientOption = clientOption }
+    }
+
+    public struct BetaAsyncResource: ~Copyable {
+        let clientOption: OpenAIClientOption
+        public let realtime: BetaRealtimeAsyncResource
+        init(_ clientOption: OpenAIClientOption) {
+            self.clientOption = clientOption
+            self.realtime = BetaRealtimeAsyncResource(clientOption)
+        }
     }
 }

@@ -27,7 +27,7 @@ public extension OpenAISyncAPIResource.ResponsesSyncResource {
     func stream(
         parameters: ResponseCreateParameters,
         requestOptions: RequestOptions? = nil
-    ) throws -> SyncThrowingStream<ResponseStreamResult, Error> {
+    ) throws -> SyncThrowingStream<ResponseStreamResult, any Error> {
         let url = try clientOption.getServerUrl(path: "/responses")
         var streamingParameters = parameters
         streamingParameters.stream = true
@@ -56,7 +56,7 @@ public extension OpenAISyncAPIResource.ResponsesSyncResource {
     func retrieveStream(
         parameters: ResponseRetrieveParameters,
         requestOptions: RequestOptions? = nil
-    ) throws -> SyncThrowingStream<ResponseStreamResult, Error> {
+    ) throws -> SyncThrowingStream<ResponseStreamResult, any Error> {
         let url = try clientOption.getServerUrl(path: "/responses/\(parameters.response_id)")
         var streamingParameters = parameters
         streamingParameters.stream = true

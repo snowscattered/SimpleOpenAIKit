@@ -27,7 +27,7 @@ public extension OpenAIAsyncAPIResource.ImagesAsyncResource {
     func generateStream(
         parameters: ImageGenerateParameters,
         requestOptions: RequestOptions? = nil
-    ) async throws -> AsyncThrowingStream<ImagesGenerateStreamResult, Error> {
+    ) async throws -> AsyncThrowingStream<ImagesGenerateStreamResult, any Error> {
         let url = try clientOption.getServerUrl(path: "/images/generations")
         var streamingParameters = parameters
         streamingParameters.stream = true
@@ -59,7 +59,7 @@ public extension OpenAIAsyncAPIResource.ImagesAsyncResource {
     func editStream(
         parameters: ImageEditParameters,
         requestOptions: RequestOptions? = nil
-    ) async throws -> AsyncThrowingStream<ImagesEditStreamResult, Error> {
+    ) async throws -> AsyncThrowingStream<ImagesEditStreamResult, any Error> {
         let url = try clientOption.getServerUrl(path: "/images/edits")
         var streamingParameters = parameters
         streamingParameters.stream = true

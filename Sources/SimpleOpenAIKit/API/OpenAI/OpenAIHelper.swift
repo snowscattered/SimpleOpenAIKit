@@ -7,7 +7,6 @@
 
 import Foundation
 
-public let BufferSize: AVAudioFrameCount = 1024
 public struct AudioFormat: Hashable, Sendable {
     public var sampleRate: Double
     public var channelCount: UInt32
@@ -116,6 +115,7 @@ private func convert(
 }
 // MARK: - Microphone
 public final class AVMicrophoneHelper: MicrophoneHelper {
+    private let BufferSize: AVAudioFrameCount = 1024
     private let targetFormat: AVAudioFormat?
     private let shouldRecord: @Sendable () async -> Bool
     private let timeout: TimeInterval?
@@ -199,6 +199,7 @@ private func makeBuffer(from data: Data, format: AVAudioFormat) -> AVAudioPCMBuf
 }
 // MARK: - Player
 public final class AVAudioPlayerHelper: AudioPlayerHelper {
+    private let BufferSize: AVAudioFrameCount = 1024
     private let targetFormat: AVAudioFormat?
     private let shouldStop: @Sendable () async -> Bool
     public init(

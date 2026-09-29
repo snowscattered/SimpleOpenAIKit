@@ -83,12 +83,12 @@ final class NetworkInputStream: InputStream {
         return .open
     }
 
-    override var streamError: Error? {
+    override var streamError: any Error? {
         lock.lock()
         defer { lock.unlock() }
         return _streamError
     }
-    private var _streamError: Error?
+    private var _streamError: any Error?
 
     // MARK: - Delegate Callbacks (internal)
     fileprivate func didReceiveData(_ data: Data) {
@@ -100,7 +100,7 @@ final class NetworkInputStream: InputStream {
         semaphore.signal()
     }
 
-    fileprivate func didFinish(error: Error?) {
+    fileprivate func didFinish(error: any Error?) {
         lock.lock()
         _streamError = error
         isFinished = true
@@ -119,7 +119,7 @@ private final class InputStreamNetWorkDelegate: NSObject, URLSessionDataDelegate
         owner?.didReceiveData(data)
     }
 
-    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
+    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: any Error?) {
         owner?.didFinish(error: error)
     }
 }

@@ -26,7 +26,7 @@ func SyncStreamGenerator() -> SyncStream<Int> {
         }
     }
 }
-func SyncThrowingStreamGenerator() -> SyncThrowingStream<Int, Error> {
+func SyncThrowingStreamGenerator() -> SyncThrowingStream<Int, any Error> {
     SyncThrowingStream { continuation in
         let task = Task.detached(priority: Task.currentPriority) {
             for i in 0...10 {
@@ -87,7 +87,7 @@ struct SyncStreamTests {
         try await Task.sleep(for: .seconds(5))
     }
     
-    func SyncStreamResultGenerator() -> SyncStream<Result<Int, Error>> {
+    func SyncStreamResultGenerator() -> SyncStream<Result<Int, any Error>> {
         SyncStream { continuation in
             let task = Task.detached(priority: Task.currentPriority) {
                 for i in 0...10 {

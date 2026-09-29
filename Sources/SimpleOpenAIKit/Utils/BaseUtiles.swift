@@ -20,7 +20,7 @@ func decodeNetworkData<T: Decodable>(_ type: T.Type = T.self, from data: Data) t
 func retry<T>(
     maxRetries: Int = 2,
     delay: TimeInterval = 0.5,
-    shouldRetry: (Error) -> Bool = { error in true },
+    shouldRetry: (any Error) -> Bool = { error in true },
     callback: () throws -> T
 ) throws -> T {
     var retries = 0
@@ -41,7 +41,7 @@ func retry<T>(
 func retry<T>(
     maxRetries: Int = 2,
     delay: TimeInterval = 1.0,
-    shouldRetry: (Error) -> Bool = { error in true },
+    shouldRetry: (any Error) -> Bool = { error in true },
     callback: () async throws -> T
 ) async throws -> T {
     var retries = 0

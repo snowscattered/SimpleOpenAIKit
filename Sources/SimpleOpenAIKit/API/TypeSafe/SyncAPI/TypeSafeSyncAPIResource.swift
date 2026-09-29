@@ -5,14 +5,17 @@
 //  Created by snow on 9/23/26.
 //
 
-public class TypeSafeSyncAPIResource {
-    let clientOption: TypeSafeClientOption
-    init(_ clientOption: TypeSafeClientOption) {
-        self.clientOption = clientOption
-    }
+public enum TypeSafeSyncAPIResource {
 
     // MARK: SystemOne
-    public final class SystemOneSyncResource: TypeSafeSyncAPIResource { }
+    public struct SystemOneSyncResource: ~Copyable {
+        let clientOption: TypeSafeClientOption
+        init(_ clientOption: TypeSafeClientOption) { self.clientOption = clientOption }
+    }
+
     // MARK: Model
-    public final class ModelsSyncResource: TypeSafeSyncAPIResource { }
+    public struct ModelsSyncResource: ~Copyable {
+        let clientOption: TypeSafeClientOption
+        init(_ clientOption: TypeSafeClientOption) { self.clientOption = clientOption }
+    }
 }
