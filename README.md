@@ -37,7 +37,7 @@ English | [中文](README.zh-CN.md)
 
 ## Introduction
 
-SimpleOpenAIkit is a lightweight client built specifically for Swift developers, designed to fill the gap left by the absence of an official OpenAI Swift SDK. It provides a seamless, efficient, and Swift‑native way to interact with OpenAI’s REST APIs. This project is primarily inspired by [OpenAIKit](https://github.com/OpenDive/OpenAIKit) and [openai-python](https://github.com/openai/openai-python), enabling developers to quickly migrate and integrate their existing `openai-python` code into Swift applications with minimal friction. In addition, it also includes built‑in support for the Anthropic API, making it easy to switch between different model providers as needed.
+SimpleOpenAIkit is a lightweight client built specifically for Swift developers, designed to fill the gap left by the absence of an official OpenAI Swift SDK. It provides a seamless, efficient, and Swift‑native way to interact with OpenAI’s REST APIs. This project is primarily inspired by [OpenAIKit](https://github.com/OpenDive/OpenAIKit), [openai-python](https://github.com/openai/openai-python), [anthropic-sdk-python](https://github.com/anthropics/anthropic-sdk-python) and [typesafe-sdk-python](https://github.com/typesafe-ai/typesafe-sdk-python), enabling developers to quickly migrate and integrate their existing `openai-python` code into Swift applications with minimal friction. In addition, it also includes built‑in support for the Anthropic API, making it easy to switch between different model providers as needed.
 
 ## Installation
 

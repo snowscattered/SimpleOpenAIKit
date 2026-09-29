@@ -7,11 +7,13 @@
 
 import Foundation
 
+/// Shared TypeSafe transport; turns HTTP failures into `TypeSafeAPIError` cases.
 struct TypeSafeSession: Sendable, SessionProtocol {
     typealias ClientOption = TypeSafeClientOption
     static let shared: TypeSafeSession = TypeSafeSession()
     init() { }
 
+    /// Retries rate limits, overload, 5xx, 408 and client timeouts.
     func retryErrorHandler(error: any Error) -> Bool {
         if let error = error as? TypeSafeAPIError {
             switch error {
@@ -29,6 +31,7 @@ struct TypeSafeSession: Sendable, SessionProtocol {
         return false
     }
 
+    /// Map a status code and response body onto the matching `TypeSafeAPIError` case.
     func TypeSafeStatusError(data: Data, request: URLRequest, response: HTTPURLResponse) -> TypeSafeAPIError {
         let statusCode = response.statusCode
         let payload: TypeSafeErrorResponse
@@ -49,6 +52,7 @@ struct TypeSafeSession: Sendable, SessionProtocol {
         default: return .unexpectedStatusCode(statusCode: statusCode, payload: payload, request, response)
         }
     }
+    /// Rewrite `NetworkError.statusError` as a TypeSafe error, leaving others untouched.
     func wrapError(error: any Error) -> any Error {
         if case let NetworkError.statusError(data, request, response) = error {
             return TypeSafeStatusError(data: data, request: request, response: response)

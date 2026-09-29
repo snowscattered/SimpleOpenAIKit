@@ -9,9 +9,11 @@ import Foundation
 import System
 
 extension Data {
+    /// Hand back the bytes the receiver still holds.
     mutating func read() -> Data {
         return self
     }
+    /// Consume and return up to `size` bytes, or `nil` once nothing is left.
     mutating func read(size: Int) -> Data? {
         guard !self.isEmpty else { return nil }
         let end = Swift.min(size, self.count)
@@ -22,6 +24,7 @@ extension Data {
 }
 // MARK: IO API
 extension Stream {
+    /// Open the stream, run `call`, and close it again even if `call` throws.
     @inlinable
     func with(call: () throws -> Void) rethrows {
         self.open()
@@ -29,6 +32,7 @@ extension Stream {
         try call()
     }
     
+    /// Awaitable counterpart of `with(call:)`.
     @inlinable
     func with(call: () async throws -> Void) async rethrows {
         self.open()
@@ -37,6 +41,7 @@ extension Stream {
     }
 }
 extension InputStream {
+    /// Drain the stream into memory, reading in 16 KB steps.
     func read() -> Data {
         var result = Data()
         let bufferSize = 16 * 1024
@@ -49,6 +54,7 @@ extension InputStream {
         }
         return result
     }
+    /// Read up to `size` bytes now, returning empty data when nothing is available.
     func read(size: Int) -> Data {
         var buffer = [UInt8](repeating: 0, count: size)
         let bytesRead = self.read(&buffer, maxLength: size)
@@ -58,6 +64,7 @@ extension InputStream {
     }
 }
 extension OutputStream {
+    /// Write all of `data`, looping over partial writes and throwing when the stream fails.
     func write(data: Data) throws {
         try data.withUnsafeBytes { rawBuffer in
             guard let base = rawBuffer.baseAddress?.assumingMemoryBound(to: UInt8.self) else {
@@ -77,12 +84,14 @@ extension OutputStream {
         }
     }
     
+    /// Append an awaitable `Data` stream to the receiver, checking cancellation per chunk.
     func writeFile<T: AsyncSequence>(stream: T) async throws where T.Element == Data {
         for try await chunk in stream {
             try Task.checkCancellation()
             try self.write(data: chunk)
         }
     }
+    /// Blocking counterpart of `writeFile(stream:)`.
     func writeFile<T: SyncSequence>(stream: T) throws where T.Element == Data {
         try stream.forEach { chunk in
             try Task.checkCancellation()

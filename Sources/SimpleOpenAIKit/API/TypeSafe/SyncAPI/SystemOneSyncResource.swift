@@ -8,6 +8,7 @@
 import Foundation
 
 public extension TypeSafeSyncAPIResource.SystemOneSyncResource {
+    /// Ask System One for its judgements, defaulting the model to the client's configured one.
     func system_one(
         parameters: SystemOneParameters,
         requestOptions: RequestOptions? = nil
@@ -28,6 +29,7 @@ public extension TypeSafeSyncAPIResource.SystemOneSyncResource {
 }
 
 public extension TypeSafeClient {
+    /// Convenience wrapper around the client's internal `systemOne` resource.
     func system_one(
         parameters: SystemOneParameters,
         requestOptions: RequestOptions? = nil

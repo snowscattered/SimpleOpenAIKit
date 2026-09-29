@@ -8,6 +8,7 @@
 import Foundation
 
 public extension AnthropicAsyncAPIResource.MessagesAsyncResource {
+    /// Send a Messages request and wait for the whole reply.
     func create(
         parameters: MessageParameters,
         requestOptions: RequestOptions? = nil
@@ -24,6 +25,7 @@ public extension AnthropicAsyncAPIResource.MessagesAsyncResource {
         )
     }
 
+    /// Send a Messages request with `stream` enabled and iterate the SSE events.
     func stream(
         parameters: MessageParameters,
         requestOptions: RequestOptions? = nil
@@ -40,6 +42,7 @@ public extension AnthropicAsyncAPIResource.MessagesAsyncResource {
         )
     }
     
+    /// Estimate the input tokens of a Messages payload without generating output.
     func count_tokens(
         parameters: MessageCountTokenParameters,
         requestOptions: RequestOptions? = nil

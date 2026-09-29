@@ -8,6 +8,7 @@
 import Foundation
 
 public extension OpenAISyncAPIResource.ResponsesSyncResource {
+    /// Send a Responses request and wait for the finished response.
     func create(
         parameters: ResponseCreateParameters,
         requestOptions: RequestOptions? = nil
@@ -24,6 +25,7 @@ public extension OpenAISyncAPIResource.ResponsesSyncResource {
         )
     }
     
+    /// Send a Responses request with `stream` enabled and iterate the events.
     func stream(
         parameters: ResponseCreateParameters,
         requestOptions: RequestOptions? = nil
@@ -40,6 +42,7 @@ public extension OpenAISyncAPIResource.ResponsesSyncResource {
         )
     }
     // MARK: Retrieve
+    /// Fetch a stored response.
     func retrieve(
         parameters: ResponseRetrieveParameters,
         requestOptions: RequestOptions? = nil
@@ -53,6 +56,7 @@ public extension OpenAISyncAPIResource.ResponsesSyncResource {
             method: .post
         )
     }
+    /// Re-iterate the events of a stored response.
     func retrieveStream(
         parameters: ResponseRetrieveParameters,
         requestOptions: RequestOptions? = nil
@@ -69,6 +73,7 @@ public extension OpenAISyncAPIResource.ResponsesSyncResource {
         )
     }
     // MARK: Cancel
+    /// Stop a response that is still generating.
     func cancel(
         response_id: String,
         requestOptions: RequestOptions? = nil
@@ -83,6 +88,7 @@ public extension OpenAISyncAPIResource.ResponsesSyncResource {
         )
     }
     // MARK: Delete
+    /// Delete a stored response.
     func delete(
         response_id: String,
         requestOptions: RequestOptions? = nil
@@ -97,6 +103,7 @@ public extension OpenAISyncAPIResource.ResponsesSyncResource {
         )
     }
     // MARK: compact
+    /// Compact a conversation's context into a smaller item set.
     func compact(
         parameters: ResponseCompactParameters,
         requestOptions: RequestOptions? = nil
@@ -111,6 +118,7 @@ public extension OpenAISyncAPIResource.ResponsesSyncResource {
         )
     }
     // MARK: WS-Connection
+    /// Open a websocket session against the Responses API and hand the connection to `completion`.
     func connect(
         requestOptions: RequestOptions? = nil,
         completion: @escaping (SyncResponseConnection) throws -> Void
@@ -135,6 +143,7 @@ public extension OpenAISyncAPIResource.ResponsesSyncResource {
     }
 }
 
+/// Pushes websocket frames into the connection's stream until the socket closes.
 private final class ResponseEventSyncReceiver: @unchecked Sendable {
     private let ws: URLSessionWebSocketTask
     private let continuation: SyncStream<ResponseStreamResult>.Continuation
@@ -164,6 +173,7 @@ private final class ResponseEventSyncReceiver: @unchecked Sendable {
     }
 }
 
+/// One live Responses websocket: send client events, iterate the server's events.
 public class SyncResponseConnection: Sequence, @unchecked Sendable {
     private let ws: URLSessionWebSocketTask
     private let stream: SyncStream<ResponseStreamResult>

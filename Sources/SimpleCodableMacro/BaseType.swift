@@ -7,6 +7,10 @@
 
 import Foundation
 // MARK: - BaseType
+/// A JSON value Swift can hold without a matching model: null, bool, int, double, string, array or object.
+///
+/// Tool schemas and the `extra` passthrough fields are built from this, so unknown keys survive a
+/// decode and re-encode round trip.
 public indirect enum BaseType: Codable & Sendable {
     case null
     case bool(Bool)
@@ -41,6 +45,7 @@ public indirect enum BaseType: Codable & Sendable {
         }
     }
 }
+/// Lets any JSON literal be written directly as a `BaseType`.
 extension BaseType: ExpressibleByBooleanLiteral,
                     ExpressibleByIntegerLiteral,
                     ExpressibleByFloatLiteral,
@@ -62,6 +67,7 @@ extension BaseType: ExpressibleByBooleanLiteral,
         self = .dict(try JSONDecoder().decode([String: BaseType].self, from: data))
     }
 }
+/// Turn any Codable value into a dictionary of JSON values.
 public extension Dictionary where Key == String, Value == BaseType {
     init(_ object: some Codable & Sendable) throws {
         let data = try JSONEncoder().encode(object)
@@ -70,6 +76,7 @@ public extension Dictionary where Key == String, Value == BaseType {
 }
 
 extension BaseType {
+    /// Read or replace one key of a `.dict` value; other cases are left alone.
     public subscript(key: String) -> BaseType? {
         get {
             guard case .dict(let dict) = self else { return nil }
@@ -83,6 +90,7 @@ extension BaseType {
     }
 }
 extension BaseType {
+    /// Hand back the stored scalar as `T`, or `nil` when this case does not hold one.
     public func value<T>() -> T? {
         switch self {
         case .int(let v): return v as? T
@@ -96,9 +104,12 @@ extension BaseType {
     }
 }
 // MARK: - BaseModel
+/// Marker for a generated API model: `Codable`, `Sendable`, and able to dump itself as JSON.
 public protocol BaseModel: Codable & Sendable { }
 public extension BaseModel {
+    /// Hook for generated models to run after decoding; the default does nothing.
     func after() throws -> Void { }
+    /// Encode to a sorted, pretty-printed JSON string.
     func json() throws -> String {
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.sortedKeys, .prettyPrinted]
@@ -107,14 +118,17 @@ public extension BaseModel {
     }
 }
 // MARK: - BaseModelExtra
+/// A model whose fields are exactly the ones it declares, with no room for unknown keys.
 public protocol BaseModelNoWithExtra: BaseModel { }
 public extension BaseModelNoWithExtra {
+    /// Return a copy with one key path replaced, for terse call sites.
     func update<T>(_ keyPath: WritableKeyPath<Self, T>, to value: T) -> Self {
         var copy = self
         copy[keyPath: keyPath] = value
         return copy
     }
 }
+/// A model that also keeps the JSON keys it does not declare in `extra`.
 public protocol BaseModelWithExtra: BaseModelNoWithExtra {
     var extra: [String: BaseType] { get set }
 }

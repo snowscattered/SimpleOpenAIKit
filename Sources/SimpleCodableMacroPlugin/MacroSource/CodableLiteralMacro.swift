@@ -2,6 +2,7 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 
+/// Implements `@CodableLiteral`: literal-style Codable synthesis for an enum's cases.
 struct CodableLiteralMacro: ExtensionMacro {
     static func expansion(
         of node: AttributeSyntax,

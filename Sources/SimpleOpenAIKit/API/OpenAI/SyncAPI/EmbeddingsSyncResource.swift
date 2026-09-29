@@ -8,6 +8,7 @@
 import Foundation
 
 public extension OpenAISyncAPIResource.EmbeddingsSyncResource {
+    /// Embed every input, returning one vector per entry.
     func create(
         parameters: EmbeddingParameters,
         requestOptions: RequestOptions? = nil

@@ -2,6 +2,7 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 
+/// Implements `@SingleOrArray`: decodes a field the API sends either as one value or as an array.
 struct SingleOrArrayMacro: ExtensionMacro {
     static func expansion(
         of node: AttributeSyntax,

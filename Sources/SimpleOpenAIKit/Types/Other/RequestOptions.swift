@@ -6,11 +6,13 @@
 //
 
 import Foundation
+import SimpleCodableMacro
 
+@PublicInit
 public struct RequestOptions: Sendable {
-    var extra_body: Body = [:]
-    var extra_headers: Header = [:]
-    var extra_query: Query = [:]
+    public var extra_body: Body = [:]
+    public var extra_headers: Header = [:]
+    public var extra_query: Query = [:]
     
-    var timeout: TimeInterval?
+    public var timeout: TimeInterval?
 }

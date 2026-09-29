@@ -8,6 +8,7 @@
 import Foundation
 
 public extension OpenAIAsyncAPIResource.ImagesAsyncResource {
+    /// Generate images from a prompt.
     func generate(
         parameters: ImageGenerateParameters,
         requestOptions: RequestOptions? = nil
@@ -24,6 +25,7 @@ public extension OpenAIAsyncAPIResource.ImagesAsyncResource {
         )
     }
 
+    /// Generate images and iterate the partial results.
     func generateStream(
         parameters: ImageGenerateParameters,
         requestOptions: RequestOptions? = nil
@@ -40,6 +42,7 @@ public extension OpenAIAsyncAPIResource.ImagesAsyncResource {
         )
     }
 
+    /// Edit or vary existing images; the body is sent as multipart form data.
     func edit(
         parameters: ImageEditParameters,
         requestOptions: RequestOptions? = nil
@@ -56,6 +59,7 @@ public extension OpenAIAsyncAPIResource.ImagesAsyncResource {
         )
     }
 
+    /// Edit or vary existing images and iterate the partial results.
     func editStream(
         parameters: ImageEditParameters,
         requestOptions: RequestOptions? = nil

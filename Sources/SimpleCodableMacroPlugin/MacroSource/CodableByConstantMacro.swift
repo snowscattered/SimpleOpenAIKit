@@ -2,6 +2,7 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 
+/// Implements `@CodableByConstant`: encodes and decodes enum cases by a fixed constant string.
 struct CodableByConstantMacro: ExtensionMacro {
     static func expansion(
         of node: AttributeSyntax,

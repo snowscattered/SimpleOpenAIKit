@@ -2,6 +2,7 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 
+/// Implements `@BaseModelWithExtra`: Codable synthesis that routes undeclared JSON keys into `extra`.
 struct BaseModelWithExtraMacro: MemberMacro, ExtensionMacro {
     static func expansion(
         of node: AttributeSyntax,

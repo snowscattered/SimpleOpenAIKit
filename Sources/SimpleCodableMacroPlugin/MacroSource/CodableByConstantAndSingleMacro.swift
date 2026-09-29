@@ -2,6 +2,7 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 
+/// Implements `@CodableByConstantAndSingle`: matches a case by its constant, falling back to the single-value case.
 struct CodableByConstantAndSingleMacro: ExtensionMacro {
     static func expansion(
         of node: AttributeSyntax,

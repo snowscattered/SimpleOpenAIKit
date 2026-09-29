@@ -8,6 +8,7 @@
 import Foundation
 
 // MARK: - Dynamic Coding Key
+/// Coding key built on the fly from a name or index, used to flatten nested paths.
 private struct AnyCodingKey: CodingKey {
     var stringValue: String
     var intValue: Int?
@@ -17,6 +18,7 @@ private struct AnyCodingKey: CodingKey {
 }
  
 // MARK: - CodingKey Path Extension
+/// The multipart name for a coding path, rendered with brackets: `files[0]`, `extra[key]`.
 private extension Array where Element == any CodingKey {
     var pathString: String {
         guard let first = self.first else { return "" }
@@ -32,11 +34,17 @@ private extension Array where Element == any CodingKey {
     }
 }
 
+/// One entry of the form: a text field or a file part.
 private enum MultipartFormPart {
     case field(String)
     case file(FileParameters)
 }
 // MARK: - MultipartFormDataEncoder
+/// Collects the fields and files of a single `multipart/form-data` body.
+///
+/// `encode(_:)` walks any `Encodable` payload and flattens it into bracketed names, so upload
+/// endpoints get the shape they expect without a bespoke encoder per request. Parts are keyed by
+/// name, which means a later write to the same name replaces an earlier one.
 public class MultipartFormDataEncodeContainer {
     private var codingPath: [any CodingKey] = []
     private var parts: [String: MultipartFormPart] = [:]
@@ -45,12 +53,15 @@ public class MultipartFormDataEncodeContainer {
     public init(boundary: String = "Boundary-\(UUID().uuidString)") {
         self.boundary = boundary
     }
+    /// Attach `file` as the part named `name`.
     public func encodeFile(name: String, file: FileParameters) {
         self.parts[name] = .file(file)
     }
+    /// Attach `value` as the text field named `name`.
     public func encodeField(name: String, value: String) {
         self.parts[name] = .field(value)
     }
+    /// Walk `value` and turn each leaf into a field or file part.
     public func encode<T: Encodable>(_ value: T) throws {
         let encoder = MultipartEncoder(codingPath: codingPath, encoder: self)
         try value.encode(to: encoder)
@@ -59,6 +70,7 @@ public class MultipartFormDataEncodeContainer {
 
 #if SelectInputStream
 extension MultipartFormDataEncodeContainer {
+    /// The body as a stream of parts, so a file is read from disk lazily instead of copied into memory.
     public var serialize: InputStream {
         var inputStreams: [InputStream] = []
         
@@ -89,6 +101,7 @@ extension MultipartFormDataEncodeContainer {
 }
 #else
 extension MultipartFormDataEncodeContainer {
+    /// The body assembled into one in-memory `InputStream`.
     public var serialize: InputStream {
         var body = Data()
         self.parts.forEach { (field, v) in
@@ -111,6 +124,7 @@ extension MultipartFormDataEncodeContainer {
 #endif
  
 // MARK: - Internal Encoder Proxy
+/// `Encoder` that routes scalars to the container instead of producing JSON.
 private class MultipartEncoder: Encoder {
     var codingPath: [any CodingKey]
     var userInfo: [CodingUserInfoKey : Any] = [:]

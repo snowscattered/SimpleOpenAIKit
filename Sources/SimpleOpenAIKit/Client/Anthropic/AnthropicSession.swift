@@ -7,11 +7,13 @@
 
 import Foundation
 
+/// Shared Anthropic transport; turns HTTP failures into `AnthropicAPIError` cases.
 struct AnthropicSession: Sendable, SessionProtocol {
     typealias ClientOption = AnthropicClientOption
     static let shared: AnthropicSession = AnthropicSession()
     init() { }
     
+    /// Retries rate limits, 5xx (including 503, 504 and 529) and client timeouts.
     func retryErrorHandler(error: any Error) -> Bool {
         if let error = error as? AnthropicAPIError {
             switch error {
@@ -31,6 +33,7 @@ struct AnthropicSession: Sendable, SessionProtocol {
         return false
     }
     
+    /// Map a status code and response body onto the matching `AnthropicAPIError` case.
     func AnthropicStatusError(data: Data, request: URLRequest, response: HTTPURLResponse) -> AnthropicAPIError {
         let statusCode = response.statusCode
         var payload: AnthropicErrorResponse? = nil
@@ -65,6 +68,7 @@ struct AnthropicSession: Sendable, SessionProtocol {
         default: return .unexpectedStatusCode(statusCode: statusCode, payload: payload, request, response)
         }
     }
+    /// Rewrite `NetworkError.statusError` as an Anthropic error, leaving others untouched.
     func wrapError(error: any Error) -> any Error {
         if case let NetworkError.statusError(data, request, response) = error {
             return AnthropicStatusError(data: data, request: request, response: response)

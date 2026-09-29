@@ -8,6 +8,7 @@
 import Foundation
 
 public extension OpenAISyncAPIResource.ModelsSyncResource {
+    /// List every model the key can reach, in one page.
     func list(
         requestOptions: RequestOptions? = nil
     ) throws -> PageStruct<ModelResult> {
@@ -35,6 +36,7 @@ public extension OpenAISyncAPIResource.ModelsSyncResource {
 //        }
 //    }
     
+    /// Fetch one model's metadata.
     func retrieve(
         model: String,
         requestOptions: RequestOptions? = nil
@@ -48,6 +50,7 @@ public extension OpenAISyncAPIResource.ModelsSyncResource {
             method: .get
         )
     }
+    /// Delete a fine-tuned model.
     func delete(
         model: String,
         requestOptions: RequestOptions? = nil

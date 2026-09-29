@@ -8,6 +8,7 @@
 import Foundation
 
 public extension OpenAISyncAPIResource.VideosSyncResource {
+    /// Start a video generation job.
     func create(
         parameters: VideoCreateParamerters,
         requestOptions: RequestOptions? = nil
@@ -22,6 +23,7 @@ public extension OpenAISyncAPIResource.VideosSyncResource {
             hasFile: true
         )
     }
+    /// Iterate the videos under the account, one page per request.
     func list(
         parameters: VideoListParameter? = nil,
         requestOptions: RequestOptions? = nil
@@ -45,6 +47,7 @@ public extension OpenAISyncAPIResource.VideosSyncResource {
             return result
         }
     }
+    /// Fetch one video's status and metadata.
     func retrieve(
         video_id: String,
         requestOptions: RequestOptions? = nil
@@ -58,6 +61,7 @@ public extension OpenAISyncAPIResource.VideosSyncResource {
             method: .get
         )
     }
+    /// Delete a video.
     func delete(
         video_id: String,
         requestOptions: RequestOptions? = nil
@@ -71,6 +75,7 @@ public extension OpenAISyncAPIResource.VideosSyncResource {
             method: .delete
         )
     }
+    /// Rework an existing video.
     func edit(
         parameters: VideoEditParameter,
         requestOptions: RequestOptions? = nil
@@ -85,6 +90,7 @@ public extension OpenAISyncAPIResource.VideosSyncResource {
             hasFile: true
         )
     }
+    /// Append generated footage to an existing video.
     func extend(
         parameters: VideoExtendParameter,
         requestOptions: RequestOptions? = nil
@@ -99,6 +105,7 @@ public extension OpenAISyncAPIResource.VideosSyncResource {
             hasFile: true
         )
     }
+    /// Remix a video from a prompt.
     func remix(
         video_id: String,
         prompt: String,
@@ -115,6 +122,7 @@ public extension OpenAISyncAPIResource.VideosSyncResource {
         )
     }
     // MARK: Character
+    /// Register a reusable character for later generations.
     func create_character(
         parameters: VideoCharacterCreateParameter,
         requestOptions: RequestOptions? = nil
@@ -128,6 +136,7 @@ public extension OpenAISyncAPIResource.VideosSyncResource {
             method: .post
         )
     }
+    /// Fetch one character.
     func get_character(
         character_id: String,
         requestOptions: RequestOptions? = nil
@@ -142,6 +151,7 @@ public extension OpenAISyncAPIResource.VideosSyncResource {
         )
     }
     // MARK: Task
+    /// Poll a video until it reaches a terminal status.
     func poll(
         video_id: String,
         poll_interval_ms: Int?,
@@ -164,6 +174,7 @@ public extension OpenAISyncAPIResource.VideosSyncResource {
             }
         }
     }
+    /// Start a generation and poll it to completion in one call.
     func create_and_poll(
         parameters: VideoCreateParamerters,
         poll_interval_ms: Int?,
@@ -176,6 +187,7 @@ public extension OpenAISyncAPIResource.VideosSyncResource {
         return try self.poll(video_id: video.id, poll_interval_ms: poll_interval_ms)
     }
     // MARK: Download
+    /// Stream the finished video bytes.
     func download_content(
         video_id: String,
         variant: VideoDownloadContentVariant?,

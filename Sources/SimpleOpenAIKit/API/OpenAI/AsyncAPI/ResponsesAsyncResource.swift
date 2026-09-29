@@ -8,6 +8,7 @@
 import Foundation
 
 public extension OpenAIAsyncAPIResource.ResponsesAsyncResource {
+    /// Send a Responses request and wait for the finished response.
     func create(
         parameters: ResponseCreateParameters,
         requestOptions: RequestOptions? = nil
@@ -24,6 +25,7 @@ public extension OpenAIAsyncAPIResource.ResponsesAsyncResource {
         )
     }
 
+    /// Send a Responses request with `stream` enabled and iterate the events.
     func stream(
         parameters: ResponseCreateParameters,
         requestOptions: RequestOptions? = nil
@@ -40,6 +42,7 @@ public extension OpenAIAsyncAPIResource.ResponsesAsyncResource {
         )
     }
     // MARK: Retrieve
+    /// Fetch a stored response.
     func retrieve(
         parameters: ResponseRetrieveParameters,
         requestOptions: RequestOptions? = nil
@@ -53,6 +56,7 @@ public extension OpenAIAsyncAPIResource.ResponsesAsyncResource {
             method: .post
         )
     }
+    /// Re-iterate the events of a stored response.
     func retrieveStream(
         parameters: ResponseRetrieveParameters,
         requestOptions: RequestOptions? = nil
@@ -69,6 +73,7 @@ public extension OpenAIAsyncAPIResource.ResponsesAsyncResource {
         )
     }
     // MARK: Cancel
+    /// Stop a response that is still generating.
     func cancel(
         response_id: String,
         requestOptions: RequestOptions? = nil
@@ -83,6 +88,7 @@ public extension OpenAIAsyncAPIResource.ResponsesAsyncResource {
         )
     }
     // MARK: Delete
+    /// Delete a stored response.
     func delete(
         response_id: String,
         requestOptions: RequestOptions? = nil
@@ -97,6 +103,7 @@ public extension OpenAIAsyncAPIResource.ResponsesAsyncResource {
         )
     }
     // MARK: compact
+    /// Compact a conversation's context into a smaller item set.
     func compact(
         parameters: ResponseCompactParameters?,
         requestOptions: RequestOptions? = nil
@@ -111,6 +118,7 @@ public extension OpenAIAsyncAPIResource.ResponsesAsyncResource {
         )
     }
     // MARK: WS-Connection
+    /// Open a websocket session against the Responses API and hand the connection to `completion`.
     func conntent(
         requestOptions: RequestOptions? = nil,
         completion: @escaping @Sendable (AsyncResponseConnection) async throws -> Void
@@ -135,6 +143,7 @@ public extension OpenAIAsyncAPIResource.ResponsesAsyncResource {
     }
 }
 
+/// Pushes websocket frames into the connection's stream until the socket closes.
 private final class ResponseEventAsyncReceiver: @unchecked Sendable {
     private let ws: URLSessionWebSocketTask
     private let continuation: AsyncStream<ResponseStreamResult>.Continuation
@@ -145,6 +154,7 @@ private final class ResponseEventAsyncReceiver: @unchecked Sendable {
         self.continuation = continuation
         receiveNext()
     }
+    /// Keep the stream supplied by asking the socket for the next message.
     private func receiveNext() {
         ws.receive { [self] result in
             switch result {
@@ -163,6 +173,7 @@ private final class ResponseEventAsyncReceiver: @unchecked Sendable {
         }
     }
 }
+/// One live Responses websocket: send client events, iterate the server's events.
 public class AsyncResponseConnection: AsyncSequence, @unchecked Sendable {
     private let ws: URLSessionWebSocketTask
     private let stream: AsyncStream<ResponseStreamResult>
@@ -173,12 +184,15 @@ public class AsyncResponseConnection: AsyncSequence, @unchecked Sendable {
         self.stream = stream
         self.iterator = stream.makeAsyncIterator()
     }
+    /// Iterate server events until the socket closes.
     public func makeAsyncIterator() -> AsyncStream<ResponseStreamResult>.AsyncIterator {
         return stream.makeAsyncIterator()
     }
+    /// Encode `event` as JSON text and queue it on the socket.
     public func send(event: ResponseClientEventParameters) async throws {
         try await ws.send(.string(String(decoding: JSONEncoder().encode(event), as: UTF8.self)))
     }
+    /// Await the next server event, or `nil` once the stream has ended.
     public func revc() async -> ResponseStreamResult? {
         return await self.iterator.next()
     }

@@ -8,6 +8,7 @@
 import Foundation
 
 public extension AnthropicSyncAPIResource.CompletionsSyncResource {
+    /// Send a legacy completion request and wait for the whole result.
     func create(parameters: CompletionParameters, requestOptions: RequestOptions? = nil) throws -> CompletionCreateResult {
         let url = try clientOption.getServerUrl(path: "/completions")
         var nostreamingParameters = parameters
@@ -20,6 +21,7 @@ public extension AnthropicSyncAPIResource.CompletionsSyncResource {
             method: .post
         )
     }
+    /// Send a legacy completion request with `stream` enabled and iterate the chunks.
     func stream(parameters: CompletionParameters, requestOptions: RequestOptions? = nil) throws -> SyncThrowingStream<CompletionCreateResult, any Error> {
         let url = try clientOption.getServerUrl(path: "/completions")
         var streamingParameters = parameters

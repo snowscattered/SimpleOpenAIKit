@@ -8,6 +8,7 @@
 import Foundation
 
 public extension TypeSafeAsyncAPIResource.ModelsAsyncResource {
+    /// List the models exposed by the TypeSafe API.
     func list(
         requestOptions: RequestOptions? = nil
     ) async throws -> TypeSafeModelListResult {

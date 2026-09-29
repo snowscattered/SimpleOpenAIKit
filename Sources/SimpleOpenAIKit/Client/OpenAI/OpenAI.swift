@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Synchronous OpenAI client; each API group is exposed as a stored resource namespace.
 public class OpenAI {
     private let clientOption: OpenAIClientOption
     public var api_key: String { clientOption.api_key }
@@ -46,6 +47,7 @@ public class OpenAI {
 //    public let evals: OpenAISyncAPIResource.EvalsSyncResource
     public let beta: OpenAISyncAPIResource.BetaSyncResource
 
+    /// Create a client; every resource below shares the resulting options.
     public init(
         api_key: String,
         organization: String? = nil,

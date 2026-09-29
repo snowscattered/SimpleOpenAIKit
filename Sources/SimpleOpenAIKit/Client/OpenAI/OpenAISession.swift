@@ -7,11 +7,13 @@
 
 import Foundation
 
+/// Shared OpenAI transport; turns HTTP failures into `OpenAIAPIError` cases.
 struct OpenAISession: Sendable, SessionProtocol {
     typealias ClientOption = OpenAIClientOption
     static let shared: OpenAISession = OpenAISession()
     init() { }
     
+    /// Retries rate limits, 5xx and client timeouts only.
     func retryErrorHandler(error: any Error) -> Bool {
         if let error = error as? OpenAIAPIError {
             switch error {
@@ -28,6 +30,7 @@ struct OpenAISession: Sendable, SessionProtocol {
         return false
     }
     
+    /// Map a status code and response body onto the matching `OpenAIAPIError` case.
     func OpenAIStatusError(data: Data, request: URLRequest, response: HTTPURLResponse) -> OpenAIAPIError {
         let statusCode = response.statusCode
         var payload: OpenAIErrorResponse? = nil
@@ -57,6 +60,7 @@ struct OpenAISession: Sendable, SessionProtocol {
         default: return .unexpectedStatusCode(statusCode: statusCode, payload: payload, request, response)
         }
     }
+    /// Rewrite `NetworkError.statusError` as an OpenAI error, leaving others untouched.
     func wrapError(error: any Error) -> any Error {
         if case let NetworkError.statusError(data, request, response) = error {
             return OpenAIStatusError(data: data, request: request, response: response)

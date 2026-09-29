@@ -11,6 +11,7 @@ import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 @_exported import SimpleCodableMacro
 
+/// Compiler plugin that publishes the tool-schema macros re-exported by `SimpleOpenAIKitMacro`.
 @main
 struct SimpleOpenAIMacroPlugin: CompilerPlugin {
     let providingMacros: [Macro.Type] = [

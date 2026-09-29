@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Awaitable Anthropic client, holding the `models`, `completions` and `messages` resources.
 public class AsyncAnthropic {
     private let clientOption: AnthropicClientOption
     public var api_key: String { clientOption.api_key }

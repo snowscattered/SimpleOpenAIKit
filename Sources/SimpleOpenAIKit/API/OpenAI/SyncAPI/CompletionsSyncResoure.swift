@@ -8,6 +8,7 @@
 import Foundation
 
 public extension OpenAISyncAPIResource.CompletionsSyncResource {
+    /// Send a legacy completion request and wait for the whole result.
     func create(
         parameters: CompletionParameters,
         requestOptions: RequestOptions? = nil
@@ -24,6 +25,7 @@ public extension OpenAISyncAPIResource.CompletionsSyncResource {
         )
     }
     
+    /// Send a legacy completion request with `stream` enabled and iterate the chunks.
     func stream(
         parameters: CompletionParameters,
         requestOptions: RequestOptions? = nil

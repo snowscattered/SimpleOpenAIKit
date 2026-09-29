@@ -27,6 +27,7 @@ public protocol SyncSequence<Element, Failure> {
     func signal() -> Void
 }
 extension SyncSequence {
+    /// Nothing to wake unless the sequence is backed by a blocking producer.
     public func signal() -> Void { }
 }
 

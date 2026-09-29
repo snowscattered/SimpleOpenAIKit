@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// OpenAI credentials and endpoint defaults: HTTP auth headers, websocket base URL, retry budget.
 struct OpenAIClientOption: APIClientOption {
     let api_key: String
     let organization: String?
@@ -65,11 +66,13 @@ struct OpenAIClientOption: APIClientOption {
         self.default_query = default_query
     }
     
+    /// Append `path` to the HTTP base URL.
     func getServerUrl(path: String) throws -> URL {
         let fullPath = path.hasPrefix("/") ? path : "/\(path)"
         return self.base_url.appendingPathComponent(fullPath).absoluteURL
     }
     
+    /// Append `path` to the websocket base URL.
     func getWSServerUrl(path: String) throws -> URL {
         let fullPath = path.hasPrefix("/") ? path : "/\(path)"
         return self.websocket_base_url.appendingPathComponent(fullPath).absoluteURL

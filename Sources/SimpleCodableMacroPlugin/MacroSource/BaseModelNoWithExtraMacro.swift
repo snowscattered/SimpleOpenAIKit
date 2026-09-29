@@ -2,6 +2,7 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 
+/// Implements `@BaseModelNoWithExtra`: synthesises Codable conformance and a `CodingKeys` over the declared fields.
 struct BaseModelNoWithExtraMacro: ExtensionMacro {
     static func expansion(
         of node: AttributeSyntax,

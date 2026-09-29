@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Scratch space for a blocking call whose result arrives on a URLSession callback queue.
 private final class ResponseContainer: @unchecked Sendable {
     var data: Data = Data()
     var bytes: URLSession.AsyncBytes?
@@ -16,6 +17,10 @@ private final class ResponseContainer: @unchecked Sendable {
 }
 
 extension URLSession {
+    /// Stream the body as buffers of up to `chunk` bytes, flushing early on every `\n` so SSE lines stay whole.
+    ///
+    /// A non-2xx status is drained first and thrown as `NetworkError.statusError` with the error body attached.
+    /// - Returns: A stream that finishes with the transfer; cancelling it stops the download.
     func asyncStreamData(_ request: URLRequest, chunk: Int = 1024) async throws -> AsyncStream<Data> {
         let (bytes, response) = try await URLSession.shared.bytes(for: request)
         guard let httpResponse = response as? HTTPURLResponse else {
@@ -48,6 +53,7 @@ extension URLSession {
             continuation.onTermination = { _ in task.cancel() }
         }
     }
+    /// Blocking counterpart of `asyncStreamData`: parks on a semaphore until headers arrive, then streams.
     func syncStreamData(_ request: URLRequest, chunk: Int = 1024) throws -> SyncStream<Data> {
         let container = ResponseContainer()
         let semaphore = DispatchSemaphore(value: 0)
@@ -107,6 +113,7 @@ extension URLSession {
         }
     }
     // MARK: - StreamSSE
+    /// `asyncStreamData` with each chunk fed through `parser` to yield events instead of bytes.
     func asyncSSE(_ request: URLRequest, parser: any CustomParser = EventParser()) async throws -> AsyncStream<Event> {
         return try await self.asyncStreamData(request).conversion { chunk in
             let events = parser.parse(chunk)
@@ -114,6 +121,7 @@ extension URLSession {
             return .yieldMore(events)
         }
     }
+    /// `syncStreamData` with each chunk fed through `parser` to yield events instead of bytes.
     func syncSSE(_ request: URLRequest, parser: any CustomParser = EventParser()) throws -> SyncStream<Event> {
         return try self.syncStreamData(request).conversion { chunk in
             let events = parser.parse(chunk)
@@ -122,6 +130,7 @@ extension URLSession {
         }
     }
     // MARK: - Data
+    /// Load the whole body, throwing `NetworkError.statusError` on a non-2xx status.
     func asyncData(_ request: URLRequest) async throws -> Data {
         let (data, response) = try await URLSession.shared.data(for: request)
         guard let httpResponse = response as? HTTPURLResponse else { throw URLError(.badServerResponse) }
@@ -130,6 +139,7 @@ extension URLSession {
         }
         return data
     }
+    /// Blocking counterpart of `asyncData`; the wait is `request.timeoutInterval` plus one second.
     func syncData(_ request: URLRequest) throws -> Data {
         let semaphore = DispatchSemaphore(value: 0)
         let container = ResponseContainer()
