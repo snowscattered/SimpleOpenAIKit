@@ -233,9 +233,10 @@ try await AVAudioPlayerHelper(targetFormat: pcm).play(replyAudio)   // AsyncStre
 - File-carrying calls (images edit, files, uploads, video inputs) pass `hasFile: true` and get a
   multipart body from the session.
 - Every call goes through `<Provider>Session.shared`; no URLSession here.
-- Realtime and Responses connections also expose sub-resources per connection
-  (`connection.input_audio_buffer.append(...)`), but those methods are currently module-internal, so an
-  outside caller has to use `send(event:)`.
+- Realtime connections also expose sub-resources per connection
+  (`connection.session.update(...)`, `connection.conversation.item.create(...)`,
+  `connection.input_audio_buffer.append(...)`), and those methods are `public`. `send(event:)` stays
+  public too, for events without a dedicated sub-resource.
 - `requestOptions:` overrides are currently module-internal too: `RequestOptions`' members lost their
   `public`, so `extra_body`, `extra_headers`, `extra_query` and `timeout` cannot be set from a client
   package yet.

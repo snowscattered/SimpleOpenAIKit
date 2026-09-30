@@ -33,21 +33,22 @@ struct OpenAISession: Sendable, SessionProtocol {
     /// Map a status code and response body onto the matching `OpenAIAPIError` case.
     func OpenAIStatusError(data: Data, request: URLRequest, response: HTTPURLResponse) -> OpenAIAPIError {
         let statusCode = response.statusCode
-        var payload: OpenAIErrorResponse? = nil
+        let payload: OpenAIErrorResponse?
         if let p = try? JSONDecoder().decode(OpenAIErrorResponse.self, from: data) {
             payload = p
         } else if let m = try? JSONDecoder().decode(OpenAIErrorMessage.self, from: data) {
             payload = .init(error: m)
-        }
-        payload = OpenAIErrorResponse(
-            error: .init(
-                message: String(decoding: data, as: UTF8.self),
-                type: nil,
-                param: nil,
-                code: nil,
-                request_id: response.allHeaderFields["x-request-id"] as? String
+        } else {
+            payload = OpenAIErrorResponse(
+                error: .init(
+                    message: String(decoding: data, as: UTF8.self),
+                    type: nil,
+                    param: nil,
+                    code: nil,
+                    request_id: response.value(forHTTPHeaderField: "x-request-id")
+                )
             )
-        )
+        }
         switch statusCode {
         case 400: return .badRequest(payload, request, response)
         case 401: return .authentication(payload, request, response)

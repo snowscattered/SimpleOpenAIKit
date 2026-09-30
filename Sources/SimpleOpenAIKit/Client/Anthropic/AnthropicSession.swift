@@ -36,22 +36,22 @@ struct AnthropicSession: Sendable, SessionProtocol {
     /// Map a status code and response body onto the matching `AnthropicAPIError` case.
     func AnthropicStatusError(data: Data, request: URLRequest, response: HTTPURLResponse) -> AnthropicAPIError {
         let statusCode = response.statusCode
-        var payload: AnthropicErrorResponse? = nil
+        let payload: AnthropicErrorResponse?
         if let p = try? JSONDecoder().decode(AnthropicErrorResponse.self, from: data) {
             payload = p
         } else if let m = try? JSONDecoder().decode(AnthropicErrorMessage.self, from: data) {
             payload = .init(error: m)
-        }
-        payload = AnthropicErrorResponse(
-            error: .init(
-                message: String(decoding: data, as: UTF8.self),
-                type: nil,
-                param: nil,
-                code: nil,
-                // Anthropic echoes the request id in `request-id`, not OpenAI's `x-request-id`.
-                request_id: response.value(forHTTPHeaderField: "request-id")
+        } else {
+            payload = AnthropicErrorResponse(
+                error: .init(
+                    message: String(decoding: data, as: UTF8.self),
+                    type: nil,
+                    param: nil,
+                    code: nil,
+                    request_id: response.value(forHTTPHeaderField: "request-id")
+                )
             )
-        )
+        }
         switch statusCode {
         case 400: return .badRequest(payload, request, response)
         case 401: return .authentication(payload, request, response)
