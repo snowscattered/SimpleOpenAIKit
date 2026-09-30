@@ -80,55 +80,55 @@ public class BetaSyncRealtimeResource {
 /// Session-level events.
 public class BetaSyncRealtimeSessionResource: BetaSyncRealtimeResource {
     /// Replace the live session configuration.
-    func update(event_id: String? = nil, session: BetaRealtimeSession) throws {
+    public func update(event_id: String? = nil, session: BetaRealtimeSession) throws {
         try self.connection.send(event: .session_update(.init(event_id: event_id, session: session)))
     }
 }
 /// Response lifecycle events.
 public class BetaSyncRealtimeResponseResource: BetaSyncRealtimeResource {
     /// Ask the server to produce a response from the current conversation.
-    func create(event_id: String? = nil, response: BetaRealtimeResponse) throws {
+    public func create(event_id: String? = nil, response: BetaRealtimeResponse) throws {
         try self.connection.send(event: .response_create(.init(event_id: event_id, response: response)))
     }
     /// Stop the response that is currently generating.
-    func cancel(event_id: String? = nil, response_id: String? = nil) throws {
+    public func cancel(event_id: String? = nil, response_id: String? = nil) throws {
         try self.connection.send(event: .response_cancel(.init(event_id: event_id, response_id: response_id)))
     }
 }
 /// Items inside the server-side conversation.
 public class BetaSyncRealtimeConversationItemResource: BetaSyncRealtimeResource {
     /// Insert an item into the conversation.
-    func create(event_id: String? = nil, item: BetaRealtimeConversationItem) throws {
+    public func create(event_id: String? = nil, item: BetaRealtimeConversationItem) throws {
         try self.connection.send(event: .conversation_create(.init(event_id: event_id, item: item)))
     }
     /// Remove an item by id.
-    func delete(event_id: String? = nil, item_id: String) throws {
+    public func delete(event_id: String? = nil, item_id: String) throws {
         try self.connection.send(event: .conversation_delete(.init(event_id: event_id, item_id: item_id)))
     }
 }
 /// Groups `conversation.item`.
 public class BetaSyncRealtimeConversationResource: BetaSyncRealtimeResource {
-    lazy var item = BetaSyncRealtimeConversationItemResource(self.connection)
+    public lazy var item = BetaSyncRealtimeConversationItemResource(self.connection)
 }
 /// The microphone audio the client sends up.
 public class BetaSyncRealtimeInputAudioBufferResource: BetaSyncRealtimeResource {
     /// Append base64 audio to the input buffer.
-    func append(event_id: String? = nil, audio: String) throws {
+    public func append(event_id: String? = nil, audio: String) throws {
         try self.connection.send(event: .input_audio_buffer_append(.init(event_id: event_id, audio: audio)))
     }
     /// Turn the buffered audio into a conversation item.
-    func commit(event_id: String? = nil) throws {
+    public func commit(event_id: String? = nil) throws {
         try self.connection.send(event: .input_audio_buffer_commit(.init(event_id: event_id)))
     }
     /// Drop the buffered input audio.
-    func clear(event_id: String? = nil) throws {
+    public func clear(event_id: String? = nil) throws {
         try self.connection.send(event: .input_audio_buffer_clear(.init(event_id: event_id)))
     }
 }
 /// The server-generated audio waiting to be played.
 public class BetaSyncRealtimeOutputAudioBufferResource: BetaSyncRealtimeResource {
     /// Discard the pending output audio.
-    func clear(event_id: String? = nil) throws {
+    public func clear(event_id: String? = nil) throws {
         try self.connection.send(event: .output_audio_buffer_clear(.init(event_id: event_id)))
     }
 }

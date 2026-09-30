@@ -81,55 +81,55 @@ public class AsyncRealtimeResource {
 /// Session-level events.
 public class AsyncRealtimeSessionResource: AsyncRealtimeResource {
     /// Replace the live session configuration.
-    func update(event_id: String? = nil, session: RealtimeSession) async throws {
+    public func update(event_id: String? = nil, session: RealtimeSession) async throws {
         try await self.connection.send(event: .session_update(.init(event_id: event_id, session: session)))
     }
 }
 /// Response lifecycle events.
 public class AsyncRealtimeResponseResource: AsyncRealtimeResource {
     /// Ask the server to produce a response from the current conversation.
-    func create(event_id: String? = nil, response: RealtimeResponse) async throws {
+    public func create(event_id: String? = nil, response: RealtimeResponse) async throws {
         try await self.connection.send(event: .response_create(.init(event_id: event_id, response: response)))
     }
     /// Stop the response that is currently generating.
-    func cancel(event_id: String? = nil, response_id: String? = nil) async throws {
+    public func cancel(event_id: String? = nil, response_id: String? = nil) async throws {
         try await self.connection.send(event: .response_cancel(.init(event_id: event_id, response_id: response_id)))
     }
 }
 /// Items inside the server-side conversation.
 public class AsyncRealtimeConversationItemResource: AsyncRealtimeResource {
     /// Insert an item into the conversation.
-    func create(event_id: String? = nil, item: RealtimeConversationItem) async throws {
+    public func create(event_id: String? = nil, item: RealtimeConversationItem) async throws {
         try await self.connection.send(event: .conversation_create(.init(event_id: event_id, item: item)))
     }
     /// Remove an item by id.
-    func delete(event_id: String? = nil, item_id: String) async throws {
+    public func delete(event_id: String? = nil, item_id: String) async throws {
         try await self.connection.send(event: .conversation_delete(.init(event_id: event_id, item_id: item_id)))
     }
 }
 /// Groups `conversation.item`.
 public class AsyncRealtimeConversationResource: AsyncRealtimeResource {
-    lazy var item = AsyncRealtimeConversationItemResource(self.connection)
+    public lazy var item = AsyncRealtimeConversationItemResource(self.connection)
 }
 /// The microphone audio the client sends up.
 public class AsyncRealtimeInputAudioBufferResource: AsyncRealtimeResource {
     /// Append base64 audio to the input buffer.
-    func append(event_id: String? = nil, audio: String) async throws {
+    public func append(event_id: String? = nil, audio: String) async throws {
         try await self.connection.send(event: .input_audio_buffer_append(.init(event_id: event_id, audio: audio)))
     }
     /// Turn the buffered audio into a conversation item.
-    func commit(event_id: String? = nil) async throws {
+    public func commit(event_id: String? = nil) async throws {
         try await self.connection.send(event: .input_audio_buffer_commit(.init(event_id: event_id)))
     }
     /// Drop the buffered input audio.
-    func clear(event_id: String? = nil) async throws {
+    public func clear(event_id: String? = nil) async throws {
         try await self.connection.send(event: .input_audio_buffer_clear(.init(event_id: event_id)))
     }
 }
 /// The server-generated audio waiting to be played.
 public class AsyncRealtimeOutputAudioBufferResource: AsyncRealtimeResource {
     /// Discard the pending output audio.
-    func clear(event_id: String? = nil) async throws {
+    public func clear(event_id: String? = nil) async throws {
         try await self.connection.send(event: .output_audio_buffer_clear(.init(event_id: event_id)))
     }
 }
