@@ -7,6 +7,10 @@
 
 import Foundation
 
+/// An `InputStream` that reads several streams back to back as one continuous body.
+///
+/// Used by the multipart encoder to glue text headers, file contents and trailers together without
+/// buffering the whole payload. Member streams are opened on demand and closed as soon as they drain.
 final class ConcatenatedInputStream: InputStream {
     private let streams: [InputStream]
     private var currentIndex = 0
@@ -46,6 +50,8 @@ final class ConcatenatedInputStream: InputStream {
         }
     }
     
+    /// Fill `buffer` with up to `len` bytes, moving to the next member stream whenever the current one
+    /// runs dry. Returns `0` only after the last stream is exhausted, `-1` if the stream is not open.
     override func read(_ buffer: UnsafeMutablePointer<UInt8>, maxLength len: Int) -> Int {
         guard _status == .open else { return -1 }
         
@@ -82,6 +88,7 @@ final class ConcatenatedInputStream: InputStream {
         }
         return 0
     }
+    /// True if any remaining member stream still has bytes, opening them as needed.
     override var hasBytesAvailable: Bool {
         guard _status == .open else { return false }
         for i in currentIndex..<streams.count {

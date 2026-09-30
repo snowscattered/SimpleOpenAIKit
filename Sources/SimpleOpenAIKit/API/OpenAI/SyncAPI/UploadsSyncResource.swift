@@ -8,6 +8,7 @@
 import Foundation
 
 public extension OpenAISyncAPIResource.UploadsSyncResource {
+    /// Start a chunked upload and get back an `upload_id`.
     func create(
         parameters: UploadCreateParameters,
         requestOptions: RequestOptions? = nil
@@ -22,6 +23,7 @@ public extension OpenAISyncAPIResource.UploadsSyncResource {
         )
     }
     
+    /// Abandon an in-progress upload and discard its parts.
     func cancel(
         upload_id: String,
         requestOptions: RequestOptions? = nil
@@ -37,6 +39,7 @@ public extension OpenAISyncAPIResource.UploadsSyncResource {
     }
     
     @discardableResult
+    /// Assemble an upload from its parts, verifying `md5` when supplied.
     func complete(
         upload_id: String,
         part_ids: [String],
@@ -54,6 +57,7 @@ public extension OpenAISyncAPIResource.UploadsSyncResource {
         )
     }
     
+    /// Split a file into parts, upload them, and complete the upload in one call.
     func upload_file_chunked(
         parameters: UploadFileParameters
     ) throws -> UploadResult {
@@ -112,6 +116,7 @@ public extension OpenAISyncAPIResource.UploadsSyncResource {
 }
 
 public extension OpenAISyncAPIResource.UploadsPartSyncResource {
+    /// Upload one part of an in-progress upload.
     func create(
         upload_id: String,
         parameters: FileParameters,

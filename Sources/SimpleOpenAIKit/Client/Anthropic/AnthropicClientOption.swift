@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Anthropic credentials and endpoint defaults, resolved into request headers on each call.
 struct AnthropicClientOption: APIClientOption {
     let api_key: String
     let auth_token: String?
@@ -50,6 +51,7 @@ struct AnthropicClientOption: APIClientOption {
         self.default_query = default_query
     }
 
+    /// Append `path` to the Anthropic base URL.
     func getServerUrl(path: String) throws -> URL {
         let fullPath = path.hasPrefix("/") ? path : "/\(path)"
         return self.base_url.appendingPathComponent(fullPath).absoluteURL

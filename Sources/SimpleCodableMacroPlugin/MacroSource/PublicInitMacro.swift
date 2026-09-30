@@ -2,6 +2,7 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 
+/// Implements `@PublicInit`: adds a public initializer covering the struct's stored properties.
 struct PublicInitMacro: MemberMacro {
     static func expansion(
         of node: AttributeSyntax,
@@ -29,7 +30,13 @@ struct PublicInitMacro: MemberMacro {
 
         let stored = collectStoredProperties(of: declaration).filter { !$0.isStatic && !$0.isImmutableWithDefault }
         let initParams = stored.map { prop -> String in
-            prop.isOptional ? "\(prop.name): \(prop.typeName)? = nil" : "\(prop.name): \(prop.typeName)"
+            let type = prop.isOptional ? "\(prop.typeName)?" : prop.typeName
+            // Follow the synthesized memberwise initializer: a mutable property keeps its own
+            // default, and an optional one without a default falls back to `nil`.
+            if prop.isMutable, let defaultValue = prop.defaultValue {
+                return "\(prop.name): \(type) = \(defaultValue)"
+            }
+            return prop.isOptional ? "\(prop.name): \(type) = nil" : "\(prop.name): \(type)"
         }.joined(separator: ",\n")
         let initBody = stored.map { "self.\($0.name) = \($0.name)" }.joined(separator: "\n")
 

@@ -8,6 +8,7 @@
 import Foundation
 
 public extension OpenAIAsyncAPIResource.AudioSpeechAsyncResource {
+    /// Synthesize speech and return the complete audio payload.
     func create(
         parameters: AudioSpeechParameters,
         requestOptions: RequestOptions? = nil
@@ -25,6 +26,7 @@ public extension OpenAIAsyncAPIResource.AudioSpeechAsyncResource {
             method: .post
         )
     }
+    /// Synthesize speech and iterate raw audio chunks as they arrive.
     func stream(
         parameters: AudioSpeechParameters,
         requestOptions: RequestOptions? = nil

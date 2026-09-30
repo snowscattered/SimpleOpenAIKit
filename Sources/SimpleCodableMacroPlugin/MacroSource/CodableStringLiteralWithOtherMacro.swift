@@ -2,6 +2,7 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 
+/// Implements `@CodableStringLiteralWithOther`: string literals for known cases plus a catch-all for unknown ones.
 struct CodableStringLiteralWithOtherMacro: ExtensionMacro {
     static func expansion(
         of node: AttributeSyntax,

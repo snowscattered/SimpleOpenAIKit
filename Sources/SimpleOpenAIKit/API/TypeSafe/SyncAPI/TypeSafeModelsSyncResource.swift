@@ -8,6 +8,7 @@
 import Foundation
 
 public extension TypeSafeSyncAPIResource.ModelsSyncResource {
+    /// List the models exposed by the TypeSafe API.
     func list(
         requestOptions: RequestOptions? = nil
     ) throws -> TypeSafeModelListResult {

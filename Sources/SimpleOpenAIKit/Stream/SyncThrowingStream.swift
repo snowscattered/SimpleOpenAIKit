@@ -7,7 +7,12 @@
 
 import Foundation
 
+/// `SyncStream` that can also fail: a thrown error is delivered to the consumer's next call.
+///
+/// Elements already buffered are drained before the error surfaces, and the error is cleared after it
+/// is thrown so a second iteration does not see it again.
 public struct SyncThrowingStream<Element: Sendable, Failure: Error>: Sendable {
+    /// The producer-side handle: enqueue elements, then finish normally or with an error.
     public final class Continuation: @unchecked Sendable {
         private var buffer: [Element] = []
         private var isFinished = false
@@ -15,12 +20,15 @@ public struct SyncThrowingStream<Element: Sendable, Failure: Error>: Sendable {
         private var error: Failure?
         fileprivate let condition = NSCondition()
         
+        /// Why iteration stopped, carrying the failure when the producer finished with one.
         public enum Termination: Sendable {
             case finished(Failure?)
             case cancelled
         }
+        /// Called once when the stream finishes or its consumer goes away.
         public var onTermination: (@Sendable (Termination) -> Void)?
-        
+
+        /// Take the next buffered element, blocking until one arrives, the stream ends, or it failed.
         internal func consume() throws -> Element? {
             condition.lock()
             defer { condition.unlock() }
@@ -38,6 +46,7 @@ public struct SyncThrowingStream<Element: Sendable, Failure: Error>: Sendable {
             return buffer.removeFirst()
         }
         
+        /// Add `value` to the queue; ignored once the stream has ended or been cancelled.
         public func yield(_ value: Element) {
             condition.lock()
             defer { condition.unlock() }
@@ -46,10 +55,12 @@ public struct SyncThrowingStream<Element: Sendable, Failure: Error>: Sendable {
             condition.signal()
         }
         
+        /// End the stream after the buffered elements have been consumed.
         public func finish() {
             finish(throwing: nil)
         }
         
+        /// End the stream, surfacing `error` once the buffered elements are drained.
         public func finish(throwing error: Failure?) {
             condition.lock()
             defer { condition.unlock() }
@@ -60,6 +71,7 @@ public struct SyncThrowingStream<Element: Sendable, Failure: Error>: Sendable {
             executeTermination(.finished(error))
         }
         
+        /// Producer-side notice that the consumer released its iterator.
         internal func consumerDidTerminate() {
             condition.lock()
             defer { condition.unlock() }
@@ -77,16 +89,19 @@ public struct SyncThrowingStream<Element: Sendable, Failure: Error>: Sendable {
     }
     
     private var continuation: Continuation
+    /// Start `build` on a detached task and return the stream it feeds.
     public init(_ build: @escaping @Sendable (Continuation) -> Void) {
         self.continuation = Continuation()
         Task.detached(priority: Task.currentPriority) { [self] in build(self.continuation) }
     }
+    /// Wake the condition so a blocked consumer re-checks its exit conditions.
     public func signal() {
         self.continuation.condition.signal()
     }
 }
 
 extension SyncThrowingStream: SyncSequence {
+    /// Blocking iterator that rethrows the producer's failure from `next()`.
     public final class Iterator: SyncIteratorProtocol {
         let continuation: Continuation
         
@@ -107,6 +122,7 @@ extension SyncThrowingStream: SyncSequence {
 }
 
 extension SyncThrowingStream {
+    /// Split the stream and its continuation, for producers that hold the handle directly.
     public static func makeStream(
         of elementType: Element.Type = Element.self,
         throwing failureType: Failure.Type = Failure.self
@@ -121,6 +137,7 @@ extension SyncThrowingStream {
 }
 // SyncPrefixSequence
 extension SyncThrowingStream {
+    /// A stream that stops after `count` elements, forwarding upstream failures unchanged.
     public func prefix(_ count: Int) -> SyncThrowingStream<Element, Failure> {
         return SyncThrowingStream<Element, Failure> { continuation in
             let task = Task.detached(priority: Task.currentPriority) {

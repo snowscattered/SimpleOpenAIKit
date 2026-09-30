@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Decodes every websocket frame into `BetaRealtimeEventResult`; frames it cannot parse arrive as `.unkowned`.
 private final class BetaRealtimeEventAsyncReceiver: @unchecked Sendable {
     private let ws: URLSessionWebSocketTask
     private let continuation: AsyncStream<BetaRealtimeEventResult>.Continuation
@@ -17,6 +18,7 @@ private final class BetaRealtimeEventAsyncReceiver: @unchecked Sendable {
         self.continuation = continuation
         receiveNext()
     }
+    /// Keep the stream supplied by asking the socket for the next message.
     private func receiveNext() {
         ws.receive { [self] result in
             switch result {
@@ -37,6 +39,7 @@ private final class BetaRealtimeEventAsyncReceiver: @unchecked Sendable {
 }
 
 public extension OpenAIAsyncAPIResource.BetaRealtimeAsyncResource {
+    /// Open a beta realtime websocket for `model`, run `completion` with the live connection, then close it.
     func conntent(
         model: String,
         call_id: String? = nil,
@@ -68,53 +71,70 @@ public extension OpenAIAsyncAPIResource.BetaRealtimeAsyncResource {
     }
 }
 
+/// Base for the sub-resources that share one beta realtime connection.
 public class BetaAsyncRealtimeResource {
     let connection: BetaAsyncRealtimeConnection
     init(_ connection: BetaAsyncRealtimeConnection) {
         self.connection = connection
     }
 }
+/// Session-level events.
 public class BetaAsyncRealtimeSessionResource: BetaAsyncRealtimeResource {
+    /// Replace the live session configuration.
     func update(event_id: String? = nil, session: BetaRealtimeSession) async throws {
         try await self.connection.send(event: .session_update(.init(event_id: event_id, session: session)))
     }
 }
+/// Response lifecycle events.
 public class BetaAsyncRealtimeResponseResource: BetaAsyncRealtimeResource {
+    /// Ask the server to produce a response from the current conversation.
     func create(event_id: String? = nil, response: BetaRealtimeResponse) async throws {
         try await self.connection.send(event: .response_create(.init(event_id: event_id, response: response)))
     }
+    /// Stop the response that is currently generating.
     func cancel(event_id: String? = nil, response_id: String? = nil) async throws {
         try await self.connection.send(event: .response_cancel(.init(event_id: event_id, response_id: response_id)))
     }
 }
+/// Items inside the server-side conversation.
 public class BetaAsyncRealtimeConversationItemResource: BetaAsyncRealtimeResource {
+    /// Insert an item into the conversation.
     func create(event_id: String? = nil, item: BetaRealtimeConversationItem) async throws {
         try await self.connection.send(event: .conversation_create(.init(event_id: event_id, item: item)))
     }
+    /// Remove an item by id.
     func delete(event_id: String? = nil, item_id: String) async throws {
         try await self.connection.send(event: .conversation_delete(.init(event_id: event_id, item_id: item_id)))
     }
 }
+/// Groups `conversation.item`.
 public class BetaAsyncRealtimeConversationResource: BetaAsyncRealtimeResource {
     lazy var item = BetaAsyncRealtimeConversationItemResource(self.connection)
 }
+/// The microphone audio the client sends up.
 public class BetaAsyncRealtimeInputAudioBufferResource: BetaAsyncRealtimeResource {
+    /// Append base64 audio to the input buffer.
     func append(event_id: String? = nil, audio: String) async throws {
         try await self.connection.send(event: .input_audio_buffer_append(.init(event_id: event_id, audio: audio)))
     }
+    /// Turn the buffered audio into a conversation item.
     func commit(event_id: String? = nil) async throws {
         try await self.connection.send(event: .input_audio_buffer_commit(.init(event_id: event_id)))
     }
+    /// Drop the buffered input audio.
     func clear(event_id: String? = nil) async throws {
         try await self.connection.send(event: .input_audio_buffer_clear(.init(event_id: event_id)))
     }
 }
+/// The server-generated audio waiting to be played.
 public class BetaAsyncRealtimeOutputAudioBufferResource: BetaAsyncRealtimeResource {
+    /// Discard the pending output audio.
     func clear(event_id: String? = nil) async throws {
         try await self.connection.send(event: .output_audio_buffer_clear(.init(event_id: event_id)))
     }
 }
 
+/// One live beta realtime websocket: send events, read server events, reach the sub-resources.
 public class BetaAsyncRealtimeConnection: AsyncSequence, @unchecked Sendable {
     private let ws: URLSessionWebSocketTask
     private let stream: AsyncStream<BetaRealtimeEventResult>
@@ -131,12 +151,15 @@ public class BetaAsyncRealtimeConnection: AsyncSequence, @unchecked Sendable {
         self.stream = stream
         self.iterator = stream.makeAsyncIterator()
     }
+    /// Iterate server events until the socket closes.
     public func makeAsyncIterator() -> AsyncStream<BetaRealtimeEventResult>.AsyncIterator {
         return stream.makeAsyncIterator()
     }
+    /// Encode `event` as JSON text and queue it on the socket.
     public func send(event: BetaRealtimeEventParameters) async throws {
         try await ws.send(.string(String(decoding: JSONEncoder().encode(event), as: UTF8.self)))
     }
+    /// Await the next server event, or `nil` once the stream has ended.
     public func recv() async -> BetaRealtimeEventResult? {
         return await self.iterator.next()
     }

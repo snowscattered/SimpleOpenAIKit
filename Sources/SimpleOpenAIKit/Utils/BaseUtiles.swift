@@ -7,6 +7,8 @@
 import Foundation
 import SimpleCodableMacro
 
+/// Decode a response body, rethrowing failures as `NetworkError.decodeError` with the raw
+/// text attached so a schema mismatch stays debuggable.
 @inlinable
 func decodeNetworkData<T: Decodable>(_ type: T.Type = T.self, from data: Data) throws -> T {
     do {
@@ -16,6 +18,10 @@ func decodeNetworkData<T: Decodable>(_ type: T.Type = T.self, from data: Data) t
     }
 }
 
+/// Blocking retry helper shared by every session call.
+///
+/// Backs off exponentially from `delay`, capped at 8 seconds, and gives up once `maxRetries`
+/// attempts have been made or `shouldRetry` rejects the error.
 @inlinable
 func retry<T>(
     maxRetries: Int = 2,
@@ -37,6 +43,7 @@ func retry<T>(
     }
 }
 
+/// Awaitable counterpart of `retry`; sleeps cooperatively, so cancelling the task stops the loop.
 @inlinable
 func retry<T>(
     maxRetries: Int = 2,

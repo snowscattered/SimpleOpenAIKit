@@ -2,6 +2,7 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 
+/// Implements `@CodableTraversal`: walks nested members so containers encode and decode without hand-written keys.
 struct CodableTraversalMacro: ExtensionMacro {
     static func expansion(
         of node: AttributeSyntax,

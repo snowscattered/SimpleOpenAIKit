@@ -7,6 +7,9 @@
 
 import Foundation
 
+/// Send `request` and decode the whole body, retrying up to `maxRetries` times.
+///
+/// When `T` is `Data` the response is returned untouched, so binary payloads skip decoding.
 func syncResponse<T: Decodable & Sendable>(
     _ type: T.Type = T.self,
     request: URLRequest,
@@ -21,6 +24,7 @@ func syncResponse<T: Decodable & Sendable>(
     }
 }
 
+/// Awaitable counterpart of `syncResponse`.
 func asyncResponse<T: Decodable & Sendable>(
     _ type: T.Type = T.self,
     request: URLRequest,

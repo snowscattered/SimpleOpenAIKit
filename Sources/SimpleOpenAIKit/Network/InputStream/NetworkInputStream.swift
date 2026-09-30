@@ -7,6 +7,10 @@
 
 import Foundation
 
+/// An `InputStream` fed by a download task, so a remote URL can be sent as an upload part.
+///
+/// `open()` starts the task; `read` blocks until the delegate delivers bytes or the transfer ends.
+/// The buffer is capped at 64 KB, which also throttles the download.
 final class NetworkInputStream: InputStream {
     private let url: URL
     private var task: URLSessionDataTask?
@@ -25,6 +29,7 @@ final class NetworkInputStream: InputStream {
         super.init(data: Data())
     }
 
+    /// Start downloading `url` into the internal buffer.
     override func open() {
         let delegate = InputStreamNetWorkDelegate(owner: self)
         let config = URLSessionConfiguration.default
@@ -34,6 +39,7 @@ final class NetworkInputStream: InputStream {
         task?.resume()
     }
 
+    /// Cancel the download and drop the session.
     override func close() {
         task?.cancel()
         session?.invalidateAndCancel()
@@ -47,6 +53,9 @@ final class NetworkInputStream: InputStream {
         return (buffer.count - readOffset) > 0 || (!isFinished && streamError == nil)
     }
 
+    /// Copy up to `len` downloaded bytes into `buf`, waiting for more when the buffer is empty.
+    ///
+    /// - Returns: Bytes copied, `0` at end of file, `-1` when the transfer failed.
     override func read(_ buf: UnsafeMutablePointer<UInt8>, maxLength len: Int) -> Int {
         while true {
             lock.lock()
@@ -91,6 +100,7 @@ final class NetworkInputStream: InputStream {
     private var _streamError: any Error?
 
     // MARK: - Delegate Callbacks (internal)
+    /// Append a downloaded chunk and wake a blocked reader.
     fileprivate func didReceiveData(_ data: Data) {
         lock.lock()
         if buffer.count < maxBufferSize {
@@ -100,6 +110,7 @@ final class NetworkInputStream: InputStream {
         semaphore.signal()
     }
 
+    /// Mark the stream finished and record the transfer error, if any.
     fileprivate func didFinish(error: any Error?) {
         lock.lock()
         _streamError = error

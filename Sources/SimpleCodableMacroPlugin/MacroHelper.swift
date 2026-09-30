@@ -131,6 +131,7 @@ package func memberNames(of declaration: some DeclGroupSyntax, in name: String? 
 }
 
 // MARK: - Macro Error
+/// A message-only failure a macro raises while expanding, reported at the offending declaration.
 public enum MacroError: Error, CustomStringConvertible {
     case message(String)
 

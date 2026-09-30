@@ -7,6 +7,8 @@
 
 import Foundation
 
+/// Map one SSE field onto a stream action: empty data and Anthropic `ping` events are skipped,
+/// `[DONE]` ends the stream, everything else is decoded as `T`.
 private func EventConversion<T: Decodable & Sendable>(
     element: Event,
 ) throws -> StreamAction<T> {
@@ -22,6 +24,10 @@ private func EventConversion<T: Decodable & Sendable>(
     return .yield(try decodeNetworkData(T.self, from: data))
 }
 
+/// Issue `request` and stream the reply as decoded events, retrying the connection up to `maxRetries`.
+///
+/// When `T` is `Data` the SSE framing is skipped and raw chunks are yielded, which is what binary
+/// downloads such as speech or video use.
 func syncStreamResponse<T: Decodable & Sendable>(
     _ type: T.Type = T.self,
     request: URLRequest,
@@ -37,6 +43,7 @@ func syncStreamResponse<T: Decodable & Sendable>(
     }
 }
 
+/// Awaitable counterpart of `syncStreamResponse`.
 func asyncStreamResponse<T: Decodable & Sendable>(
     _ type: T.Type = T.self,
     request: URLRequest,

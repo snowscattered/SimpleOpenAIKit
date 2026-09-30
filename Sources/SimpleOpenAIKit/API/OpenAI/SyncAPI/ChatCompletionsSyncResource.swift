@@ -8,6 +8,7 @@
 import Foundation
 
 public extension OpenAISyncAPIResource.ChatCompletionsSyncResource {
+    /// Send a chat request and wait for the whole answer.
     func create(
         parameters: ChatParameters,
         requestOptions: RequestOptions? = nil
@@ -24,6 +25,7 @@ public extension OpenAISyncAPIResource.ChatCompletionsSyncResource {
         )
     }
     
+    /// Send a chat request with `stream` enabled and iterate `ChatStreamResult` chunks.
     func stream(
         parameters: ChatParameters,
         requestOptions: RequestOptions? = nil

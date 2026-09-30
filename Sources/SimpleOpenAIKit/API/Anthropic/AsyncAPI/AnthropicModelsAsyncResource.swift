@@ -8,6 +8,7 @@
 import Foundation
 
 public extension AnthropicAsyncAPIResource.ModelsAsyncResource {
+    /// Iterate the available models, requesting the next page with the `after_id` cursor.
     func list(
         requestOptions: RequestOptions? = nil,
         after_id: String? = nil,
@@ -34,6 +35,7 @@ public extension AnthropicAsyncAPIResource.ModelsAsyncResource {
             return result
         }
     }
+    /// Fetch one model's metadata.
     func retrieve(
         model: String,
         requestOptions: RequestOptions? = nil

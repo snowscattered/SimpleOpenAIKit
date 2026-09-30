@@ -7,12 +7,17 @@
 
 import Foundation
 
+/// The PCM layout a realtime or audio call expects: rate, channels, sample width, interleaving.
+///
+/// It is the contract between AVFoundation formats and the byte payloads the API accepts, so a capture
+/// can be resampled once into whatever format the endpoint wants.
 public struct AudioFormat: Hashable, Sendable {
     public var sampleRate: Double
     public var channelCount: UInt32
     public var bitDepth: BitDepth
     public var interleaved: Bool
 
+    /// Sample representation, mirroring `AVAudioCommonFormat` raw values.
     public enum BitDepth: UInt, Hashable, Sendable {
         case otherFormat      = 0
         case pcmFormatFloat32 = 1
@@ -32,6 +37,7 @@ public struct AudioFormat: Hashable, Sendable {
         self.interleaved = interleaved
     }
 }
+/// Captures microphone audio, optionally resampled to a target format.
 protocol MicrophoneHelper: Sendable {
     init (
         targetFormat: AudioFormat?,
@@ -41,6 +47,7 @@ protocol MicrophoneHelper: Sendable {
     func record() async throws -> Data
     func record() async throws -> AsyncStream<Data>
 }
+/// Plays PCM payloads, files or streams, converting to a target format first when one is set.
 protocol AudioPlayerHelper: Sendable {
     init (
         targetFormat: AudioFormat?,
@@ -55,6 +62,7 @@ protocol AudioPlayerHelper: Sendable {
 import AVFoundation
 
 extension AudioFormat {
+    /// Read the layout straight off an `AVAudioFormat`.
     public init(_ av: AVAudioFormat) {
         self.init(
             sampleRate: av.sampleRate,
@@ -63,6 +71,7 @@ extension AudioFormat {
             interleaved: av.isInterleaved
         )
     }
+    /// Build the matching `AVAudioFormat`, or `nil` when the bit depth has no AVFoundation equivalent.
     public func makeAVAudioFormat() -> AVAudioFormat? {
         guard let common = AVAudioCommonFormat(rawValue: bitDepth.rawValue) else {
             return nil
@@ -83,6 +92,7 @@ extension AudioFormat {
 }
 
 
+    /// Resample `buffer` through `converter` when one is needed, then return its raw bytes.
 private func convert(
     _ buffer: AVAudioPCMBuffer,
     converter: AVAudioConverter?,
@@ -114,6 +124,7 @@ private func convert(
     return Data(bytes: bytes, count: byteSize)
 }
 // MARK: - Microphone
+/// `AVAudioEngine` recorder: either a one-shot capture or a live stream of input chunks.
 public final class AVMicrophoneHelper: MicrophoneHelper {
     private let BufferSize: AVAudioFrameCount = 1024
     private let targetFormat: AVAudioFormat?
@@ -129,6 +140,7 @@ public final class AVMicrophoneHelper: MicrophoneHelper {
         self.timeout = timeout
     }
     
+    /// Why a recording stopped before the caller expected.
     enum RecordingError: Error, LocalizedError {
         case timeout
         case stoppedByUser
@@ -140,6 +152,7 @@ public final class AVMicrophoneHelper: MicrophoneHelper {
             }
         }
     }
+    /// Record until `shouldRecord` stops or `timeout` expires, returning the whole capture.
     public func record() async throws -> Data {
         guard await shouldRecord() else { return Data() }
         var result = Data()
@@ -151,6 +164,7 @@ public final class AVMicrophoneHelper: MicrophoneHelper {
         return result
     }
     
+    /// Record live, yielding each input buffer as it arrives.
     public func record() async throws -> AsyncStream<Data> {
         let engine = AVAudioEngine()
         let input = engine.inputNode
@@ -182,6 +196,7 @@ public final class AVMicrophoneHelper: MicrophoneHelper {
 }
 
 
+    /// Wrap raw PCM bytes in a buffer sized for `format`.
 private func makeBuffer(from data: Data, format: AVAudioFormat) -> AVAudioPCMBuffer? {
     let bytesPerFrame = format.streamDescription.pointee.mBytesPerFrame
     let frameCount = AVAudioFrameCount(data.count) / bytesPerFrame
@@ -198,6 +213,7 @@ private func makeBuffer(from data: Data, format: AVAudioFormat) -> AVAudioPCMBuf
     return buffer
 }
 // MARK: - Player
+/// `AVAudioEngine` player for PCM data, files and streams.
 public final class AVAudioPlayerHelper: AudioPlayerHelper {
     private let BufferSize: AVAudioFrameCount = 1024
     private let targetFormat: AVAudioFormat?
@@ -210,6 +226,7 @@ public final class AVAudioPlayerHelper: AudioPlayerHelper {
         self.shouldStop = shouldStop ?? { false }
     }
     
+    /// Why playback could not start.
     public enum PlaybackError: Error, LocalizedError {
         case targetFormatRequired
         case invalidData
@@ -223,6 +240,7 @@ public final class AVAudioPlayerHelper: AudioPlayerHelper {
             }
         }
     }
+    /// Play one PCM payload after converting it to `targetFormat`.
     public func play(_ data: Data) async throws {
         guard let format = targetFormat else { throw PlaybackError.targetFormatRequired }
         let bytesPerFrame = format.streamDescription.pointee.mBytesPerFrame
@@ -242,6 +260,7 @@ public final class AVAudioPlayerHelper: AudioPlayerHelper {
         }
         try await play(stream)
     }
+    /// Play an audio file, resampling it into `targetFormat` chunk by chunk.
     public func play(_ url: URL) async throws {
         let file = try AVAudioFile(forReading: url)
         let format = targetFormat ?? file.processingFormat
@@ -264,6 +283,7 @@ public final class AVAudioPlayerHelper: AudioPlayerHelper {
         }
         try await play(stream)
     }
+    /// Play a stream of PCM chunks produced elsewhere, such as a realtime response.
     public func play(_ stream: AsyncStream<Data>) async throws {
         guard let format = targetFormat else { throw PlaybackError.targetFormatRequired }
         let bufferStream = AsyncStream<AVAudioPCMBuffer> { continuation in
@@ -280,6 +300,7 @@ public final class AVAudioPlayerHelper: AudioPlayerHelper {
         
     }
     
+    /// Feed already-decoded buffers to the engine's player node.
     private func play(_ stream: AsyncStream<AVAudioPCMBuffer>) async throws {
         let engine = AVAudioEngine()
         let player = AVAudioPlayerNode()
@@ -302,12 +323,14 @@ public final class AVAudioPlayerHelper: AudioPlayerHelper {
         player.stop()
     }
 }
+    /// Append `value` to `data` in little-endian order, as WAV headers require.
 private func appendLittleEndian<T: FixedWidthInteger>(_ value: T, to data: inout Data) {
     var littleEndian = value.littleEndian
     withUnsafeBytes(of: &littleEndian) { bytes in
         data.append(contentsOf: bytes)
     }
 }
+    /// Prefix raw PCM bytes with a WAV header so they become a self-describing file.
 private func makeWAVData(data: Data, format: AVAudioFormat) throws -> Data {
     enum CovertError: Error {
         case invalidAudioFormat

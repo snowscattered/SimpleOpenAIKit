@@ -8,6 +8,7 @@
 import Foundation
 
 public extension OpenAIAsyncAPIResource.FilesAsyncResource {
+    /// Upload a file for use by another endpoint.
     func create(
         parameters: FilesCreateParameters,
         requestOptions: RequestOptions? = nil
@@ -22,6 +23,7 @@ public extension OpenAIAsyncAPIResource.FilesAsyncResource {
             hasFile: true
         )
     }
+    /// Iterate the files stored under the account, one page per request.
     func list(
         parameters: FilesListParameters? = nil,
         requestOptions: RequestOptions? = nil
@@ -44,6 +46,7 @@ public extension OpenAIAsyncAPIResource.FilesAsyncResource {
             return result
         }
     }
+    /// Fetch one file's metadata.
     func retrieve(
         file_id: String,
         requestOptions: RequestOptions? = nil
@@ -57,6 +60,7 @@ public extension OpenAIAsyncAPIResource.FilesAsyncResource {
             method: .get
         )
     }
+    /// Delete a stored file.
     func delete(
         file_id: String,
         requestOptions: RequestOptions? = nil

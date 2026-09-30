@@ -8,6 +8,7 @@
 import Foundation
 
 public extension OpenAIAsyncAPIResource.AudioTranscriptionsAsyncResource {
+    /// Transcribe or translate an uploaded audio file.
     func create(
         parameters: AudioTranscriptionParameters,
         requestOptions: RequestOptions? = nil
@@ -24,6 +25,7 @@ public extension OpenAIAsyncAPIResource.AudioTranscriptionsAsyncResource {
         )
     }
 
+    /// Transcribe audio and iterate partial hypotheses as they are produced.
     func stream(
         parameters: AudioTranscriptionParameters,
         requestOptions: RequestOptions? = nil

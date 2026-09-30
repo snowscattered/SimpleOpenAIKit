@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Synchronous TypeSafe client, holding the `models` resource and the internal `systemOne` resource.
 public class TypeSafeClient {
     private let clientOption: TypeSafeClientOption
     public var api_key: String { clientOption.api_key }

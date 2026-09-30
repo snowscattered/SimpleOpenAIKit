@@ -207,7 +207,13 @@ Attribution Notice:
 This project is inspired by and based on the design of:
 
 1. openai-python (https://github.com/openai/openai-python),
-Copyright 2023 OpenAI, licensed under the Apache License, Version 2.0.
+Copyright 2026 OpenAI, licensed under the Apache License, Version 2.0.
 
 2. OpenAIKit (https://github.com/OpenDive/OpenAIKit),
 Copyright (c) 2021 Darren Clark, licensed under the MIT License.
+
+3. anthropic-sdk-python (https://github.com/anthropics/anthropic-sdk-python),
+Copyright (c) 2023 Anthropic PBC, licensed under the MIT License.
+
+4. typesafe-sdk-python (https://github.com/typesafe-ai/typesafe-sdk-python),
+Copyright (c) [year] [fullname], licensed under the MIT License.

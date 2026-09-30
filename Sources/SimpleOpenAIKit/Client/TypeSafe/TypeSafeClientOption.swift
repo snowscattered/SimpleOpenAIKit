@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// TypeSafe credentials plus the default model name used when a call does not specify one.
 struct TypeSafeClientOption: APIClientOption {
     let api_key: String
     let model: String
@@ -47,6 +48,7 @@ struct TypeSafeClientOption: APIClientOption {
         self.default_query = default_query
     }
 
+    /// Append `path` to the TypeSafe base URL.
     func getServerUrl(path: String) throws -> URL {
         let fullPath = path.hasPrefix("/") ? path : "/\(path)"
         return self.base_url.appendingPathComponent(fullPath).absoluteURL
