@@ -15,7 +15,7 @@ struct BaseModelWithExtraMacro: MemberMacro, ExtensionMacro {
         }
 
         let access = declAccessModifier(of: structDecl)
-        let extraProperty: DeclSyntax = "\(raw: access)var extra: [String : BaseType] = [:]"
+        let extraProperty: DeclSyntax = "\(raw: access) var extra: [String : BaseType] = [:]"
         return [extraProperty]
     }
     

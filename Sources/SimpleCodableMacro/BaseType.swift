@@ -129,6 +129,11 @@ public extension BaseModelNoWithExtra {
     }
 }
 /// A model that also keeps the JSON keys it does not declare in `extra`.
+@dynamicMemberLookup
 public protocol BaseModelWithExtra: BaseModelNoWithExtra {
     var extra: [String: BaseType] { get set }
+    subscript(dynamicMember member: String) -> BaseType? { get }
+}
+extension BaseModelWithExtra {
+    public subscript(dynamicMember member: String) -> BaseType? { extra[member] }
 }
