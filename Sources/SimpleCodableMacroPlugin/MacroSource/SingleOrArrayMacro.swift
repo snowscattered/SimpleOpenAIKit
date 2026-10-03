@@ -83,8 +83,8 @@ struct SingleOrArrayMacro: ExtensionMacro {
             """
         let ext: DeclSyntax = """
             nonisolated extension \(raw: enumName): BaseModel {
-                \(raw: decodeDecl)
-                \(raw: encodeDecl)
+            \(raw: decodeDecl)
+            \(raw: encodeDecl)
             }
             """
 
