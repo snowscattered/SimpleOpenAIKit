@@ -33,7 +33,7 @@ extension ChatStringOrContentAssistentPart: ExpressibleByStringLiteral, Expressi
     public init(arrayLiteral elements: ChatContentAssistentPart...) { self = .array(elements) }
 }
 
-@BaseModelWithExtra
+@BaseModelNoWithExtra
 @PublicInit
 public struct ChatAssistantFunctionCall {
     public var name: String

@@ -19,7 +19,7 @@ public enum AudioSpeechStreamFormatLiteral: String {
     case sse, audio
 }
 
-@BaseModelWithExtra
+@BaseModelWithExtra(encodeExtra: false)
 @PublicInit
 public struct AudioSpeechParameters {
     public var model: String

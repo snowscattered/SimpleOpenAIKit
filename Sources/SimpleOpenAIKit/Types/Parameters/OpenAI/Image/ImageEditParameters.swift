@@ -34,7 +34,7 @@ extension ImageFileInput: ExpressibleByArrayLiteral {
 
 // MARK: - ImageEditParameters
 
-@BaseModelWithExtra
+@BaseModelWithExtra(encodeExtra: false)
 @PublicInit
 public struct ImageEditParameters {
     public var model: String

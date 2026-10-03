@@ -214,7 +214,7 @@ public struct FilesExpiresAfter {
     public static let anchor: String = "created_at"
     public var seconds: Int
 }
-@BaseModelWithExtra
+@BaseModelWithExtra(encodeExtra: false)
 @PublicInit
 public struct FilesCreateParameters {
     public var file: FileParameters
@@ -227,7 +227,7 @@ public struct FilesCreateParameters {
 public enum ListOrder: String {
     case asc, desc
 }
-@BaseModelWithExtra
+@BaseModelWithExtra(encodeExtra: false)
 @PublicInit
 public struct FilesListParameters {
     public var after: String?
@@ -237,14 +237,14 @@ public struct FilesListParameters {
 }
 
 // MARK: - Retrieve
-@BaseModelWithExtra
+@BaseModelWithExtra(encodeExtra: false)
 @PublicInit
 public struct FilesRetrieveParameter {
     @transient public var file_id: String
 }
 
 // MARK: - Delete
-@BaseModelWithExtra
+@BaseModelWithExtra(encodeExtra: false)
 @PublicInit
 public struct FilesDeleteParameter {
     @transient public var file_id: String

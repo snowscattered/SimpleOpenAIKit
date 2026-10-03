@@ -42,7 +42,7 @@ extension CompletionStop: ExpressibleByStringLiteral, ExpressibleByArrayLiteral 
 
 // MARK: - Completion Param Model
 
-@BaseModelWithExtra
+@BaseModelWithExtra(encodeExtra: false)
 @PublicInit
 public struct CompletionParameters {
     public var model: String

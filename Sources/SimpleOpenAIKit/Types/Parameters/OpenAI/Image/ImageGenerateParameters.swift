@@ -25,7 +25,7 @@ public enum ImageGenerateQualityLiteral: String {
 
 // MARK: - ImageGenerationParameters
 
-@BaseModelWithExtra
+@BaseModelWithExtra(encodeExtra: false)
 @PublicInit
 public struct ImageGenerateParameters {
     public var model: String

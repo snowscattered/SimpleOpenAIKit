@@ -8,7 +8,7 @@
 import Foundation
 import SimpleCodableMacro
 
-@BaseModelWithExtra
+@BaseModelWithExtra(encodeExtra: false)
 @PublicInit
 public struct ResponseRetrieveParameters {
     @transient public var response_id: String

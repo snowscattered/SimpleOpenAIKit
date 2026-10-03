@@ -10,7 +10,7 @@ import SimpleCodableMacro
 
 // MARK: - Message Parameters
 
-@BaseModelWithExtra
+@BaseModelWithExtra(encodeExtra: false)
 @PublicInit
 public struct MessageParameters {
     public var model: String

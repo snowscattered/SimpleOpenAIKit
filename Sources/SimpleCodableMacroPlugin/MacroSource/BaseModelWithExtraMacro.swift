@@ -34,6 +34,14 @@ struct BaseModelWithExtraMacro: MemberMacro, ExtensionMacro {
         let stored = collectStoredProperties(of: structDecl)
         let access = declAccessModifier(of: structDecl)
 
+        // `encodeExtra` (default true) decides whether `extra` is merged back into the output on encode.
+        var encodeExtra = true
+        if case let .argumentList(args) = node.arguments,
+           let extraArg = args.first(where: { $0.label?.text == "encodeExtra" }),
+           let boolLit = extraArg.expression.as(BooleanLiteralExprSyntax.self) {
+            encodeExtra = boolLit.literal.tokenKind == .keyword(.true)
+        }
+
         let codingKeysCases = stored.map { "case \($0.name)" }.joined(separator: "\n")
         let members = memberNames(of: structDecl)
         let customKeys = memberNames(of: structDecl, in: "CodingKeys")  // Undefined is empty
@@ -99,13 +107,16 @@ struct BaseModelWithExtraMacro: MemberMacro, ExtensionMacro {
         var container = encoder.container(keyedBy: CodingKeys.self)
         \(encodeBody)
         """
+        let encodeExtraPart = encodeExtra ? """
+        var c = encoder.singleValueContainer()
+        let dict = extra
+        try c.encode(dict)
+        """ : "// extra is not encoded"
         let encodeDecl = members.contains("encode(to:)") ? "// Customized By you" : """
             \(access)func encode(to encoder: any Encoder) throws {
                 \(encodeContainer)
 
-                var c = encoder.singleValueContainer()
-                let dict = extra
-                try c.encode(dict)
+                \(encodeExtraPart)
             }
             """
         // MARK: - EXT

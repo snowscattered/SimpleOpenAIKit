@@ -13,7 +13,7 @@ public enum UploadFile {
     case data(Data)
     case url(URL)
 }
-@BaseModelWithExtra
+@BaseModelWithExtra(encodeExtra: false)
 @PublicInit
 public struct UploadFileParameters {
     public var file: UploadFile
@@ -26,7 +26,7 @@ public struct UploadFileParameters {
     public var md5: String?
 }
 
-@BaseModelWithExtra
+@BaseModelWithExtra(encodeExtra: false)
 @PublicInit
 public struct UploadCreateParameters {
     public var bytes: Int
@@ -37,13 +37,13 @@ public struct UploadCreateParameters {
     public var expires_after: FilesExpiresAfter?
 }
 
-@BaseModelWithExtra
+@BaseModelWithExtra(encodeExtra: false)
 @PublicInit
 public struct UploadCancelParameters {
     @transient public var upload_id: String
 }
 
-@BaseModelWithExtra
+@BaseModelWithExtra(encodeExtra: false)
 @PublicInit
 public struct UploadCompleParameters {
     @transient public var upload_id: String
