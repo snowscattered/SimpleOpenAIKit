@@ -135,5 +135,5 @@ public protocol BaseModelWithExtra: BaseModelNoWithExtra {
     subscript(dynamicMember member: String) -> BaseType? { get }
 }
 extension BaseModelWithExtra {
-    public subscript(dynamicMember member: String) -> BaseType? { extra[member] }
+    public subscript<T>(dynamicMember member: String) -> T? { extra[member]?.value() }
 }
