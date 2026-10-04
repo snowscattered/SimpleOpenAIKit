@@ -88,7 +88,7 @@ public struct MessageJSONOutputFormat {
 @BaseModelNoWithExtra
 @PublicInit
 public struct MessageOutputConfig {
-    public let effort: MessageEffortLiteral
+    public let effort: MessageEffortLiteral?
     public let format: MessageJSONOutputFormat?
 }
 
