@@ -222,7 +222,7 @@ struct Weather {
     let Str: String = String(data: try encoder.encode(Weather.ArgumentSchema), encoding: .utf8)!
     print(Str)
     // The metadata a provider takes next to the schema, and the payload type the response decodes into.
-    print(Weather.name, Weather.description, Weather.strict as Any)
+    print(Weather.name, Weather.description ?? "", Weather.strict as Any)
     let sameType: Weather.Arguments.Type = Weather.self
     print(sameType)
 }

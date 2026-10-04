@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import System
 
 extension Data {
     /// Hand back the bytes the receiver still holds.
