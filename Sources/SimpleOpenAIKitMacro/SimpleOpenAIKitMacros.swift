@@ -37,6 +37,33 @@ public macro MainArgument(extra: [String: BaseType]? = nil) = #externalMacro(mod
 @attached(extension, conformances: ReferArgument)
 public macro ReferArgument() = #externalMacro(module: "SimpleOpenAIKitMacroPlugin", type: "ReferArgumentMacro")
 
+/// Generates `static var ArgumentSchema: [String: BaseType]` exactly like `@MainArgument` and, on top
+/// of it, the members `SchemaProtocol` asks for: `name`, taken from the type's own name, `typealias
+/// Arguments = Self`, and `description` and `strict` when they are spelled out. Declaring the
+/// conformance is left to the definition, `struct Weather: SchemaProtocol`, which makes the struct
+/// both the schema sent to the provider and the type the response body decodes into, so a structured
+/// output is a single declaration: `ChatResponseFormat(Weather.self)`,
+/// `ResponseFormatTextConfig(Weather.self)`, `MessageJSONOutputFormat(Weather.self)`.
+///
+/// An omitted `description` stays empty and an omitted `strict` stays `nil`, which keeps the provider
+/// default; both defaults come from `SchemaProtocol`, so neither member is generated unless it is
+/// asked for. Properties are described the same way `@MainArgument` describes them, `extra` included,
+/// and a referenced type has to carry `@ReferSchema` or `@ReferArgument`.
+@attached(member, names: named(ArgumentSchema), named(Arguments), named(name), named(description), named(strict))
+@attached(extension, conformances: MainArgument)
+public macro MainSchema(
+    description: String? = nil,
+    strict: Bool? = nil,
+    extra: [String: BaseType]? = nil
+) = #externalMacro(module: "SimpleOpenAIKitMacroPlugin", type: "MainSchemaMacro")
+
+/// Generates `static var ArgumentSchema: [String: BaseType]` exactly like `@ReferArgument`: the `$def`
+/// definition a `@MainSchema` struct references through `@ReferToolArgument`. The `ReferArgument`
+/// conformance is added automatically, so one definition can serve both a tool and a schema.
+@attached(member, names: named(ArgumentSchema))
+@attached(extension, conformances: ReferArgument)
+public macro ReferSchema() = #externalMacro(module: "SimpleOpenAIKitMacroPlugin", type: "ReferSchemaMacro")
+
 /// Describes a `string` value. Strict mode validates `pattern` and `format` (`email`, `hostname`,
 /// `ipv4`, `ipv6`, `uuid`); `minLength` and `maxLength` are part of JSON Schema but are not supported
 /// in strict mode. Only the labels that are spelled out land in the schema. Attaching it to a value

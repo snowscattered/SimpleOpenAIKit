@@ -200,3 +200,67 @@ struct B {
     let b = try decoder.decode(B.self, from: json)
     print(b)
 }
+
+@ReferSchema
+struct WeatherLocation {
+    let lat: Float
+    let long: Float
+}
+@MainSchema(
+    description: "Fetch the weather for a given location.",
+    strict: true
+)
+struct Weather {
+    @ReferToolArgument(description: "The location to fetch the weather for.")
+    let location: WeatherLocation
+    let time: Double
+}
+@Test func verifyMainSchema() async throws {
+    let encoder = JSONEncoder()
+    // Sorted keys keep the printed schema stable between runs.
+    encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+    let Str: String = String(data: try encoder.encode(Weather.ArgumentSchema), encoding: .utf8)!
+    print(Str)
+    // The metadata a provider takes next to the schema, and the payload type the response decodes into.
+    print(Weather.name, Weather.description, Weather.strict as Any)
+    let sameType: Weather.Arguments.Type = Weather.self
+    print(sameType)
+}
+// Output:
+//{
+//  "$def" : {
+//    "WeatherLocation" : {
+//      "additionalProperties" : false,
+//      "properties" : {
+//        "lat" : {
+//          "type" : "number"
+//        },
+//        "long" : {
+//          "type" : "number"
+//        }
+//      },
+//      "required" : [
+//        "lat",
+//        "long"
+//      ],
+//      "type" : "object"
+//    }
+//  },
+//  "additionalProperties" : false,
+//  "properties" : {
+//    "location" : {
+//      "$ref" : "#\/$def\/WeatherLocation",
+//      "description" : "The location to fetch the weather for."
+//    },
+//    "time" : {
+//      "type" : "number"
+//    }
+//  },
+//  "required" : [
+//    "location",
+//    "time"
+//  ],
+//  "type" : "object"
+//}
+//Weather Fetch the weather for a given location. Optional(true)
+//Weather
