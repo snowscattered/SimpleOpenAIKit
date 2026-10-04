@@ -17,7 +17,7 @@ private func EventConversion<T: Decodable & Sendable>(
     if jsonString.range(of: #"{"type"\s*:\s*"ping"}"#, options: .regularExpression) != nil {
         return .skip
     }
-    if jsonString == "[DONE]" {
+    if jsonString.trimmingCharacters(in: .whitespacesAndNewlines) == "[DONE]" {
         return .finish
     }
     let data = Data(jsonString.utf8)
