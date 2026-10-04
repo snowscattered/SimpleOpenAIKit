@@ -69,6 +69,8 @@ public macro BaseModelNoWithExtra() = #externalMacro(module: "SimpleCodableMacro
 /// A macro applied to a struct to generate `BaseModel: Codable & Sendable` conformance
 /// with an `extra` dictionary capturing unknown JSON keys.
 /// `extra` is a decode-only fallback and is not part of the generated `init`.
+/// - Parameter encodeExtra: When `true` (default), the generated `encode(to:)` merges `extra`
+///   back into the output; when `false`, `extra` is decode-only and never encoded.
 @attached(member, names: named(extra))
 @attached(extension, conformances: BaseModelWithExtra, names: named(CodingKeys), named(init(from:)), named(encode(to:)))
-public macro BaseModelWithExtra() = #externalMacro(module: "SimpleCodableMacroPlugin", type: "BaseModelWithExtraMacro")
+public macro BaseModelWithExtra(encodeExtra: Bool = true) = #externalMacro(module: "SimpleCodableMacroPlugin", type: "BaseModelWithExtraMacro")

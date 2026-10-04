@@ -134,10 +134,10 @@ struct CodableByConstantMacro: ExtensionMacro {
             """
         let ext: DeclSyntax = """
             nonisolated extension \(raw: enumName): BaseModel {
-                private enum CodingKeys: String, CodingKey { case \(raw: field) }
-                \(raw: decodeDecl)
+            private enum CodingKeys: String, CodingKey { case \(raw: field) }
+            \(raw: decodeDecl)
 
-                \(raw: encodeDecl)
+            \(raw: encodeDecl)
             }
             """
 

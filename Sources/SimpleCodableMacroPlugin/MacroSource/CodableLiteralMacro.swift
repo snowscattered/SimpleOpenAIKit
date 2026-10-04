@@ -53,7 +53,7 @@ struct CodableLiteralMacro: ExtensionMacro {
             """
         let ext: DeclSyntax = """
             extension \(raw: enumName): BaseModel {
-                \(raw: decodeDecl)
+            \(raw: decodeDecl)
             }
             """
 

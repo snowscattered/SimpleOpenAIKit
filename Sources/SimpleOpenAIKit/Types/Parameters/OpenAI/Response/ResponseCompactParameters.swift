@@ -8,7 +8,7 @@
 import Foundation
 import SimpleCodableMacro
 
-@BaseModelWithExtra
+@BaseModelWithExtra(encodeExtra: false)
 @PublicInit
 public struct ResponseCompactParameters {
     public var model: String?

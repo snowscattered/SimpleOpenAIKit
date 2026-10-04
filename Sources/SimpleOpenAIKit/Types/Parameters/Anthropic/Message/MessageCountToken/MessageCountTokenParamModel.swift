@@ -8,7 +8,7 @@
 import Foundation
 import SimpleCodableMacro
 
-@BaseModelWithExtra
+@BaseModelWithExtra(encodeExtra: false)
 @PublicInit
 public struct MessageCountTokenParameters {
     public var model: String

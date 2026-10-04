@@ -24,8 +24,6 @@ struct AsyncSessionTests {
                 .user("你是谁？"),
             ]
         )
-        // `extra` is the decode fallback slot, so it is assigned instead of passed to the init.
-        payload.extra = ["thinking": ["type": "disabled"]]
         return payload
     }()
 
@@ -42,7 +40,7 @@ struct AsyncSessionTests {
             requestOptions: RequestOptions(
                 extra_body: .init(OBJ(a: 10))
             ),
-                    clientOption: client,
+            clientOption: client,
             method: .post
         )
         guard let string = String(data: request.httpBody!, encoding: .utf8) else {

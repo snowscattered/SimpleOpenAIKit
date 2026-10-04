@@ -12,9 +12,9 @@ import SimpleCodableMacro
 @BaseModelWithExtra
 public struct SystemOneUnknownQuestion {
     public var type: String
-    public init(type: String, extra: [String : BaseType]) {
+    public init(type: String, _ format: [String : BaseType]) {
         self.type = type
-        self.extra = extra
+        self.extra = format
     }
 }
 

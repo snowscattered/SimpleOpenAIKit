@@ -58,14 +58,14 @@ struct CodableStringLiteralWithOtherMacro: ExtensionMacro {
             """
         let ext: DeclSyntax = """
             extension \(raw: enumName): BaseModel {
-                \(raw: access)var rawValue: String {
-                    switch self {
-                    \(raw: rawValueCases)
-                    case .other(let s): return s
-                    }
+            \(raw: access)var rawValue: String {
+                switch self {
+                \(raw: rawValueCases)
+                case .other(let s): return s
                 }
-                \(raw: decodeDecl)
-                \(raw: encodeDecl)
+            }
+            \(raw: decodeDecl)
+            \(raw: encodeDecl)
             }
             """
         guard let extensionDecl = ext.as(ExtensionDeclSyntax.self) else {

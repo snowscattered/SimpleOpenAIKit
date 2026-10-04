@@ -94,11 +94,11 @@ struct BaseModelNoWithExtraMacro: ExtensionMacro {
         // MARK: - EXT
         let ext: DeclSyntax = """
             nonisolated extension \(raw: typeName): BaseModelNoWithExtra {
-                \(raw: codingKeysDecl)
+            \(raw: codingKeysDecl)
 
-                \(raw: decodeDecl)
+            \(raw: decodeDecl)
 
-                \(raw: encodeDecl)
+            \(raw: encodeDecl)
             }
             """
 

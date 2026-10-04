@@ -23,7 +23,7 @@ public enum EmbeddingEncoderFormatLiteral: String {
     case float, base64
 }
 
-@BaseModelWithExtra
+@BaseModelWithExtra(encodeExtra: false)
 @PublicInit
 public struct EmbeddingParameters {
     public var model: String

@@ -38,7 +38,7 @@ public enum AudioTranscriptionIncludeLiteral: String {
 
 // MARK: - Audio Transcription Param Model
 
-@BaseModelWithExtra
+@BaseModelWithExtra(encodeExtra: false)
 @PublicInit
 public struct AudioTranscriptionParameters {
     public var model: String

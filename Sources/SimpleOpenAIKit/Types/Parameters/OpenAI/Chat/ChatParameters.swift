@@ -265,7 +265,7 @@ public enum ChatVerbosityLiteral: String {
 
 public typealias ChatMetaData = OpenAIMetaData
 
-@BaseModelWithExtra
+@BaseModelWithExtra(encodeExtra: false)
 @PublicInit
 public struct ChatParameters {
     public var model: String

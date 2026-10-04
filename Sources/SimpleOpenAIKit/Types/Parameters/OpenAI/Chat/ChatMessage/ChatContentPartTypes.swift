@@ -71,7 +71,7 @@ public struct ChatInputAudio {
     public var data: String
     public var format: ChatInputAudioFormatLiteral?
 }
-@BaseModelWithExtra
+@BaseModelNoWithExtra
 @PublicInit
 public struct ChatContentPartAudio {
     public static let type: String = "input_audio"
@@ -106,7 +106,7 @@ public struct ChatCustomPart {
 public enum ChatContentPart {
     case text(ChatContentPartText)
     case image(ChatContentPartImage)
-    case input(ChatContentPartAudio)
+    case audio(ChatContentPartAudio)
     case file(ChatContentPartFile)
     // Extension OpenAI
     case video(ChatContentPartVideo)
