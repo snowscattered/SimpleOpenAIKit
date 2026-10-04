@@ -172,8 +172,8 @@ public struct ResponseFormatText {
 public struct ResponseFormatJSONSchema {
     public static let type: String = "json_schema"
     public var name: String
-    public var schema: [String: BaseType]
     public var description: String?
+    public var schema: [String: BaseType]
     public var strict: Bool?
 }
 

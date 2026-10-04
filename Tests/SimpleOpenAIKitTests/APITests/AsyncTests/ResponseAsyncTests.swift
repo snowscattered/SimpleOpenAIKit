@@ -12,7 +12,7 @@ import Foundation
 @Suite("ResponseAsyncTests")
 struct ResponseAsyncTests {
     let param: ResponseCreateParameters = .init(
-        model: "deepseek-v4-flash",
+        model: "deepseek-flash",
         input: "who are you?",
     )
     @Test func asyncResponseData() async throws {
@@ -71,12 +71,12 @@ struct ResponseAsyncTests {
             let long: Float
         }
         @MainArgument
-        struct Argument {
+        struct Arguments {
             @ReferToolArgument(description: "The location to fetch the weather for.")
             let location: Location
             let time: Double
         }
-        static func call(arguments: Argument) async throws -> String { "sunny" }
+        static func call(arguments: Arguments) async throws -> String { "sunny" }
     }
     @Test func asyncResponseToolData() async throws {
         var parameters = param
@@ -90,7 +90,7 @@ struct ResponseAsyncTests {
             switch item {
             case .function_call(let function_call_item):
                 let str = function_call_item.arguments
-                let arg = try JSONDecoder().decode(Tool.Argument.self, from: str.data(using: .utf8)!)
+                let arg = try JSONDecoder().decode(Tool.Arguments.self, from: str.data(using: .utf8)!)
                 print(arg)
             default: continue
             }
@@ -106,5 +106,49 @@ struct ResponseAsyncTests {
         for try await chunk in res {
             print(chunk)
         }
+    }
+    
+    @ReferSchema
+    struct Location {
+        let lat: Float
+        let long: Float
+    }
+    @MainSchema(
+        description: "Fetch the weather for a given location.",
+        strict: true
+    )
+    struct Schema: SchemaProtocol {
+        @ReferToolArgument(description: "The location to fetch the weather for.")
+        let location: Location
+        let time: Double
+    }
+    @Test func asyncResponseSchemaData() async throws {
+        var parameters = param
+        parameters.input = "Could you fetch the current weather for lat=40.7128, lon=-74.0060? Also tell me what it'll be like in 5 hours."
+        parameters.text = ResponseTextConfig(format: ResponseFormatTextConfig(Schema.self))
+        let res = try await asyncClient.responses.create(
+            parameters: parameters
+        )
+        print(res)
+        let arg = try JSONDecoder().decode(Schema.self, from: res.output_text.data(using: .utf8)!)
+        print(arg)
+    }
+    @Test func asyncResponseSchemaStream() async throws {
+        var parameters = param
+        parameters.input = "Could you fetch the current weather for lat=40.7128, lon=-74.0060? Also tell me what it'll be like in 5 hours."
+        parameters.text = ResponseTextConfig(format: ResponseFormatTextConfig(Schema.self))
+        let res = try await asyncClient.responses.stream(
+            parameters: parameters
+        )
+        var content = ""
+        for try await chunk in res {
+            if case .response_output_text_delta(let event) = chunk {
+                content += event.delta
+                print(event.delta, terminator: "")
+            }
+        }
+        print()
+        let arg = try JSONDecoder().decode(Schema.self, from: content.data(using: .utf8)!)
+        print(arg)
     }
 }
