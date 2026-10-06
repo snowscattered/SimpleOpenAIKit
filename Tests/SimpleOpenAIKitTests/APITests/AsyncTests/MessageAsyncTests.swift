@@ -83,12 +83,12 @@ struct MessageAsyncTests {
         }
     }
     
-    @ReferSchema
+    @ReferArgument
     struct Location {
         let lat: Float
         let long: Float
     }
-    @MainSchema(
+    @MainArgument(
         description: "Fetch the weather for a given location.",
         strict: true
     )

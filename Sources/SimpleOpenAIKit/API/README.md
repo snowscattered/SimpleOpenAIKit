@@ -143,21 +143,24 @@ for item in response.output {
 
 ## Structured Outputs
 
-A required answer shape is one type as well: `SchemaProtocol` plus `@MainSchema`, which generates
-the JSON Schema of the struct, its `name` (the type's own name), `description` and `strict`, and
-`typealias Arguments = Self`, so the struct is both what the request describes and what the answer
-decodes into. A type the schema points at instead of inlining carries `@ReferSchema`, referenced
-with `@ReferToolArgument`. See [SimpleOpenAIKitMacro](../../SimpleOpenAIKitMacro/README.md) for the
-schema macros.
+A required answer shape is one type as well: a `@MainArgument` struct that declares `SchemaProtocol`.
+The macro already writes the JSON Schema of the struct, the `MainArgument` conformance, and the
+metadata next to it — `__name` (the type's own name), `__description` and `__strict`, spelled through
+the `description:` and `strict:` labels — so the struct is both what the request describes and what the
+answer decodes into, and one macro covers a tool argument and an output shape alike. The `__` prefix
+keeps those three apart from the `name`, `description` and `strict` a `ToolProtocol` declares itself. A
+type the schema points at instead of inlining carries `@ReferArgument`, the same definition a tool uses,
+and is referenced with `@ReferToolArgument`. See
+[SimpleOpenAIKitMacro](../../SimpleOpenAIKitMacro/README.md) for the schema macros.
 
 ```swift
-@ReferSchema
+@ReferArgument
 struct Location {
     let lat: Float
     let long: Float
 }
 
-@MainSchema(description: "Fetch the weather for a given location.", strict: true)
+@MainArgument(description: "Fetch the weather for a given location.", strict: true)
 struct Weather: SchemaProtocol {
     @ReferToolArgument(description: "The location to fetch the weather for.")
     let location: Location

@@ -22,47 +22,34 @@
 /// A property that carries `@ReferToolArgument` is written as a `$ref` instead, and this object's
 /// `"$def"` entry holds the definitions it references.
 ///
+/// On top of the schema it writes the metadata a structured output reports: `__name`, taken from the
+/// type's own name, and `__description` and `__strict`, each generated as `nil` unless spelled out —
+/// spelling either one as `nil` or `""` counts as omitting it, which keeps the provider default instead
+/// of sending an empty description or forcing the schema strict. The `__` prefix is what separates
+/// these from the `name`, `description` and `strict` a tool declares for itself, and from the
+/// properties of the payload, so one macro serves both families: declare `SchemaProtocol` and the
+/// struct becomes the schema the provider answers, as well as the type the answer decodes into. A tool
+/// reads only `__strict`, which its own `strict` falls back to.
+///
 /// The `MainArgument` conformance is added automatically.
-@attached(member, names: named(ArgumentSchema))
+@attached(member, names: named(ArgumentSchema), named(__name), named(__description), named(__strict))
 @attached(extension, conformances: MainArgument)
-public macro MainArgument(extra: [String: BaseType]? = nil) = #externalMacro(module: "SimpleOpenAIKitMacroPlugin", type: "MainArgumentMacro")
+public macro MainArgument(
+    description: String? = nil,
+    strict: Bool? = nil,
+    extra: [String: BaseType]? = nil
+) = #externalMacro(module: "SimpleOpenAIKitMacroPlugin", type: "MainArgumentMacro")
 
 /// Generates `static var ArgumentSchema: [String: BaseType]` on a struct used as a `$def` definition.
 /// The schema has the same object shape as `@MainArgument`, including `"additionalProperties": false`,
 /// but does not generate a nested `"$def"` block. Use `@ReferToolArgument` on properties that should be
 /// written as `$ref`.
 ///
-/// The `ReferArgument` conformance is added automatically.
+/// The `ReferArgument` conformance is added automatically, so one definition serves both a tool and a
+/// structured output.
 @attached(member, names: named(ArgumentSchema))
 @attached(extension, conformances: ReferArgument)
 public macro ReferArgument() = #externalMacro(module: "SimpleOpenAIKitMacroPlugin", type: "ReferArgumentMacro")
-
-/// Generates `static var ArgumentSchema: [String: BaseType]` exactly like `@MainArgument` and, on top
-/// of it, the members `SchemaProtocol` asks for: `name`, taken from the type's own name, `typealias
-/// Arguments = Self`, and `description` and `strict` when they are spelled out. Declaring the
-/// conformance is left to the definition, `struct Weather: SchemaProtocol`, which makes the struct
-/// both the schema sent to the provider and the type the response body decodes into, so a structured
-/// output is a single declaration: `ChatResponseFormat(Weather.self)`,
-/// `ResponseFormatTextConfig(Weather.self)`, `MessageJSONOutputFormat(Weather.self)`.
-///
-/// An omitted `description` or `strict` is generated as `nil`, which keeps the provider default
-/// instead of sending an empty description or forcing the schema strict; spelling either one as `nil`
-/// or `""` counts as omitting it. Properties are described the same way `@MainArgument` describes
-/// them, `extra` included, and a referenced type has to carry `@ReferSchema` or `@ReferArgument`.
-@attached(member, names: named(ArgumentSchema), named(Arguments), named(name), named(description), named(strict))
-@attached(extension, conformances: MainArgument)
-public macro MainSchema(
-    description: String? = nil,
-    strict: Bool? = nil,
-    extra: [String: BaseType]? = nil
-) = #externalMacro(module: "SimpleOpenAIKitMacroPlugin", type: "MainSchemaMacro")
-
-/// Generates `static var ArgumentSchema: [String: BaseType]` exactly like `@ReferArgument`: the `$def`
-/// definition a `@MainSchema` struct references through `@ReferToolArgument`. The `ReferArgument`
-/// conformance is added automatically, so one definition can serve both a tool and a schema.
-@attached(member, names: named(ArgumentSchema))
-@attached(extension, conformances: ReferArgument)
-public macro ReferSchema() = #externalMacro(module: "SimpleOpenAIKitMacroPlugin", type: "ReferSchemaMacro")
 
 /// Describes a `string` value. Strict mode validates `pattern` and `format` (`email`, `hostname`,
 /// `ipv4`, `ipv6`, `uuid`); `minLength` and `maxLength` are part of JSON Schema but are not supported

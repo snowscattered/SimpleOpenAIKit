@@ -39,7 +39,7 @@ public extension ToolProtocol {
     }
 
     static var defer_loading: Bool? { nil }
-    static var strict: Bool? { nil }
+    static var strict: Bool? { Self.Arguments.__strict }
     /// Entry point for a raw tool call arriving from a response or stream: decodes `data`
     /// into `Arguments` and forwards it to `call(arguments:)`.
     @concurrent @discardableResult static func call(_ data: Data) async throws -> Output {

@@ -24,7 +24,5 @@ struct SimpleOpenAIMacroPlugin: CompilerPlugin {
         AnyOfToolArgumentMacro.self,
         MainArgumentMacro.self,
         ReferArgumentMacro.self,
-        MainSchemaMacro.self,
-        ReferSchemaMacro.self,
     ]
 }

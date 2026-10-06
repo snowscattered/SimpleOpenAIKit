@@ -201,30 +201,28 @@ struct B {
     print(b)
 }
 
-@ReferSchema
+@ReferArgument
 struct WeatherLocation {
     let lat: Float
     let long: Float
 }
-@MainSchema(
-    description: "Fetch the weather for a given location.",
-    strict: true
-)
+@MainArgument(strict: nil)
 struct Weather {
     @ReferToolArgument(description: "The location to fetch the weather for.")
     let location: WeatherLocation
     let time: Double
 }
-@Test func verifyMainSchema() async throws {
+@Test func verifySchema() async throws {
     let encoder = JSONEncoder()
     // Sorted keys keep the printed schema stable between runs.
     encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
     let Str: String = String(data: try encoder.encode(Weather.ArgumentSchema), encoding: .utf8)!
     print(Str)
     // The metadata a provider takes next to the schema, and the payload type the response decodes into.
-    print(Weather.name, Weather.description ?? "", Weather.strict as Any)
-    let sameType: Weather.Arguments.Type = Weather.self
-    print(sameType)
+    print(Weather.__name, Weather.__description ?? "", Weather.__strict as Any)
+    // The struct is its own payload type, so the answer the schema describes decodes into it.
+    let json = Data(#"{"location":{"lat":40.7128,"long":-74.006},"time":5}"#.utf8)
+    print(try JSONDecoder().decode(Weather.self, from: json))
 }
 // Output:
 //{
@@ -263,4 +261,4 @@ struct Weather {
 //  "type" : "object"
 //}
 //Weather Fetch the weather for a given location. Optional(true)
-//Weather
+//Weather(location: SimpleOpenAIKitMacroTests.WeatherLocation(lat: 40.7128, long: -74.006), time: 5.0)
