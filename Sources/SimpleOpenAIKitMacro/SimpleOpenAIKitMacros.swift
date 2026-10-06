@@ -45,10 +45,10 @@ public macro ReferArgument() = #externalMacro(module: "SimpleOpenAIKitMacroPlugi
 /// output is a single declaration: `ChatResponseFormat(Weather.self)`,
 /// `ResponseFormatTextConfig(Weather.self)`, `MessageJSONOutputFormat(Weather.self)`.
 ///
-/// An omitted `description` stays empty and an omitted `strict` stays `nil`, which keeps the provider
-/// default; both defaults come from `SchemaProtocol`, so neither member is generated unless it is
-/// asked for. Properties are described the same way `@MainArgument` describes them, `extra` included,
-/// and a referenced type has to carry `@ReferSchema` or `@ReferArgument`.
+/// An omitted `description` or `strict` is generated as `nil`, which keeps the provider default
+/// instead of sending an empty description or forcing the schema strict; spelling either one as `nil`
+/// or `""` counts as omitting it. Properties are described the same way `@MainArgument` describes
+/// them, `extra` included, and a referenced type has to carry `@ReferSchema` or `@ReferArgument`.
 @attached(member, names: named(ArgumentSchema), named(Arguments), named(name), named(description), named(strict))
 @attached(extension, conformances: MainArgument)
 public macro MainSchema(

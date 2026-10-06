@@ -136,4 +136,21 @@ struct ChatAsyncTests {
         let arg = try JSONDecoder().decode(Schema.self, from: content.data(using: .utf8)!)
         print(arg)
     }
+    @Test func asyncChatParseData() async throws {
+        let res = try await asyncClient.chat.completions.parse(
+            parameters: .init(
+                model: "qwen3.8-max",
+                messages: [.user("Could you fetch the current weather for lat=40.7128, lon=-74.0060? Also tell me what it'll be like in 5 hours.")],
+                response_format: Schema.self,
+                n: 2,
+            ),
+            requestOptions: .init(
+                extra_body: ["enable_thinking": false]
+            )
+        )
+        print(res)
+        for choice in res.choices {
+            print(choice.message.parsed as Any)
+        }
+    }
 }

@@ -75,7 +75,7 @@ dependencies: [
 | --- | --- | --- |
 | `models` | ✅ | `list`, `retrieve`, `delete` |
 | `completions` | ✅ | `create`, `stream` |
-| `chat.completions` | ✅ | `create`, `stream` |
+| `chat.completions` | ✅ | `create`, `stream`, `parse` |
 | `embeddings` | ✅ | `create` |
 | `images` | ✅ | `generate`, `edit`, `generateStream`, `editStream` |
 | `audio` | ✅ | `speech.create`, `speech.stream`, `transcriptions.create`, `transcriptions.stream` |

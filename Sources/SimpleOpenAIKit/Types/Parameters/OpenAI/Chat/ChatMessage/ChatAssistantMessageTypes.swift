@@ -103,7 +103,7 @@ public struct ChatAssistantMessage {
     public var name: String?
     public var reasoning_content: String?
     /// Result Field
-    let annotation: [ChatAnnotation]?
+    public let annotation: [ChatAnnotation]?
 }
 extension ChatAssistantMessage: ExpressibleByStringLiteral {
     public init(stringLiteral value: String) { self = .init(content: .string(value)) }

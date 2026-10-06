@@ -24,7 +24,7 @@ import SimpleOpenAIKitMacro
 /// `ResponseFormatTextConfig(Weather.self)`, `MessageJSONOutputFormat(Weather.self)`.
 /// Unlike `ToolProtocol` there is nothing to call: the provider returns the JSON and the caller
 /// decodes it into `Arguments`.
-public protocol SchemaProtocol {
+public protocol SchemaProtocol: Codable & Sendable {
     /// The object the model must produce, validated against the generated schema.
     associatedtype Arguments: MainArgument
     /// The name reported to the provider next to the schema; `@MainSchema` takes it from the type.

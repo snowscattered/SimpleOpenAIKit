@@ -141,6 +141,54 @@ for item in response.output {
 }
 ```
 
+## Structured Outputs
+
+A required answer shape is one type as well: `SchemaProtocol` plus `@MainSchema`, which generates
+the JSON Schema of the struct, its `name` (the type's own name), `description` and `strict`, and
+`typealias Arguments = Self`, so the struct is both what the request describes and what the answer
+decodes into. A type the schema points at instead of inlining carries `@ReferSchema`, referenced
+with `@ReferToolArgument`. See [SimpleOpenAIKitMacro](../../SimpleOpenAIKitMacro/README.md) for the
+schema macros.
+
+```swift
+@ReferSchema
+struct Location {
+    let lat: Float
+    let long: Float
+}
+
+@MainSchema(description: "Fetch the weather for a given location.", strict: true)
+struct Weather: SchemaProtocol {
+    @ReferToolArgument(description: "The location to fetch the weather for.")
+    let location: Location
+    let time: Double
+}
+```
+
+The type drops into the format field each provider exposes: `ChatResponseFormat(Weather.self)` for
+`chat.completions`, `ResponseFormatTextConfig(Weather.self)` for `responses` under `text.format`,
+and `MessageJSONOutputFormat(Weather.self)` for Anthropic `messages` under `output_config.format`,
+where only the schema is sent. A `description` or `strict` the caller leaves out is generated as
+`nil`, which keeps the provider default.
+
+`chat.completions.parse` sends the schema and decodes the answer in one step, over
+`ChatParseParameters`:
+
+```swift
+let result = try await openAIAsyncClient.chat.completions.parse(
+    parameters: .init(
+        model: "your-model",
+        messages: [.user("What's the weather in New York?")],
+        response_format: Weather.self
+    )
+)
+print(result.choices.first?.message.parsed as Any)      // Weather?
+```
+
+`parsed` is `nil` when the answer carries no string content, and malformed JSON throws. Reaching
+for `create` with a `ChatResponseFormat` stays available whenever you would rather decode the raw
+`content` yourself.
+
 ## Websockets
 
 `connect`/`conntent` opens the socket, runs your closure against the live connection, then closes it.
