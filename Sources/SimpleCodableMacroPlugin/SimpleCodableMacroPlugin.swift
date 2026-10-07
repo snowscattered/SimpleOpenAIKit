@@ -8,6 +8,7 @@ import SwiftSyntaxMacros
 struct SimpleCodableMacroPlugin: CompilerPlugin {
     let providingMacros: [Macro.Type] = [
         // struct
+        BaseModelFieldAliasMacro.self,
         BaseModelWithExtraMacro.self,
         BaseModelNoWithExtraMacro.self,
         PublicInitMacro.self,
