@@ -1,5 +1,5 @@
 //
-//  SystemOneChoiceAnswer.swift
+//  SystemOneAnswerChoice.swift
 //  SimpleOpenAIKit
 //
 //  Created by snow on 9/23/26.
@@ -10,7 +10,7 @@ import SimpleCodableMacro
 
 @BaseModelNoWithExtra
 @PublicInit
-public struct SystemOneChoiceAnswer {
+public struct SystemOneAnswerChoice {
     public static let type: String = "choice"
     public let choice: String
     public let probabilities: [String: Double]

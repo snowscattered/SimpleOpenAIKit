@@ -36,6 +36,7 @@ public class OpenAI {
     public let uploads: OpenAISyncAPIResource.UploadsSyncResource
     public let videos: OpenAISyncAPIResource.VideosSyncResource
     public let realtime: OpenAISyncAPIResource.RealtimeSyncResource
+    public let decisions: OpenAISyncAPIResource.DecisionsSyncResource
 //    public let vector_stores: OpenAISyncAPIResource.VectorStoresSyncResource
 //    public let batches: OpenAISyncAPIResource.BatchesSyncResource
 //    public let fine_tuning: OpenAISyncAPIResource.FineTuningSyncResource
@@ -89,6 +90,7 @@ public class OpenAI {
         self.uploads     = .init(clientOption)
         self.videos      = .init(clientOption)
         self.realtime    = .init(clientOption)
+        self.decisions   = .init(clientOption)
         self.beta        = .init(clientOption)
         self.clientOption = clientOption
     }

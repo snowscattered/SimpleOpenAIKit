@@ -20,18 +20,18 @@ public struct SystemOneUnknownAnswer {
 @CodableByConstant(defaultCase: "unknown")
 @nonexhaustive
 public enum SystemOneAnswer {
-    case noul(SystemOneNoulAnswer)
-    case choice(SystemOneChoiceAnswer)
-    case score(SystemOneScoreAnswer)
+    case noul(SystemOneAnswerNoul)
+    case choice(SystemOneAnswerChoice)
+    case score(SystemOneAnswerScore)
     case unknown(SystemOneUnknownAnswer)
 }
 
 public extension SystemOneAnswer {
     var type: String {
         switch self {
-        case .noul:              return SystemOneNoulAnswer.type
-        case .choice:            return SystemOneChoiceAnswer.type
-        case .score:             return SystemOneScoreAnswer.type
+        case .noul:              return SystemOneAnswerNoul.type
+        case .choice:            return SystemOneAnswerChoice.type
+        case .score:             return SystemOneAnswerScore.type
         case .unknown(let v):    return v.type
         }
     }

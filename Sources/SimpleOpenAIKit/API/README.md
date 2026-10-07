@@ -20,7 +20,8 @@ the namespace file. `OpenAIHelper.swift` is the AVFoundation microphone/player p
 audio.
 
 Names follow the provider's REST path: `client.chat.completions` is `/chat/completions`,
-`client.images.generate` is `/images/generations`, `client.beta.realtime` is the beta namespace.
+`client.images.generate` is `/images/generations`, `client.decisions.create` is `/decisions`, and
+`client.beta.realtime` is the beta namespace.
 
 ## Call shapes
 
@@ -52,6 +53,37 @@ let stream = try await openAIAsyncClient.chat.completions.stream(
 )
 for try await chunk in stream {
     print(chunk.choices.first?.delta.content ?? "", terminator: "")
+}
+```
+
+## Decision
+
+`decisions.create` sends `DecisionCreateParameters` and returns a `DecisionResult`. Answers are
+positionally aligned with the request's questions. Named question variants take `name` as their first
+initializer parameter.
+
+```swift
+let parameters: DecisionCreateParameters = .init(
+    input: .string("I was charged twice. Please fix this ASAP."),
+    model: "your-model",
+    questions: [
+        .predicate(name: "billing", instructions: "Is this ticket about billing?"),
+        .choice(
+            name: "tone",
+            instructions: "What is the customer's tone?",
+            choices: ["calm", "frustrated", "angry"]
+        ),
+        .score(
+            name: "urgency",
+            instructions: "How urgent is this ticket?",
+            levels: ["can wait", "this week", "today"]
+        ),
+    ]
+)
+
+let result = try await openAIAsyncClient.decisions.create(parameters: parameters)
+for (question, answer) in zip(parameters.questions, result.answers) {
+    print(question.type, answer.type)
 }
 ```
 

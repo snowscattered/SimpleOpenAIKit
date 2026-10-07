@@ -24,22 +24,22 @@ public struct SystemOneResult {
 }
 
 public extension SystemOneResult {
-    var nouls: [String: SystemOneNoulAnswer] {
-        var grouped: [String: SystemOneNoulAnswer] = [:]
+    var nouls: [String: SystemOneAnswerNoul] {
+        var grouped: [String: SystemOneAnswerNoul] = [:]
         for (name, answer) in answers {
             if case .noul(let value) = answer { grouped[name] = value }
         }
         return grouped
     }
-    var choices: [String: SystemOneChoiceAnswer] {
-        var grouped: [String: SystemOneChoiceAnswer] = [:]
+    var choices: [String: SystemOneAnswerChoice] {
+        var grouped: [String: SystemOneAnswerChoice] = [:]
         for (name, answer) in answers {
             if case .choice(let value) = answer { grouped[name] = value }
         }
         return grouped
     }
-    var scores: [String: SystemOneScoreAnswer] {
-        var grouped: [String: SystemOneScoreAnswer] = [:]
+    var scores: [String: SystemOneAnswerScore] {
+        var grouped: [String: SystemOneAnswerScore] = [:]
         for (name, answer) in answers {
             if case .score(let value) = answer { grouped[name] = value }
         }

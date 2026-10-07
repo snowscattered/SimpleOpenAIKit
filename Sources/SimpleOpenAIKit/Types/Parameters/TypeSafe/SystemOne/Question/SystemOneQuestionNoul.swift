@@ -1,5 +1,5 @@
 //
-//  SystemOneNoulQuestion.swift
+//  SystemOneQuestionNoul.swift
 //  SimpleOpenAIKit
 //
 //  Created by snow on 9/23/26.
@@ -10,7 +10,7 @@ import SimpleCodableMacro
 
 @BaseModelNoWithExtra
 @PublicInit
-public struct SystemOneNoulQuestion {
+public struct SystemOneQuestionNoul {
     public static let type: String = "noul"
     public var instructions: SystemOneJSONConent?
     public var criteria: SystemOneNoulCriteria?

@@ -10,7 +10,7 @@ import SimpleCodableMacro
 
 @BaseModelNoWithExtra
 @PublicInit
-public struct SystemOneScoreAnswer {
+public struct SystemOneAnswerScore {
     public static let type: String = "score"
     public let score: Double
     public let legend: [String: SystemOneJSONConent]
@@ -18,7 +18,7 @@ public struct SystemOneScoreAnswer {
     public let confidence: Double
 }
 
-public extension SystemOneScoreAnswer {
+public extension SystemOneAnswerScore {
     func probability(forLevel level: Int) -> Double? {
         probabilities[String(level)]
     }

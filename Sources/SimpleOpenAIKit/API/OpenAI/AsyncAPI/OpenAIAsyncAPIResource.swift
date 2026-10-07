@@ -159,6 +159,12 @@ public enum OpenAIAsyncAPIResource {
         let clientOption: OpenAIClientOption
         init(_ clientOption: OpenAIClientOption) { self.clientOption = clientOption }
     }
+    
+    // MARK: Decision
+    public struct DecisionsAsyncResource: ~Copyable {
+        let clientOption: OpenAIClientOption
+        init(_ clientOption: OpenAIClientOption) { self.clientOption = clientOption }
+    }
 
     // MARK: Beta
     /// Beta realtime websocket session, mirroring `RealtimeAsyncResource` on the `beta` namespace.

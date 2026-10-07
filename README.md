@@ -77,6 +77,7 @@ The following list is based on the top-level properties in `Sources/SimpleOpenAI
 | `completions` | ✅ | `create`, `stream` |
 | `chat.completions` | ✅ | `create`, `stream`, `parse` |
 | `embeddings` | ✅ | `create` |
+| `decisions` | ✅ | `create` |
 | `images` | ✅ | `generate`, `edit`, `generateStream`, `editStream` |
 | `audio` | ✅ | `speech.create`, `speech.stream`, `transcriptions.create`, `transcriptions.stream` |
 | `responses` | ✅ | `create`, `stream`, `parse` |
@@ -263,6 +264,38 @@ func openAIAsyncResponse() async throws {
         )
     )
     print(response.output_text)
+}
+```
+
+### Decision
+
+`decisions.create` returns answers in the same order as the request's questions. Where a question
+supports a `name`, it is the first initializer parameter.
+
+```swift
+func openAIAsyncDecision() async throws {
+    let parameters: DecisionCreateParameters = .init(
+        input: .string("I was charged twice. Please fix this ASAP."),
+        model: "your-model",
+        questions: [
+            .predicate(name: "billing", instructions: "Is this ticket about billing?"),
+            .choice(
+                name: "tone",
+                instructions: "What is the customer's tone?",
+                choices: ["calm", "frustrated", "angry"]
+            ),
+            .score(
+                name: "urgency",
+                instructions: "How urgent is this ticket?",
+                levels: ["can wait", "this week", "today"]
+            ),
+        ]
+    )
+
+    let result = try await openAIAsyncClient.decisions.create(parameters: parameters)
+    for (question, answer) in zip(parameters.questions, result.answers) {
+        print(question.type, answer.type)
+    }
 }
 ```
 
