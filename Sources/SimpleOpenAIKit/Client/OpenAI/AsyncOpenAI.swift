@@ -36,6 +36,7 @@ public class AsyncOpenAI {
     public let uploads: OpenAIAsyncAPIResource.UploadsAsyncResource
     public let videos: OpenAIAsyncAPIResource.VideosAsyncResource
     public let realtime: OpenAIAsyncAPIResource.RealtimeAsyncResource
+    public let decisions: OpenAIAsyncAPIResource.DecisionsAsyncResource
 //    public let vector_stores: OpenAIAsyncAPIResource.VectorStoresAsyncResource
 //    public let batches: OpenAIAsyncAPIResource.BatchesAsyncResource
 //    public let fine_tuning: OpenAIAsyncAPIResource.FineTuningAsyncResource
@@ -88,6 +89,7 @@ public class AsyncOpenAI {
         self.uploads     = .init(clientOption)
         self.videos      = .init(clientOption)
         self.realtime    = .init(clientOption)
+        self.decisions   = .init(clientOption)
         self.beta        = .init(clientOption)
         self.clientOption = clientOption
     }

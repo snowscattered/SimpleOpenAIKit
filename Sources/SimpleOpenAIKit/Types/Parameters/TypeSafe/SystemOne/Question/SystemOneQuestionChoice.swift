@@ -1,5 +1,5 @@
 //
-//  SystemOneScoreQuestion.swift
+//  SystemOneQuestionChoice.swift
 //  SimpleOpenAIKit
 //
 //  Created by snow on 9/23/26.
@@ -10,8 +10,8 @@ import SimpleCodableMacro
 
 @BaseModelNoWithExtra
 @PublicInit
-public struct SystemOneScoreQuestion {
-    public static let type: String = "score"
+public struct SystemOneQuestionChoice {
+    public static let type: String = "choice"
     public var instructions: SystemOneJSONConent?
-    public var criteria: [SystemOneJSONConent]
+    public var criteria: [String: SystemOneJSONConent?]
 }
