@@ -169,7 +169,7 @@ public enum ChatToolChoice {
 @PublicInit
 public struct ChatJSONSchema {
     public var name: String
-    public var description: String
+    public var description: String?
     public var schema: [String: BaseType]
     public var strict: Bool?
 }

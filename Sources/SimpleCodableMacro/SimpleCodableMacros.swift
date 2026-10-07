@@ -55,6 +55,31 @@ public macro MultiConstant(_ values: [String]) = #externalMacro(module: "SimpleC
 @attached(peer)
 public macro transient() = #externalMacro(module: "SimpleCodableMacroPlugin", type: "TransientMacro")
 
+/// Marker attribute for a stored property inside a `@BaseModelWithExtra` or `@BaseModelNoWithExtra` struct.
+/// It declares extra JSON key names the property also answers to, so a payload spelled `x-schema`,
+/// `beta_realtime` or any other variant decodes into the field instead of failing with `keyNotFound`
+/// and landing in `extra`. Each alias becomes its own `CodingKeys` case named after the key:
+/// `case beta_realtime`, a backticked one for hyphenated keys, and a mangled name plus an explicit
+/// raw value for keys Swift cannot spell at all, such as `item.input_audio.logprobs`.
+/// - Decoding tries the Swift property name first, then the aliases in the order they are declared.
+/// - Encoding is untouched: the generated `encode(to:)` always writes the Swift property name.
+/// - Two fields may not claim the same key: `CodingKeys` is a `String` enum, so the macro reports it.
+/// - A type that declares its own `CodingKeys` keeps full control; alias keys are then your job.
+/// ```swift
+/// @BaseModelWithExtra
+/// struct Schema {
+///     @BaseModelFieldAlias("x-schema")
+///     public var schema_: [String: BaseType]?
+///
+///     @BaseModelFieldAlias(["beta_realtime", "x-betarealtime"])
+///     public var betaRealtime: Bool?
+/// }
+/// ```
+@attached(peer)
+public macro BaseModelFieldAlias(_ keys: String...) = #externalMacro(module: "SimpleCodableMacroPlugin", type: "BaseModelFieldAliasMacro")
+@attached(peer)
+public macro BaseModelFieldAlias(_ keys: [String]) = #externalMacro(module: "SimpleCodableMacroPlugin", type: "BaseModelFieldAliasMacro")
+
 /// A macro that generates a `public` memberwise initializer for a struct or root class.
 /// Properties that are `static` or `let` with an initial value are skipped.
 @attached(member, names: named(init))

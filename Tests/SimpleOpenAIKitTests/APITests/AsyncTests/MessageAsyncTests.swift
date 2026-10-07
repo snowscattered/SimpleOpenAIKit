@@ -46,12 +46,12 @@ struct MessageAsyncTests {
             let long: Float
         }
         @MainArgument
-        struct Argument {
+        struct Arguments {
             @ReferToolArgument(description: "The location to fetch the weather for.")
             let location: Location
             let time: Double
         }
-        static func call(arguments: Argument) async throws -> String { "sunny" }
+        static func call(arguments: Arguments) async throws -> String { "sunny" }
     }
     @Test func asyncResponseToolData() async throws {
         var parameters = param
@@ -65,7 +65,7 @@ struct MessageAsyncTests {
             switch block {
             case .tool_use(let tool_use_block):
                 let data = try JSONEncoder().encode(tool_use_block.input)
-                let arg = try JSONDecoder().decode(Tool.Argument.self, from: data)
+                let arg = try JSONDecoder().decode(Tool.Arguments.self, from: data)
                 print(arg)
             default: continue
             }
@@ -81,5 +81,57 @@ struct MessageAsyncTests {
         for try await chunk in res {
             print(chunk)
         }
+    }
+    
+    @ReferArgument
+    struct Location {
+        let lat: Float
+        let long: Float
+    }
+    @MainArgument(
+        description: "Fetch the weather for a given location.",
+        strict: true
+    )
+    struct Schema: SchemaProtocol {
+        @ReferToolArgument(description: "The location to fetch the weather for.")
+        let location: Location
+        let time: Double
+    }
+    @Test func asyncMessageSchemaData() async throws {
+        var parameters = param
+        parameters.messages = [.user("Could you fetch the current weather for lat=40.7128, lon=-74.0060? Also tell me what it'll be like in 5 hours.")]
+        parameters.tools = nil
+        parameters.output_config = MessageOutputConfig(format: MessageJSONOutputFormat(Schema.self))
+        let res = try await anthropicAsyncClient.messages.create(
+            parameters: parameters
+        )
+        print(res)
+        for block in res.content {
+            switch block {
+            case .text(let text_block):
+                let arg = try JSONDecoder().decode(Schema.self, from: text_block.text.data(using: .utf8)!)
+                print(arg)
+            default: continue
+            }
+        }
+    }
+    @Test func asyncMessageSchemaStream() async throws {
+        var parameters = param
+        parameters.messages = [.user("Could you fetch the current weather for lat=40.7128, lon=-74.0060? Also tell me what it'll be like in 5 hours.")]
+        parameters.tools = nil
+        parameters.output_config = MessageOutputConfig(format: MessageJSONOutputFormat(Schema.self))
+        let res = try await anthropicAsyncClient.messages.stream(
+            parameters: parameters
+        )
+        var content = ""
+        for try await chunk in res {
+            if case .content_block_delta(let event) = chunk, case .text_delta(let delta) = event.delta {
+                content += delta.text
+                print(delta.text, terminator: "")
+            }
+        }
+        print()
+        let arg = try JSONDecoder().decode(Schema.self, from: content.data(using: .utf8)!)
+        print(arg)
     }
 }

@@ -8,7 +8,6 @@
 // Types shared by the macro test files.
 
 import Foundation
-import Testing
 import SimpleCodableMacro
 
 @CodableLiteral
@@ -138,10 +137,60 @@ enum Multi {
     case a(A)
 }
 
-@CodableByConstantAndSingle(field: "role", singleCase: "single")
-enum MultiSingle {
-    @MultiConstant(["D", "C"])
-    case multi(MultiRole)
-    case a(A)
-    case single(B)
+// MARK: - @BaseModelFieldAlias
+@BaseModelWithExtra
+@PublicInit
+struct AliasedExtra {
+    @BaseModelFieldAlias("x-schema")
+    var schema_: [String: BaseType]?
+    @BaseModelFieldAlias(["beta_realtime", "x-betarealtime"])
+    var betaRealtime: Bool?
+    @BaseModelFieldAlias("x-timeout")
+    var timeout: Int = 30
+    var name: String?
+}
+
+@BaseModelWithExtra
+@PublicInit
+struct AliasedSchema {
+    @BaseModelFieldAlias("schema_")
+    var schema: [String: BaseType]?
+}
+
+@BaseModelNoWithExtra
+@PublicInit
+struct AliasedPlain {
+    @BaseModelFieldAlias("type")
+    var type_: String
+    @BaseModelFieldAlias(["match_aliases", "matchAliases"])
+    var aliases: [String]?
+}
+
+// Keys Swift cannot spell as a case name directly: hyphen, keyword, dotted path.
+@BaseModelNoWithExtra
+@PublicInit
+struct AliasedNames {
+    @BaseModelFieldAlias("beta_realtime")
+    var betaRealtime: Bool?
+    @BaseModelFieldAlias("default")
+    var defaultValue: String?
+    @BaseModelFieldAlias("item.input_audio_transcription.logprobs")
+    var logprobs: Int?
+    @BaseModelFieldAlias("item.logprobs")
+    var a: Int?
+    @BaseModelFieldAlias("item_logprobs")
+    var b: Int?
+}
+
+@BaseModelNoWithExtra
+@PublicInit
+struct MultiBindingModel {
+    var first: Int
+    var second: String
+}
+
+@BaseModelNoWithExtra
+struct EscapedPropertyModel {
+    @BaseModelFieldAlias("legacy-default")
+    var `default`: String?
 }

@@ -8,6 +8,7 @@ re-exported by `SimpleOpenAIKit`; expansion lives in
 | --- | --- |
 | `@BaseModelNoWithExtra` | Codable synthesis over exactly the declared fields |
 | `@BaseModelWithExtra` | Same, routing unknown JSON keys into `extra` |
+| `@BaseModelFieldAlias` | Adds alternate JSON key spellings for a stored property |
 | `@PublicInit` | Public initializer over the stored properties |
 | `@SingleOrArray` | Accepts one value or an array when decoding |
 | `@CodableLiteral` | Literal-style Codable synthesis for an enum's cases |
@@ -59,6 +60,31 @@ extension After {
     mutating func after() throws { self.A += 100 }
 }
 ```
+
+## Field aliases
+
+`@BaseModelFieldAlias` lets a stored property accept additional JSON key spellings while keeping its
+Swift property name as the canonical key:
+
+```swift
+@BaseModelWithExtra
+@PublicInit
+public struct Schema {
+    @BaseModelFieldAlias("x-schema")
+    public var schema_: [String: BaseType]?
+
+    @BaseModelFieldAlias(["beta_realtime", "x-betarealtime"])
+    public var betaRealtime: Bool?
+}
+```
+
+Decoding checks the Swift property name first, then the aliases in declaration order. Encoding always
+writes the Swift property name, so alias keys are decode-only. Alias keys that are not valid Swift
+identifiers, such as `x-schema` or `item.input_audio.logprobs`, are emitted as escaped or mangled
+`CodingKeys` cases while preserving their original JSON spelling.
+
+Two properties cannot claim the same JSON key, and a type that declares its own `CodingKeys` keeps
+full control over alias handling.
 
 ## `@PublicInit` parameters
 

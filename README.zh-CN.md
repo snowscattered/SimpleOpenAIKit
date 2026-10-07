@@ -75,11 +75,11 @@ dependencies: [
 | --- | --- | --- |
 | `models` | ✅ | `list`, `retrieve`, `delete` |
 | `completions` | ✅ | `create`, `stream` |
-| `chat.completions` | ✅ | `create`, `stream` |
+| `chat.completions` | ✅ | `create`, `stream`, `parse` |
 | `embeddings` | ✅ | `create` |
 | `images` | ✅ | `generate`, `edit`, `generateStream`, `editStream` |
 | `audio` | ✅ | `speech.create`, `speech.stream`, `transcriptions.create`, `transcriptions.stream` |
-| `responses` | ✅ | `create`, `stream` |
+| `responses` | ✅ | `create`, `stream`, `parse` |
 | `files` | ✅ | `create`, `list`, `retrieve`, `delete` |
 | `uploads` | ✅ | `create`, `cancel`, `complete`, `upload_file_chunked`, `part.create` |
 | `videos` | ✅ | `create`, `list`, `retrieve`, `delete`, `edit`, `create_character`, `create_and_poll` |
@@ -583,7 +583,7 @@ func openAIAsyncBetaRealtime() async throws {
 | --- | --- | --- |
 | `models` | ✅ | `list`, `retrieve` |
 | `completions` | ✅ | `create`, `stream` |
-| `messages` | ✅ | `create`, `stream`, `count_tokens` |
+| `messages` | ✅ | `create`, `stream`, `count_tokens`, `parse` |
 
 ### Message
 

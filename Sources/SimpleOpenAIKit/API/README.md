@@ -141,6 +141,87 @@ for item in response.output {
 }
 ```
 
+## Structured Outputs
+
+A required answer shape is one type as well: a `@MainArgument` struct that declares `SchemaProtocol`.
+The macro already writes the JSON Schema of the struct, the `MainArgument` conformance, and the
+metadata next to it — `__name` (the type's own name), `__description` and `__strict`, spelled through
+the `description:` and `strict:` labels — so the struct is both what the request describes and what the
+answer decodes into, and one macro covers a tool argument and an output shape alike. The `__` prefix
+keeps those three apart from the `name`, `description` and `strict` a `ToolProtocol` declares itself. A
+type the schema points at instead of inlining carries `@ReferArgument`, the same definition a tool uses,
+and is referenced with `@ReferToolArgument`. See
+[SimpleOpenAIKitMacro](../../SimpleOpenAIKitMacro/README.md) for the schema macros.
+
+```swift
+@ReferArgument
+struct Location {
+    let lat: Float
+    let long: Float
+}
+
+@MainArgument(description: "Fetch the weather for a given location.", strict: true)
+struct Weather: SchemaProtocol {
+    @ReferToolArgument(description: "The location to fetch the weather for.")
+    let location: Location
+    let time: Double
+}
+```
+
+The type drops into the format field each provider exposes: `ChatResponseFormat(Weather.self)` for
+`chat.completions`, `ResponseFormatTextConfig(Weather.self)` for `responses` under `text.format`,
+and `MessageJSONOutputFormat(Weather.self)` for Anthropic `messages` under `output_config.format`,
+where only the schema is sent. A `description` or `strict` the caller leaves out is generated as
+`nil`, which keeps the provider default.
+
+All three providers expose `parse`: `chat.completions.parse` takes `ChatParseParameters`,
+`responses.parse` takes `ResponseParseParameters`, and Anthropic `messages.parse` takes
+`MessageParseParameters`. Each method builds the provider's format field from the schema type,
+sends a non-streaming request, and returns the original response with decoded values attached to
+its text content.
+
+```swift
+let chat = try await openAIAsyncClient.chat.completions.parse(
+    parameters: .init(
+        model: "your-model",
+        messages: [.user("What's the weather in New York?")],
+        response_format: Weather.self
+    )
+)
+print(chat.choices.first?.message.parsed as Any)      // Weather?
+
+let response = try await openAIAsyncClient.responses.parse(
+    parameters: .init(
+        model: "your-model",
+        input: "What's the weather in New York?",
+        text_format: Weather.self
+    )
+)
+for item in response.output {
+    if case .message(let message) = item {
+        print(message.parsed as Any)                  // Weather?
+    }
+}
+
+let anthropic = AsyncAnthropic(api_key: "YOUR_ANTHROPIC_API_KEY")
+let message = try await anthropic.messages.parse(
+    parameters: .init(
+        model: "your-anthropic-model",
+        messages: [.user("What's the weather in New York?")],
+        output_format: Weather.self,
+        max_tokens: 1024
+    )
+)
+for block in message.content {
+    if case .text(let textBlock) = block {
+        print(textBlock.parsed as Any)                // Weather?
+    }
+}
+```
+
+`parsed` is `nil` when the target text is empty, and malformed JSON throws. The `create` methods
+remain available whenever you would rather decode the raw content yourself.
+
 ## Websockets
 
 `connect`/`conntent` opens the socket, runs your closure against the live connection, then closes it.

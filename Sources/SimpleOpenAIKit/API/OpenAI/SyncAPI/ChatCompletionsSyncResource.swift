@@ -41,4 +41,16 @@ public extension OpenAISyncAPIResource.ChatCompletionsSyncResource {
             method: .post
         )
     }
+    /// Send a chat request whose answer has to fit `parameters.response_format`, and decode it into
+    /// that schema. `message.parsed` is `nil` when the answer carries no string content.
+    func parse<T: SchemaProtocol>(
+        parameters: ChatParseParameters<T>,
+        requestOptions: RequestOptions? = nil
+    ) throws -> ChatParseResult<T> {
+        let result = try self.create(
+            parameters: parameters.createParameters,
+            requestOptions: requestOptions
+        )
+        return try ChatParseResult(result)
+    }
 }

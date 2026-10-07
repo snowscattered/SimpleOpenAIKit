@@ -5,7 +5,7 @@ Public declarations for the tool-schema macros, re-exported by `SimpleOpenAIKit`
 
 | Macro | Effect |
 | --- | --- |
-| `@MainArgument` | Root `object` JSON Schema on a struct, plus `MainArgument` conformance |
+| `@MainArgument` | Root `object` JSON Schema, plus `MainArgument`, `__name`, `__description` and `__strict` |
 | `@ReferArgument` | A `$def` definition a root schema can reference |
 | `@EnumToolArgument` | `{"type": ..., "enum": [...]}` built from an enum's raw values |
 | `@AnyOfToolArgument` | `{"anyOf": [...]}` over an enum's cases, plus the matching `init(from:)` |
@@ -153,3 +153,11 @@ type cannot drift apart. See [API](../SimpleOpenAIKit/API/README.md) for the cal
 describe itself as a schema fragment), then `MainArgument`, `ReferArgument`, `EnumArgument` and
 `AnyOfArgument`. Each encodes its schema rather than a value, which is how a schema constant reaches
 the request body.
+
+A `@MainArgument` struct is a structured output as soon as it declares `SchemaProtocol`: the macro
+already writes that protocol's `__name`, `__description` and `__strict` next to the schema, and the
+`MainArgument` conformance codes the struct, so one type is both what the request describes and what
+the answer decodes into. The `__` prefix is what keeps those three apart from the `name`, `description`
+and `strict` a `ToolProtocol` declares, and from the properties of the payload; a tool that says nothing
+about strictness falls back to `Arguments.__strict`. A referenced definition needs nothing more than
+`@ReferArgument`. See [API / Structured Outputs](../SimpleOpenAIKit/API/README.md).
