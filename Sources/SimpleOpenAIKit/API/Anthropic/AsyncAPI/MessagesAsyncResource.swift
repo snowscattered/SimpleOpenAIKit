@@ -41,6 +41,20 @@ public extension AnthropicAsyncAPIResource.MessagesAsyncResource {
             method: .post
         )
     }
+
+    // MARK: Structured Outputs
+    /// Send a Messages request whose answer has to fit `parameters.output_format`, and decode it into
+    /// that schema. `textBlock.parsed` is `nil` when the answer carries no text.
+    func parse<T: SchemaProtocol>(
+        parameters: MessageParseParameters<T>,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> MessageParseResult<T> {
+        let result: MessageCreateResult = try await self.create(
+            parameters: parameters.createParameters,
+            requestOptions: requestOptions
+        )
+        return try MessageParseResult(result)
+    }
     
     /// Estimate the input tokens of a Messages payload without generating output.
     func count_tokens(

@@ -41,6 +41,21 @@ public extension OpenAISyncAPIResource.ResponsesSyncResource {
             method: .post
         )
     }
+    
+    // MARK: Structured Outputs
+    /// Send a Responses request whose answer has to fit `parameters.text_format`, and decode it into
+    /// that schema. `message.parsed` is `nil` when the answer carries no output text.
+    func parse<T: SchemaProtocol>(
+        parameters: ResponseParseParameters<T>,
+        requestOptions: RequestOptions? = nil
+    ) throws -> ResponseParseResult<T> {
+        let result: ResponseCreateResult = try self.create(
+            parameters: parameters.createParameters,
+            requestOptions: requestOptions
+        )
+        return try ResponseParseResult(result)
+    }
+
     // MARK: Retrieve
     /// Fetch a stored response.
     func retrieve(

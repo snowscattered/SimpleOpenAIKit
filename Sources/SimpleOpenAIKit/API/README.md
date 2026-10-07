@@ -174,23 +174,53 @@ and `MessageJSONOutputFormat(Weather.self)` for Anthropic `messages` under `outp
 where only the schema is sent. A `description` or `strict` the caller leaves out is generated as
 `nil`, which keeps the provider default.
 
-`chat.completions.parse` sends the schema and decodes the answer in one step, over
-`ChatParseParameters`:
+All three providers expose `parse`: `chat.completions.parse` takes `ChatParseParameters`,
+`responses.parse` takes `ResponseParseParameters`, and Anthropic `messages.parse` takes
+`MessageParseParameters`. Each method builds the provider's format field from the schema type,
+sends a non-streaming request, and returns the original response with decoded values attached to
+its text content.
 
 ```swift
-let result = try await openAIAsyncClient.chat.completions.parse(
+let chat = try await openAIAsyncClient.chat.completions.parse(
     parameters: .init(
         model: "your-model",
         messages: [.user("What's the weather in New York?")],
         response_format: Weather.self
     )
 )
-print(result.choices.first?.message.parsed as Any)      // Weather?
+print(chat.choices.first?.message.parsed as Any)      // Weather?
+
+let response = try await openAIAsyncClient.responses.parse(
+    parameters: .init(
+        model: "your-model",
+        input: "What's the weather in New York?",
+        text_format: Weather.self
+    )
+)
+for item in response.output {
+    if case .message(let message) = item {
+        print(message.parsed as Any)                  // Weather?
+    }
+}
+
+let anthropic = AsyncAnthropic(api_key: "YOUR_ANTHROPIC_API_KEY")
+let message = try await anthropic.messages.parse(
+    parameters: .init(
+        model: "your-anthropic-model",
+        messages: [.user("What's the weather in New York?")],
+        output_format: Weather.self,
+        max_tokens: 1024
+    )
+)
+for block in message.content {
+    if case .text(let textBlock) = block {
+        print(textBlock.parsed as Any)                // Weather?
+    }
+}
 ```
 
-`parsed` is `nil` when the answer carries no string content, and malformed JSON throws. Reaching
-for `create` with a `ChatResponseFormat` stays available whenever you would rather decode the raw
-`content` yourself.
+`parsed` is `nil` when the target text is empty, and malformed JSON throws. The `create` methods
+remain available whenever you would rather decode the raw content yourself.
 
 ## Websockets
 

@@ -8,11 +8,11 @@
 import Foundation
 import SimpleCodableMacro
 
-//@BaseModelWithExtra(encodeExtra: false)
-//@PublicInit
+@PublicInit
 public struct ChatParseParameters<T: SchemaProtocol> {
     public var model: String
     public var messages: [ChatMessage]
+    public var response_format: T.Type?
     public var functions: [ChatFunction]?
     public var function_call: ChatFunctionCall?
     public var tools: [ChatTool]?
@@ -27,7 +27,6 @@ public struct ChatParseParameters<T: SchemaProtocol> {
     public var reasoning_effort: ChatReasoningEffortLiteral?
     public var stream_options: ChatStreamOptions?
     public var stop: [String]?
-    public var response_format: T.Type?
     public var modalities: [ChatModalityLiteral]?
     public var seed: Int?
     public var web_search_options: ChatWebSearchOption?
@@ -45,79 +44,6 @@ public struct ChatParseParameters<T: SchemaProtocol> {
     public var top_logprobs: Int?
     public var verbosity: ChatVerbosityLiteral?
     public var user: String?
-    
-    
-    public init(
-        model: String,
-        messages: [ChatMessage],
-        functions: [ChatFunction]? = nil,
-        function_call: ChatFunctionCall? = nil,
-        tools: [ChatTool]? = nil,
-        tool_choice: ChatToolChoice? = nil,
-        audio: ChatAudio? = nil,
-        temperature: Double? = nil,
-        top_p: Double? = nil,
-        frequency_penalty: Double? = nil,
-        presence_penalty: Double? = nil,
-        max_tokens: Int? = nil,
-        parallel_tool_calls: Bool? = nil,
-        reasoning_effort: ChatReasoningEffortLiteral? = nil,
-        stream_options: ChatStreamOptions? = nil,
-        stop: [String]? = nil,
-        response_format: T.Type? = nil,
-        modalities: [ChatModalityLiteral]? = nil,
-        seed: Int? = nil,
-        web_search_options: ChatWebSearchOption? = nil,
-        metadata: ChatMetaData? = nil,
-        max_completion_tokens: Int? = nil,
-        logit_bias: [String: Int]? = nil,
-        logprobs: Bool? = nil,
-        n: Int? = nil,
-        prediction: ChatPredictionContent? = nil,
-        prompt_cache_key: String? = nil,
-        prompt_cache_retention: ChatPromptCacheRetentionLiteral? = nil,
-        safety_identifier: String? = nil,
-        service_tier: ChatServiceTierLiteral? = nil,
-        store: Bool? = nil,
-        top_logprobs: Int? = nil,
-        verbosity: ChatVerbosityLiteral? = nil,
-        user: String? = nil
-    ) {
-        self.model = model
-        self.messages = messages
-        self.functions = functions
-        self.function_call = function_call
-        self.tools = tools
-        self.tool_choice = tool_choice
-        self.audio = audio
-        self.temperature = temperature
-        self.top_p = top_p
-        self.frequency_penalty = frequency_penalty
-        self.presence_penalty = presence_penalty
-        self.max_tokens = max_tokens
-        self.parallel_tool_calls = parallel_tool_calls
-        self.reasoning_effort = reasoning_effort
-        self.stream_options = stream_options
-        self.stop = stop
-        self.response_format = response_format
-        self.modalities = modalities
-        self.seed = seed
-        self.web_search_options = web_search_options
-        self.metadata = metadata
-        self.max_completion_tokens = max_completion_tokens
-        self.logit_bias = logit_bias
-        self.logprobs = logprobs
-        self.n = n
-        self.prediction = prediction
-        self.prompt_cache_key = prompt_cache_key
-        self.prompt_cache_retention = prompt_cache_retention
-        self.safety_identifier = safety_identifier
-        self.service_tier = service_tier
-        self.store = store
-        self.top_logprobs = top_logprobs
-        self.verbosity = verbosity
-        self.user = user
-    }
 }
 
 extension ChatParseParameters {
