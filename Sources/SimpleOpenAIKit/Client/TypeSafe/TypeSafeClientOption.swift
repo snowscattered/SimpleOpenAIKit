@@ -31,21 +31,21 @@ struct TypeSafeClientOption: APIClientOption, Sendable {
 
     init(
         api_key: String,
-        model: String = "jev-latest",
-        base_url: URL = URL(string: "https://api.typesafe.ai")!,
-        timeout: TimeInterval = 600,
-        max_retries: Int = 2,
+        base_url: URL? = nil,
+        model: String? = nil,
+        timeout: TimeInterval? = nil,
+        max_retries: Int? = nil,
 
-        default_headers: Header = [:],
-        default_query: Query = [:]
+        default_headers: Header? = nil,
+        default_query: Query? = nil
     ) {
         self.api_key = api_key
-        self.model = model
-        self.base_url = base_url
-        self.timeout = timeout
-        self.max_retries = max_retries
-        self.default_headers = default_headers
-        self.default_query = default_query
+        self.model = model ?? "jev-latest"
+        self.base_url = base_url ?? URL(string: "https://api.typesafe.ai")!
+        self.timeout = timeout ?? 600
+        self.max_retries = max_retries ?? 2
+        self.default_headers = default_headers ?? [:]
+        self.default_query = default_query ?? [:]
     }
 
     /// Append `path` to the TypeSafe base URL.

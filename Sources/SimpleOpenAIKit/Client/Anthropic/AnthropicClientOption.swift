@@ -33,22 +33,22 @@ struct AnthropicClientOption: APIClientOption, Sendable {
 
     init(
         api_key: String,
+        base_url: URL? = nil,
         auth_token: String? = nil,
-        base_url: URL = URL(string: "https://api.anthropic.com")!,
 
-        timeout: TimeInterval = 600,
-        max_retries: Int = 2,
+        timeout: TimeInterval? = nil,
+        max_retries: Int? = nil,
 
-        default_headers: Header = [:],
-        default_query: Query = [:]
+        default_headers: Header? = nil,
+        default_query: Query? = nil
     ) {
         self.api_key = api_key
-        self.auth_token = auth_token
-        self.base_url = base_url
-        self.timeout = timeout
-        self.max_retries = max_retries
-        self.default_headers = default_headers
-        self.default_query = default_query
+        self.auth_token = auth_token ?? nil
+        self.base_url = base_url ?? URL(string: "https://api.anthropic.com")!
+        self.timeout = timeout ?? 600
+        self.max_retries = max_retries ?? 2
+        self.default_headers = default_headers ?? [:]
+        self.default_query = default_query ?? [:]
     }
 
     /// Append `path` to the Anthropic base URL.

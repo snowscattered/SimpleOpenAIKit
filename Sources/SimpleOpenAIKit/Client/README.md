@@ -26,11 +26,11 @@ let openAI = AsyncOpenAI(api_key: "YOUR_API_KEY")
 
 let gateway = AsyncOpenAI(
     api_key: "YOUR_API_KEY",
+    base_url: URL(string: "https://your-gateway.example.com/v1")!,
+    websocket_base_url: URL(string: "wss://your-gateway.example.com/v1")!,
     organization: "org_...",
     project: "proj_...",
     webhook_secret: "whsec_...",
-    base_url: URL(string: "https://your-gateway.example.com/v1")!,
-    websocket_base_url: URL(string: "wss://your-gateway.example.com/v1")!,
     timeout: 600,
     max_retries: 2,
     default_headers: ["User-Agent": "my-app/2.0"],
