@@ -72,7 +72,8 @@ struct ResponseAsyncTests {
         }
         @MainArgument
         struct Arguments {
-            @ReferToolArgument(description: "The location to fetch the weather for.")
+            @ArgumentDescription("The location to fetch the weather for.")
+            @ReferToolArgument
             let location: Location
             let time: Double
         }
@@ -118,7 +119,8 @@ struct ResponseAsyncTests {
         strict: true
     )
     struct Schema: SchemaProtocol {
-        @ReferToolArgument(description: "The location to fetch the weather for.")
+        @ArgumentDescription("The location to fetch the weather for.")
+        @ReferToolArgument
         let location: Location
         let time: Double
     }

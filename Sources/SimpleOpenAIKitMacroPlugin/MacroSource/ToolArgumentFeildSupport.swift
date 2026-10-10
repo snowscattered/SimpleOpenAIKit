@@ -108,15 +108,20 @@ package enum ToolArgumentKind: String {
     }
 }
 
-/// A `@*ToolArgument` marker and the arguments it carries. Values stay source text so that literals
-/// reach the generated schema untouched.
+/// A `@*ToolArgument` marker and the arguments it carries, together with the `@ArgumentDescription`
+/// written next to it. Values stay source text so that literals reach the generated schema untouched.
 package struct ToolArgument {
-    package let kind: ToolArgumentKind
+    /// The marker written on the value, or `nil` when only `@ArgumentDescription` is there, in which
+    /// case the schema is inferred from the Swift type.
+    package let kind: ToolArgumentKind?
     package let arguments: [String: String]
+    /// The source of the `@ArgumentDescription`, or `nil` when there is none.
+    package let description: String?
 
-    package init(kind: ToolArgumentKind, arguments: [String: String]) {
+    package init(kind: ToolArgumentKind?, arguments: [String: String], description: String?) {
         self.kind = kind
         self.arguments = arguments
+        self.description = description
     }
 
     /// The entries for `labels`, in the given order, skipping the ones that are not spelled out.
@@ -126,19 +131,23 @@ package struct ToolArgument {
 
     /// The `description` entry, when there is a non-empty one.
     package func descriptionEntries() -> [(key: String, value: SchemaSource)] {
-        guard let value = arguments["description"], value != "\"\"" else { return [] }
-        return [("description", .literal(value))]
+        ArgumentDescriptionMacro.entries(for: description)
     }
 }
 
 extension ToolArgument {
-    /// Builds an argument from the first schema marker in `attributes`, if one is present.
+    /// Builds an argument from the schema markers in `attributes`: the `@*ToolArgument` one supplies the
+    /// JSON type and its constraints, and `@ArgumentDescription` supplies the description. A value with
+    /// only a description carries no kind, so its schema stays inferred from its Swift type.
     package init?(attributes: AttributeListSyntax) {
+        let description = ArgumentDescriptionMacro.source(in: attributes)
         guard let marker = Self.marker(in: attributes),
               let name = marker.attributeName.as(IdentifierTypeSyntax.self)?.name.text,
               let kind = ToolArgumentKind(rawValue: name)
         else {
-            return nil
+            guard let description else { return nil }
+            self.init(kind: nil, arguments: [:], description: description)
+            return
         }
 
         var arguments: [String: String] = [:]
@@ -150,7 +159,7 @@ extension ToolArgument {
             }
         }
 
-        self.init(kind: kind, arguments: arguments)
+        self.init(kind: kind, arguments: arguments, description: description)
     }
 
     private static func marker(in attributes: AttributeListSyntax) -> AttributeSyntax? {

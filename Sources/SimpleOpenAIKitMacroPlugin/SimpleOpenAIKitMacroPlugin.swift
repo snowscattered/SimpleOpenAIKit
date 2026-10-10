@@ -15,6 +15,7 @@ import SwiftSyntaxMacros
 @main
 struct SimpleOpenAIMacroPlugin: CompilerPlugin {
     let providingMacros: [Macro.Type] = [
+        ArgumentDescriptionMacro.self,
         StringToolArgumentMacro.self,
         NumberToolArgumentMacro.self,
         BooleanToolArgumentMacro.self,

@@ -185,7 +185,8 @@ struct WeatherTool: ToolProtocol {
 
     @MainArgument
     struct Argument {
-        @ReferToolArgument(description: "The location to fetch the weather for.")
+        @ArgumentDescription("The location to fetch the weather for.")
+        @ReferToolArgument
         let location: Location
         let time: Double
     }
