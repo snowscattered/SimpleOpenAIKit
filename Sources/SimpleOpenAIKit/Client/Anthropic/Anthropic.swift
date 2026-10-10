@@ -8,7 +8,7 @@
 import Foundation
 
 /// Synchronous Anthropic client, holding the `models`, `completions` and `messages` resources.
-public class Anthropic {
+public class Anthropic: @unchecked Sendable {
     private let clientOption: AnthropicClientOption
     public var api_key: String { clientOption.api_key }
     public var auth_token: String? { clientOption.auth_token }

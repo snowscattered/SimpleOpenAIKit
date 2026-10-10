@@ -8,7 +8,7 @@
 import Foundation
 
 /// Awaitable OpenAI client; each API group is exposed as a stored resource namespace.
-public class AsyncOpenAI {
+public class AsyncOpenAI: @unchecked Sendable {
     private let clientOption: OpenAIClientOption
     public var api_key: String { clientOption.api_key }
     public var organization: String? { clientOption.organization }

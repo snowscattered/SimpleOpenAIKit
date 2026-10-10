@@ -8,7 +8,7 @@
 import Foundation
 
 /// Synchronous OpenAI client; each API group is exposed as a stored resource namespace.
-public class OpenAI {
+public class OpenAI: @unchecked Sendable {
     private let clientOption: OpenAIClientOption
     public var api_key: String { clientOption.api_key }
     public var organization: String? { clientOption.organization }

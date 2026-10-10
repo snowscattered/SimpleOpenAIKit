@@ -11,27 +11,27 @@
 public enum OpenAIAsyncAPIResource {
     // MARK: Model
     /// `/models`: list, retrieve, delete a model.
-    public struct ModelsAsyncResource: ~Copyable {
+    public struct ModelsAsyncResource: ~Copyable, ResourceProtocol {
         let clientOption: OpenAIClientOption
         init(_ clientOption: OpenAIClientOption) { self.clientOption = clientOption }
     }
 
     // MARK: Completions
     /// `/completions`: the legacy text completion endpoint, plus its streaming variant.
-    public struct CompletionsAsyncResource: ~Copyable {
+    public struct CompletionsAsyncResource: ~Copyable, ResourceProtocol {
         let clientOption: OpenAIClientOption
         init(_ clientOption: OpenAIClientOption) { self.clientOption = clientOption }
     }
 
     // MARK: Chat
     /// `/chat/completions`: chat requests and streamed chat chunks.
-    public struct ChatCompletionsAsyncResource: ~Copyable {
+    public struct ChatCompletionsAsyncResource: ~Copyable, ResourceProtocol {
         let clientOption: OpenAIClientOption
         init(_ clientOption: OpenAIClientOption) { self.clientOption = clientOption }
     }
 
     /// Groups `chat.completions` under `client.chat`.
-    public struct ChatsAsyncResource: ~Copyable {
+    public struct ChatsAsyncResource: ~Copyable, ResourceProtocol {
         let clientOption: OpenAIClientOption
         public let completions: ChatCompletionsAsyncResource
         init(_ clientOption: OpenAIClientOption) {
@@ -42,26 +42,26 @@ public enum OpenAIAsyncAPIResource {
 
     // MARK: Embedding
     /// `/embeddings`: turn text into vectors.
-    public struct EmbeddingsAsyncResource: ~Copyable {
+    public struct EmbeddingsAsyncResource: ~Copyable, ResourceProtocol {
         let clientOption: OpenAIClientOption
         init(_ clientOption: OpenAIClientOption) { self.clientOption = clientOption }
     }
 
     // MARK: Image
     /// `/images/generations`: create images from a prompt.
-    public struct ImageGenerateAsyncResource: ~Copyable {
+    public struct ImageGenerateAsyncResource: ~Copyable, ResourceProtocol {
         let clientOption: OpenAIClientOption
         init(_ clientOption: OpenAIClientOption) { self.clientOption = clientOption }
     }
 
     /// `/images/edits` and `/images/variations`: multipart image rework.
-    public struct ImageEditAsyncResource: ~Copyable {
+    public struct ImageEditAsyncResource: ~Copyable, ResourceProtocol {
         let clientOption: OpenAIClientOption
         init(_ clientOption: OpenAIClientOption) { self.clientOption = clientOption }
     }
 
     /// Groups `images.generate` and `images.edit` under `client.images`.
-    public struct ImagesAsyncResource: ~Copyable {
+    public struct ImagesAsyncResource: ~Copyable, ResourceProtocol {
         let clientOption: OpenAIClientOption
         public let generate: ImageGenerateAsyncResource
         public let edit: ImageEditAsyncResource
@@ -74,19 +74,19 @@ public enum OpenAIAsyncAPIResource {
 
     // MARK: Audio
     /// `/audio/speech`: text to speech, returned as raw audio bytes.
-    public struct AudioSpeechAsyncResource: ~Copyable {
+    public struct AudioSpeechAsyncResource: ~Copyable, ResourceProtocol {
         let clientOption: OpenAIClientOption
         init(_ clientOption: OpenAIClientOption) { self.clientOption = clientOption }
     }
 
     /// `/audio/transcriptions`: speech to text, optionally streamed.
-    public struct AudioTranscriptionsAsyncResource: ~Copyable {
+    public struct AudioTranscriptionsAsyncResource: ~Copyable, ResourceProtocol {
         let clientOption: OpenAIClientOption
         init(_ clientOption: OpenAIClientOption) { self.clientOption = clientOption }
     }
 
     /// Groups `audio.speech` and `audio.transcriptions` under `client.audio`.
-    public struct AudioAsyncResource: ~Copyable {
+    public struct AudioAsyncResource: ~Copyable, ResourceProtocol {
         let clientOption: OpenAIClientOption
         public let speech: AudioSpeechAsyncResource
         public let transcriptions: AudioTranscriptionsAsyncResource
@@ -99,19 +99,19 @@ public enum OpenAIAsyncAPIResource {
 
     // MARK: Response
     /// Reserved for the response input-item endpoints; no calls are wired up yet.
-    public struct ResponsesInputItemsAsyncResource: ~Copyable {
+    public struct ResponsesInputItemsAsyncResource: ~Copyable, ResourceProtocol {
         let clientOption: OpenAIClientOption
         init(_ clientOption: OpenAIClientOption) { self.clientOption = clientOption }
     }
 
     /// Reserved for response input-token counting; no calls are wired up yet.
-    public struct ResponsesInputTokensAsyncResource: ~Copyable {
+    public struct ResponsesInputTokensAsyncResource: ~Copyable, ResourceProtocol {
         let clientOption: OpenAIClientOption
         init(_ clientOption: OpenAIClientOption) { self.clientOption = clientOption }
     }
 
     /// `/responses`: create, retrieve, cancel, delete, compact, plus websocket access.
-    public struct ResponsesAsyncResource: ~Copyable {
+    public struct ResponsesAsyncResource: ~Copyable, ResourceProtocol {
         let clientOption: OpenAIClientOption
         public let inputItems: ResponsesInputItemsAsyncResource
         public let inputTokens: ResponsesInputTokensAsyncResource
@@ -124,20 +124,20 @@ public enum OpenAIAsyncAPIResource {
 
     // MARK: File
     /// `/files`: upload, list, inspect and delete stored files.
-    public struct FilesAsyncResource: ~Copyable {
+    public struct FilesAsyncResource: ~Copyable, ResourceProtocol {
         let clientOption: OpenAIClientOption
         init(_ clientOption: OpenAIClientOption) { self.clientOption = clientOption }
     }
 
     // MARK: Upload
     /// `/uploads/{id}/parts`: add one part to an in-progress upload.
-    public struct UploadsPartAsyncResource: ~Copyable {
+    public struct UploadsPartAsyncResource: ~Copyable, ResourceProtocol {
         let clientOption: OpenAIClientOption
         init(_ clientOption: OpenAIClientOption) { self.clientOption = clientOption }
     }
 
     /// `/uploads`: start, complete or cancel a chunked upload.
-    public struct UploadsAsyncResource: ~Copyable {
+    public struct UploadsAsyncResource: ~Copyable, ResourceProtocol {
         let clientOption: OpenAIClientOption
         public let part: UploadsPartAsyncResource
         init(_ clientOption: OpenAIClientOption) {
@@ -148,33 +148,33 @@ public enum OpenAIAsyncAPIResource {
 
     // MARK: Video
     /// `/videos`: generate, edit, extend, remix, poll and download videos.
-    public struct VideosAsyncResource: ~Copyable {
+    public struct VideosAsyncResource: ~Copyable, ResourceProtocol {
         let clientOption: OpenAIClientOption
         init(_ clientOption: OpenAIClientOption) { self.clientOption = clientOption }
     }
 
     // MARK: Realtime
     /// `/realtime`: opens a websocket session and exposes buffered send/receive resources.
-    public struct RealtimeAsyncResource: ~Copyable {
+    public struct RealtimeAsyncResource: ~Copyable, ResourceProtocol {
         let clientOption: OpenAIClientOption
         init(_ clientOption: OpenAIClientOption) { self.clientOption = clientOption }
     }
     
     // MARK: Decision
-    public struct DecisionsAsyncResource: ~Copyable {
+    public struct DecisionsAsyncResource: ~Copyable, ResourceProtocol {
         let clientOption: OpenAIClientOption
         init(_ clientOption: OpenAIClientOption) { self.clientOption = clientOption }
     }
 
     // MARK: Beta
     /// Beta realtime websocket session, mirroring `RealtimeAsyncResource` on the `beta` namespace.
-    public struct BetaRealtimeAsyncResource: ~Copyable {
+    public struct BetaRealtimeAsyncResource: ~Copyable, ResourceProtocol {
         let clientOption: OpenAIClientOption
         init(_ clientOption: OpenAIClientOption) { self.clientOption = clientOption }
     }
 
     /// Groups `beta.realtime` under `client.beta`.
-    public struct BetaAsyncResource: ~Copyable {
+    public struct BetaAsyncResource: ~Copyable, ResourceProtocol {
         let clientOption: OpenAIClientOption
         public let realtime: BetaRealtimeAsyncResource
         init(_ clientOption: OpenAIClientOption) {

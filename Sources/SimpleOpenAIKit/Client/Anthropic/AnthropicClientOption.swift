@@ -8,7 +8,7 @@
 import Foundation
 
 /// Anthropic credentials and endpoint defaults, resolved into request headers on each call.
-struct AnthropicClientOption: APIClientOption {
+struct AnthropicClientOption: APIClientOption, Sendable {
     let api_key: String
     let auth_token: String?
 
