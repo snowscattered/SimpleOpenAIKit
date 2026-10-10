@@ -17,6 +17,14 @@ extension DecisionQuestionChoiceValue: ExpressibleByStringLiteral, ExpressibleBy
     public init(stringLiteral value: String) { self = .string(value) }
     public init(booleanLiteral value: Bool) { self = .bool(value) }
 }
+public extension DecisionQuestionChoiceValue {
+    var value: String {
+        switch self {
+        case .string(let str): return str
+        case .bool(let bool):  return bool ? "__TRUE__" : "__FALSE__"
+        }
+    }
+}
 
 
 @BaseModelNoWithExtra
