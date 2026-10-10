@@ -147,18 +147,16 @@ public enum VideoSeconds {
 ## One value or an array
 
 `@SingleOrArray` decodes a field the provider sends either as a single object or as a list, and encodes
-whichever case you built. The literal conformances are hand-written, which is what makes call sites read
-like plain strings:
+whichever case you built. The macro also synthesises the literal conformances, which is what makes call
+sites read like plain strings. The array case always gets `ExpressibleByArrayLiteral`, and a single case
+whose payload is `String`, `Int`, `Double` or `Bool` gets the matching literal protocol. Other payload
+types keep only the array literal conformance:
 
 ```swift
 @SingleOrArray
 public enum MessageSystem {
     case string(String)
     case array([MessageTextBlock])
-}
-extension MessageSystem: ExpressibleByStringLiteral, ExpressibleByArrayLiteral {
-    public init(stringLiteral value: String)                { self = .string(value) }
-    public init(arrayLiteral elements: MessageTextBlock...) { self = .array(elements) }
 }
 
 let system: MessageSystem = "Answer briefly."

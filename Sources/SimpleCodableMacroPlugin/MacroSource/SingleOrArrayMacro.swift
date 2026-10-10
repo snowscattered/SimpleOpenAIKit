@@ -52,6 +52,32 @@ struct SingleOrArrayMacro: ExtensionMacro {
         }
 
         let members = memberNames(of: enumDecl)
+
+        let inheritedTypes = Set(
+            enumDecl.inheritanceClause?.inheritedTypes.map {
+                $0.type.trimmedDescription.split(separator: ".").last.map(String.init) ?? ""
+            } ?? []
+        )
+        var literalProtocols: [String] = []
+        var literalInitializers: [String] = []
+
+        if let literal = literalConformance(for: single.typeName),
+           !inheritedTypes.contains(literal.protocolName),
+           !members.contains("init(\(literal.initializerLabel):)") {
+            literalProtocols.append(literal.protocolName)
+            literalInitializers.append(
+                "\(access)init(\(literal.initializerLabel) value: \(literal.valueType)) { self = .\(single.name)(value) }"
+            )
+        }
+
+        if !inheritedTypes.contains("ExpressibleByArrayLiteral"),
+           !members.contains("init(arrayLiteral:)") {
+            literalProtocols.append("ExpressibleByArrayLiteral")
+            literalInitializers.append(
+                "\(access)init(arrayLiteral elements: \(array.elementType)...) { self = .\(array.name)(elements) }"
+            )
+        }
+
         let decodeDecl = members.contains("init(from:)") ? "// Customized By you" : """
             \(access)init(from decoder: any Decoder) throws {
                 let container = try decoder.singleValueContainer()
@@ -88,9 +114,59 @@ struct SingleOrArrayMacro: ExtensionMacro {
             }
             """
 
-        guard let extensionDecl = ext.as(ExtensionDeclSyntax.self) else {
-            return []
+        var extensions: [ExtensionDeclSyntax] = []
+        if let extensionDecl = ext.as(ExtensionDeclSyntax.self) {
+            extensions.append(extensionDecl)
         }
-        return [extensionDecl]
+
+        if !literalProtocols.isEmpty {
+            let literalExt: DeclSyntax = """
+                nonisolated extension \(raw: enumName): \(raw: literalProtocols.joined(separator: ", ")) {
+                \(raw: literalInitializers.joined(separator: "\n"))
+                }
+                """
+            if let literalExtensionDecl = literalExt.as(ExtensionDeclSyntax.self) {
+                extensions.append(literalExtensionDecl)
+            }
+        }
+
+        return extensions
+    }
+}
+
+private struct LiteralConformance {
+    let protocolName: String
+    let initializerLabel: String
+    let valueType: String
+}
+
+/// Types whose single payload can be built directly from a standard library literal.
+private func literalConformance(for typeName: String) -> LiteralConformance? {
+    switch typeName.split(separator: ".").last.map(String.init) ?? typeName {
+    case "String":
+        return LiteralConformance(
+            protocolName: "ExpressibleByStringLiteral",
+            initializerLabel: "stringLiteral",
+            valueType: "String"
+        )
+    case "Int":
+        return LiteralConformance(
+            protocolName: "ExpressibleByIntegerLiteral",
+            initializerLabel: "integerLiteral",
+            valueType: "Int"
+        )
+    case "Double":
+        return LiteralConformance(
+            protocolName: "ExpressibleByFloatLiteral",
+            initializerLabel: "floatLiteral",
+            valueType: "Double"
+        )
+    case "Bool":
+        return LiteralConformance(
+            protocolName: "ExpressibleByBooleanLiteral",
+            initializerLabel: "booleanLiteral",
+            valueType: "Bool"
+        )
+    default: return nil
     }
 }

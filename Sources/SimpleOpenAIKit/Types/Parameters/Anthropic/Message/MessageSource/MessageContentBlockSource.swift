@@ -19,10 +19,6 @@ public enum MessageContentBlockSourceContent {
     case string(String)
     case array([MessageContentBlockSourceContents])
 }
-extension MessageContentBlockSourceContent: ExpressibleByStringLiteral, ExpressibleByArrayLiteral {
-    public init(stringLiteral value: String)                                 { self = .string(value) }
-    public init(arrayLiteral elements: MessageContentBlockSourceContents...) { self = .array(elements) }
-}
 
 @BaseModelNoWithExtra
 @PublicInit

@@ -32,6 +32,14 @@ enum Input {
     case array([Int])
 }
 
+struct NonLiteralSingleValue: Codable {}
+
+@SingleOrArray
+enum NonLiteralInput {
+    case file(NonLiteralSingleValue)
+    case array([NonLiteralSingleValue])
+}
+
 @BaseModelNoWithExtra
 @PublicInit
 struct A {

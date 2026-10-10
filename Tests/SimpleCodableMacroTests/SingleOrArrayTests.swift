@@ -17,4 +17,31 @@ import SimpleCodableMacro
             print(input)
         } catch { print(error) }
     }
+
+    @Test("SingleOrArray Literal Conformances")
+    func singleOrArrayLiteralConformances() {
+        let single: Input = "ABC"
+        if case .string(let value) = single {
+            #expect(value == "ABC")
+        } else {
+            Issue.record("Expected .string")
+        }
+
+        let multiple: Input = [1, 2, 3]
+        if case .array(let values) = multiple {
+            #expect(values == [1, 2, 3])
+        } else {
+            Issue.record("Expected .array")
+        }
+    }
+
+    @Test("SingleOrArray Skips NonLiteral Single Case")
+    func singleOrArrayNonLiteralSingleCase() {
+        let multiple: NonLiteralInput = [NonLiteralSingleValue(), NonLiteralSingleValue()]
+        if case .array(let values) = multiple {
+            #expect(values.count == 2)
+        } else {
+            Issue.record("Expected .array")
+        }
+    }
 }

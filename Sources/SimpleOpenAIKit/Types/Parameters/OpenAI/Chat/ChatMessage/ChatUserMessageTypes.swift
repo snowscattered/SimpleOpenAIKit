@@ -13,10 +13,6 @@ public enum ChatStringOrContentPart {
     case string(String)
     case array([ChatContentPart])
 }
-extension ChatStringOrContentPart: ExpressibleByStringLiteral, ExpressibleByArrayLiteral {
-    public init(stringLiteral value: String)               { self = .string(value) }
-    public init(arrayLiteral elements: ChatContentPart...) { self = .array(elements) }
-}
 
 @BaseModelNoWithExtra
 @PublicInit

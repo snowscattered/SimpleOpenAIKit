@@ -3,7 +3,14 @@
 
 /// A macro that generates `BaseModel` conformance for enums where one case
 /// wraps a single value and another wraps an array of the same element type.
-@attached(extension, conformances: BaseModel, names: named(init(from:)), named(encode(to:)))
+@attached(
+    extension,
+    conformances: BaseModel, ExpressibleByStringLiteral, ExpressibleByArrayLiteral,
+        ExpressibleByIntegerLiteral, ExpressibleByFloatLiteral, ExpressibleByBooleanLiteral,
+    names: named(init(from:)), named(encode(to:)),
+        named(init(stringLiteral:)), named(init(arrayLiteral:)),
+        named(init(integerLiteral:)), named(init(floatLiteral:)), named(init(booleanLiteral:))
+)
 public macro SingleOrArray() = #externalMacro(module: "SimpleCodableMacroPlugin", type: "SingleOrArrayMacro")
 
 /// Automatically adds `BaseModel` conformance to an enum with constant cases (no associated values).

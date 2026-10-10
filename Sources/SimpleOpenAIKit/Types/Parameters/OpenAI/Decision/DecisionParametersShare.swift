@@ -49,10 +49,6 @@ public enum DecisionInputMessageContent {
     case string(String)
     case array([DecisionInputPart])
 }
-extension DecisionInputMessageContent: ExpressibleByStringLiteral, ExpressibleByArrayLiteral {
-    public init(stringLiteral value: String) { self = .string(value) }
-    public init(arrayLiteral elements: DecisionInputPart...) { self = .array(elements) }
-}
 
 @BaseModelNoWithExtra
 @PublicInit
@@ -66,8 +62,4 @@ public struct DecisionInputMessageParam {
 public enum DecisionInputOrMessages {
     case string(String)
     case array([DecisionInputMessageParam])
-}
-extension DecisionInputOrMessages: ExpressibleByStringLiteral, ExpressibleByArrayLiteral {
-    public init(stringLiteral value: String) { self = .string(value) }
-    public init(arrayLiteral elements: DecisionInputMessageParam...) { self = .array(elements) }
 }
