@@ -23,10 +23,6 @@ public enum CompletionPrompt {
     case string(String)
     case array([String])
 }
-extension CompletionPrompt: ExpressibleByStringLiteral, ExpressibleByArrayLiteral {
-    public init(stringLiteral value: String)      { self = .string(value) }
-    public init(arrayLiteral elements: String...) { self = .array(elements) }
-}
 
 // MARK: - Completion Stop
 
@@ -34,10 +30,6 @@ extension CompletionPrompt: ExpressibleByStringLiteral, ExpressibleByArrayLitera
 public enum CompletionStop {
     case string(String)
     case array([String])
-}
-extension CompletionStop: ExpressibleByStringLiteral, ExpressibleByArrayLiteral {
-    public init(stringLiteral value: String)      { self = .string(value) }
-    public init(arrayLiteral elements: String...) { self = .array(elements) }
 }
 
 // MARK: - Completion Param Model

@@ -37,16 +37,16 @@ struct DecisionAsyncTests {
             parameters: parameters
         )
         #expect(result.answers.count == parameters.questions.count)
-        for item in result.answers {
-            switch item {
-            case .predicate(let p): print(p.name as Any, p.probability)
-            case .choice(let choice):
-                print(choice.name as Any, choice.choice)
+        for (question, answer) in zip(parameters.questions, result.answers) {
+            switch (question, answer) {
+            case (.predicate, .predicate(let p)): print(p.probability)
+            case (.choice, .choice(let choice)):
+                print(choice.name as Any, choice.choice.value)
                 print(choice.probabilities)
-            case .score(let score):
+            case (.score, .score(let score)):
                 print(score.name as Any, score.score)
                 print(score.probabilities)
-            case .refusal: print("refusal")
+            default: print("refusal: \(question.type) vs \(answer.type)")
             }
         }
     }

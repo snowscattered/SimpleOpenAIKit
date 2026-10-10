@@ -14,10 +14,6 @@ public enum ResponseAgentMessageItemContent {
     case string(String)
     case array([ResponseAgentMessageContent])
 }
-extension ResponseAgentMessageItemContent: ExpressibleByStringLiteral, ExpressibleByArrayLiteral {
-    public init(stringLiteral value: String)                           { self = .string(value) }
-    public init(arrayLiteral elements: ResponseAgentMessageContent...) { self = .array(elements) }
-}
 
 // Codex Agent
 @BaseModelNoWithExtra

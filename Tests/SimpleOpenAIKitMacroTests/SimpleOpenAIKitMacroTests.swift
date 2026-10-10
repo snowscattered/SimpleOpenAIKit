@@ -27,12 +27,12 @@ struct A {
     }
     @AnyOfToolArgument
     enum D {
-        @StringToolArgument(description: "DA")
+        @ArgumentDescription("DA")
         case a(String)
         case b(Int)
     }
     
-    @StringToolArgument(description: "AA")
+    @ArgumentDescription("AA")
     let Arg1: String
     let Arg2: String?
     let Arg3: Int
@@ -42,6 +42,7 @@ struct A {
     let Arg6: [String]
     let Arg7: [Int]
 
+    @ArgumentDescription("EA Type")
     let Arg8: EA
     let Arg9: EB
     
@@ -63,7 +64,7 @@ struct A {
 //    "Arg5": { "type": "boolean" },
 //    "Arg6": { "type": "array", "items": { "type": "string" } },
 //    "Arg7": { "type": "array", "items": { "type": "integer" } },
-//    "Arg8": { "type": "string", "enum": ["A", "B"] },
+//    "Arg8": { "type": "string", "enum": ["A", "B"], "description": "EA Type" },
 //    "Arg9": { "type": "integer", "enum": [1, 2] },
 //    "Arg10": {
 //      "anyOf": [
@@ -135,7 +136,8 @@ struct B {
         @ReferToolArgument
         let aa: AA
     }
-    @ReferToolArgument(description: "AA Type")
+    @ArgumentDescription("AA Type")
+    @ReferToolArgument
     let aa: AA
     @ReferToolArgument
     let ab: AB
@@ -208,7 +210,8 @@ struct WeatherLocation {
 }
 @MainArgument(strict: nil)
 struct Weather {
-    @ReferToolArgument(description: "The location to fetch the weather for.")
+    @ArgumentDescription("The location to fetch the weather for.")
+    @ReferToolArgument
     let location: WeatherLocation
     let time: Double
 }

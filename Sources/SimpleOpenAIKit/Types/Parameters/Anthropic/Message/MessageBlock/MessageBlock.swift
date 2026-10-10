@@ -51,10 +51,6 @@ public enum MessageContentInput {
     case string(String)
     case array([MessageBlock])
 }
-extension MessageContentInput: ExpressibleByStringLiteral, ExpressibleByArrayLiteral {
-    public init(stringLiteral value: String)            { self = .string(value) }
-    public init(arrayLiteral elements: MessageBlock...) { self = .array(elements) }
-}
 
 // MARK: - Message
 @CodableLiteral

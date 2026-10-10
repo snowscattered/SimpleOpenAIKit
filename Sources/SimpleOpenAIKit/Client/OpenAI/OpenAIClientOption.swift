@@ -8,7 +8,7 @@
 import Foundation
 
 /// OpenAI credentials and endpoint defaults: HTTP auth headers, websocket base URL, retry budget.
-struct OpenAIClientOption: APIClientOption {
+struct OpenAIClientOption: APIClientOption, Sendable {
     let api_key: String
     let organization: String?
     let project: String?

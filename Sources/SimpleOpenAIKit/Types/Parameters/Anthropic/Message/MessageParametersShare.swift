@@ -27,10 +27,6 @@ public enum MessageSystem {
     case string(String)
     case array([MessageTextBlock])
 }
-extension MessageSystem: ExpressibleByStringLiteral, ExpressibleByArrayLiteral {
-    public init(stringLiteral value: String)                { self = .string(value) }
-    public init(arrayLiteral elements: MessageTextBlock...) { self = .array(elements) }
-}
 
 // MARK: - Tool Choice
 @CodableLiteral

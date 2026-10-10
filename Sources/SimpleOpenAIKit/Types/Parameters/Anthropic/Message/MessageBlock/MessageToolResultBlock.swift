@@ -32,10 +32,6 @@ public enum MessageToolResultContent {
     case string(String)
     case array([MessageToolContent])
 }
-extension MessageToolResultContent: ExpressibleByStringLiteral, ExpressibleByArrayLiteral {
-    public init(stringLiteral value: String)                  { self = .string(value) }
-    public init(arrayLiteral elements: MessageToolContent...) { self = .array(elements) }
-}
 
 @BaseModelNoWithExtra
 @PublicInit

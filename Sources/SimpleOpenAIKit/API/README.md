@@ -194,7 +194,8 @@ struct Location {
 
 @MainArgument(description: "Fetch the weather for a given location.", strict: true)
 struct Weather: SchemaProtocol {
-    @ReferToolArgument(description: "The location to fetch the weather for.")
+    @ArgumentDescription("The location to fetch the weather for.")
+    @ReferToolArgument
     let location: Location
     let time: Double
 }

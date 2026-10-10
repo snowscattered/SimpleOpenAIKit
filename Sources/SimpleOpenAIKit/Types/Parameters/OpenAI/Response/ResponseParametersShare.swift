@@ -14,10 +14,7 @@ public enum ResponseInputOrItems {
     case string(String)
     case array([ResponseInputItem])
 }
-extension ResponseInputOrItems: ExpressibleByStringLiteral, ExpressibleByArrayLiteral {
-    public init(stringLiteral value: String)                 { self = .string(value) }
-    public init(arrayLiteral elements: ResponseInputItem...) { self = .array(elements) }
-}
+
 @CodableLiteral
 public enum ResponseItemStatusLiteral: String {
     case in_progress, completed, incomplete

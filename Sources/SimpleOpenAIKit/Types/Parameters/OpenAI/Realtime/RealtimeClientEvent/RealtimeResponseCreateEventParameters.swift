@@ -37,10 +37,6 @@ public enum RealtimeMCPToolAllowedTools {
     case string(String)
     case array([RealtimeAllowedToolsMcpToolFilter])
 }
-extension RealtimeMCPToolAllowedTools: ExpressibleByStringLiteral, ExpressibleByArrayLiteral {
-    public init(stringLiteral value: String)                                 { self = .string(value) }
-    public init(arrayLiteral elements: RealtimeAllowedToolsMcpToolFilter...) { self = .array(elements) }
-}
 
 @CodableLiteral
 public enum RealtimeMCPToolConnectorId: String {

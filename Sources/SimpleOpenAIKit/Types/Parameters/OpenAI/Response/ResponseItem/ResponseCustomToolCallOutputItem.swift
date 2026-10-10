@@ -15,10 +15,6 @@ public enum ResponseCustomToolCallOutput {
     case string(String)
     case array([ResponseCustomToolCallOutputContent])
 }
-extension ResponseCustomToolCallOutput: ExpressibleByStringLiteral {
-   public init(stringLiteral value: String)                                   { self = .string(value) }
-   public init(arrayLiteral elements: ResponseCustomToolCallOutputContent...) { self = .array(elements) }
-}
 
 @BaseModelNoWithExtra
 @PublicInit

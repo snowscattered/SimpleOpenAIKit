@@ -50,10 +50,7 @@ public enum ResponseMessageInputItemContent {
     case string(String)
     case array([ResponseMessageInputContent])
 }
-extension ResponseMessageInputItemContent: ExpressibleByStringLiteral, ExpressibleByArrayLiteral {
-    public init(stringLiteral value: String)                           { self = .string(value) }
-    public init(arrayLiteral elements: ResponseMessageInputContent...) { self = .array(elements) }
-}
+
 @CodableLiteral
 public enum ResponseEasyInputMessageRoleLiteral: String {
     case user, assistant, system, developer

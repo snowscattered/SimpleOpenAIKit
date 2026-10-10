@@ -8,7 +8,7 @@
 import Foundation
 
 /// TypeSafe credentials plus the default model name used when a call does not specify one.
-struct TypeSafeClientOption: APIClientOption {
+struct TypeSafeClientOption: APIClientOption, Sendable {
     let api_key: String
     let model: String
     let base_url: URL

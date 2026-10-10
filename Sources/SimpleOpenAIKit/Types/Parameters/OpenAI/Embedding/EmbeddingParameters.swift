@@ -13,10 +13,6 @@ public enum EmbeddingInput {
     case string(String)
     case array([String])
 }
-extension EmbeddingInput: ExpressibleByStringLiteral, ExpressibleByArrayLiteral {
-    public init(stringLiteral value: String)      { self = .string(value) }
-    public init(arrayLiteral elements: String...) { self = .array(elements) }
-}
 
 @CodableLiteral
 public enum EmbeddingEncoderFormatLiteral: String {

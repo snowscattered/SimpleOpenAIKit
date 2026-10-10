@@ -51,13 +51,20 @@ public macro MainArgument(
 @attached(extension, conformances: ReferArgument)
 public macro ReferArgument() = #externalMacro(module: "SimpleOpenAIKitMacroPlugin", type: "ReferArgumentMacro")
 
+/// Describes one value with the `description` key of its JSON Schema fragment: on its own when the
+/// schema is inferred from the Swift type, or next to a `@*ToolArgument` marker, which adds the JSON
+/// type and its constraints. Writing `""` counts as leaving the description out.
+@attached(peer)
+public macro ArgumentDescription(
+    _ description: String
+) = #externalMacro(module: "SimpleOpenAIKitMacroPlugin", type: "ArgumentDescriptionMacro")
+
 /// Describes a `string` value. Strict mode validates `pattern` and `format` (`email`, `hostname`,
 /// `ipv4`, `ipv6`, `uuid`); `minLength` and `maxLength` are part of JSON Schema but are not supported
 /// in strict mode. Only the labels that are spelled out land in the schema. Attaching it to a value
 /// whose Swift type is not a `string` one is an error.
 @attached(peer)
 public macro StringToolArgument(
-    description: String? = nil,
     format: String? = nil,
     pattern: String? = nil,
     minLength: Int? = nil,
@@ -70,7 +77,6 @@ public macro StringToolArgument(
 /// type is neither is an error.
 @attached(peer)
 public macro NumberToolArgument(
-    description: String? = nil,
     `default`: Double? = nil,
     minimum: Double? = nil,
     maximum: Double? = nil,
@@ -79,37 +85,32 @@ public macro NumberToolArgument(
     multipleOf: Double? = nil
 ) = #externalMacro(module: "SimpleOpenAIKitMacroPlugin", type: "NumberToolArgumentMacro")
 
-/// Describes a `boolean` value, which has no constraint of its own beyond `description`. Attaching it
-/// to a value whose Swift type is not a `boolean` one is an error.
+/// Describes a `boolean` value, which has no constraint of its own; `@ArgumentDescription` adds its
+/// description. Attaching it to a value whose Swift type is not a `boolean` one is an error.
 @attached(peer)
-public macro BooleanToolArgument(
-    description: String? = nil
-) = #externalMacro(module: "SimpleOpenAIKitMacroPlugin", type: "BooleanToolArgumentMacro")
+public macro BooleanToolArgument() = #externalMacro(module: "SimpleOpenAIKitMacroPlugin", type: "BooleanToolArgumentMacro")
 
 /// Describes an `array` value. `items` is the schema inferred from the Swift element type, so a named
 /// element has to carry its own schema macro. `minItems` and `maxItems` are part of JSON Schema but are
 /// not supported in strict mode. Attaching it to a value whose Swift type is not an array is an error.
 @attached(peer)
 public macro ArrayToolArgument(
-    description: String? = nil,
     minItems: Int? = nil,
     maxItems: Int? = nil
 ) = #externalMacro(module: "SimpleOpenAIKitMacroPlugin", type: "ArrayToolArgumentMacro")
 
 /// Describes a value by reference: `{"$ref": "#/$def/TypeName"}` pointing at a type annotated with
 /// `@ReferArgument`, whose definition the enclosing schema writes into its `"$def"` entry, so one
-/// definition can serve several properties. `description` is the only key a reference adds of its own,
-/// which strict mode allows next to `$ref`. An array of them is `{"type": "array", "items": {"$ref":
-/// ...}}`, where `description` describes the array.
+/// definition can serve several properties. `@ArgumentDescription` is the only key a reference adds of
+/// its own, which strict mode allows next to `$ref`. An array of them is `{"type": "array", "items":
+/// {"$ref": ...}}`, where the description describes the array.
 ///
 /// Attaching it to a value whose Swift type is built from a scalar is an error. Attaching it to a type
 /// that has no schema macro of its own is an error too, reported where the enclosing schema writes its
 /// `"$def"`: that entry names `TypeName.ArgumentSchema`, which only exists on a type carrying one of
 /// them.
 @attached(peer)
-public macro ReferToolArgument(
-    description: String? = nil
-) = #externalMacro(module: "SimpleOpenAIKitMacroPlugin", type: "ReferToolArgumentMacro")
+public macro ReferToolArgument() = #externalMacro(module: "SimpleOpenAIKitMacroPlugin", type: "ReferToolArgumentMacro")
 
 /// Generates `static var ArgumentSchema: [String: BaseType]` on a raw-value enum: `{"type": ...,
 /// "enum": [...]}` built from its raw values, where the JSON type is the raw type's own — `String`
@@ -123,9 +124,9 @@ public macro ReferToolArgument(
 public macro EnumToolArgument() = #externalMacro(module: "SimpleOpenAIKitMacroPlugin", type: "EnumToolArgumentMacro")
 
 /// Generates `static var ArgumentSchema: [String: BaseType]` on an enum: `{"anyOf": [...]}` with one
-/// entry per case, each of them the schema of that case's associated value. A case may carry a
-/// `@*ToolArgument` macro to describe itself, e.g. `@StringToolArgument(description: "DA")`. Cases
-/// must use distinct associated value types because decoding tries them in declaration order.
+/// entry per case, each of them the schema of that case's associated value. A case describes itself
+/// with `@ArgumentDescription`, a `@*ToolArgument` marker, or both. Cases must use distinct associated
+/// value types because decoding tries them in declaration order.
 ///
 /// The `AnyOfArgument` conformance is added automatically.
 @attached(member, names: named(ArgumentSchema), named(init(from:)))

@@ -27,10 +27,6 @@ public enum ImageFileInput {
     case file(FileParameters)
     case array([FileParameters])
 }
-extension ImageFileInput: ExpressibleByArrayLiteral {
-    public init(_ file: FileParameters)                   { self = .file(file) }
-    public init(arrayLiteral elements: FileParameters...) { self = .array(elements) }
-}
 
 // MARK: - ImageEditParameters
 

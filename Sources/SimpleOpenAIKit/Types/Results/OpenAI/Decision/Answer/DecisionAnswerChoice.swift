@@ -13,7 +13,18 @@ public enum DecisionAnswerChoiceValue {
     case string(String)
     case bool(Bool)
 }
-
+extension DecisionAnswerChoiceValue: ExpressibleByStringLiteral, ExpressibleByBooleanLiteral {
+    public init(stringLiteral value: String) { self = .string(value) }
+    public init(booleanLiteral value: Bool) { self = .bool(value) }
+}
+public extension DecisionAnswerChoiceValue {
+    var value: String {
+        switch self {
+        case .string(let str): return str
+        case .bool(let bool):  return bool ? "__TRUE__" : "__FALSE__"
+        }
+    }
+}
 @BaseModelNoWithExtra
 @PublicInit
 public struct DecisionAnswerChoiceProbability {

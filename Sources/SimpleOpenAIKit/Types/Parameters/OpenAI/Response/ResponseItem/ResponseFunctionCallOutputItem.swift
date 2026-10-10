@@ -15,10 +15,6 @@ public enum ResponseFunctionCallOutput {
     case string(String)
     case array([ResponseFunctionCallOutputContent])
 }
-extension ResponseFunctionCallOutput: ExpressibleByStringLiteral, ExpressibleByArrayLiteral {
-   public init(stringLiteral value: String)                                 { self = .string(value) }
-   public init(arrayLiteral elements: ResponseFunctionCallOutputContent...) { self = .array(elements) }
-}
 
 @BaseModelNoWithExtra
 @PublicInit

@@ -9,7 +9,8 @@ Public declarations for the tool-schema macros, re-exported by `SimpleOpenAIKit`
 | `@ReferArgument` | A `$def` definition a root schema can reference |
 | `@EnumToolArgument` | `{"type": ..., "enum": [...]}` built from an enum's raw values |
 | `@AnyOfToolArgument` | `{"anyOf": [...]}` over an enum's cases, plus the matching `init(from:)` |
-| `@StringToolArgument`, `@NumberToolArgument`, `@BooleanToolArgument`, `@ArrayToolArgument` | Per-property type, description and constraints |
+| `@ArgumentDescription` | The `description` of one value; works alone or next to a type marker |
+| `@StringToolArgument`, `@NumberToolArgument`, `@BooleanToolArgument`, `@ArrayToolArgument` | Per-property type and constraints |
 | `@ReferToolArgument` | Writes a property as `{"$ref": ...}` |
 
 A property with no peer macro is inferred from its Swift type, so a named type has to carry one of the
@@ -26,7 +27,7 @@ struct Arguments {
     @EnumToolArgument
     enum Tone: String { case calm, angry }
 
-    @StringToolArgument(description: "The city to look up")
+    @ArgumentDescription("The city to look up")
     let city: String
     let note: String?
     let days: Int
@@ -71,7 +72,8 @@ struct Location {
 
 @MainArgument
 struct Argument {
-    @ReferToolArgument(description: "The location to fetch the weather for.")
+    @ArgumentDescription("The location to fetch the weather for.")
+    @ReferToolArgument
     let location: Location
     let time: Double
 }
@@ -85,16 +87,20 @@ Each peer macro only accepts the Swift type it describes, and rejects anything e
 ```swift
 @MainArgument
 struct Filter {
-    @StringToolArgument(description: "Host to probe", format: "hostname")
+    @ArgumentDescription("Host to probe")
+    @StringToolArgument(format: "hostname")
     let host: String
 
-    @NumberToolArgument(description: "Retry count", `default`: 3, minimum: 1, maximum: 5, multipleOf: 1)
+    @ArgumentDescription("Retry count")
+    @NumberToolArgument(`default`: 3, minimum: 1, maximum: 5, multipleOf: 1)
     let retries: Int
 
-    @BooleanToolArgument(description: "Fail on the first error")
+    @ArgumentDescription("Fail on the first error")
+    @BooleanToolArgument
     let strict: Bool
 
-    @ArrayToolArgument(description: "Tags to match", minItems: 1)
+    @ArgumentDescription("Tags to match")
+    @ArrayToolArgument(minItems: 1)
     let tags: [String]
 }
 ```
@@ -113,7 +119,7 @@ enum Unit: String { case celsius, fahrenheit }
 // One of several shapes: {"anyOf": [...]} plus init(from:)
 @AnyOfToolArgument
 enum Value {
-    @StringToolArgument(description: "Free-form text")
+    @ArgumentDescription("Free-form text")
     case text(String)
     case count(Int)
 }
