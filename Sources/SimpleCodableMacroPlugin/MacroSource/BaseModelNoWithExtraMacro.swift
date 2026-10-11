@@ -52,13 +52,13 @@ struct BaseModelNoWithExtraMacro: ExtensionMacro {
             \(access)init(from decoder: any Decoder) throws {
                 \(decodeContainer)
 
-                try self.after()
+                try self.afterDecode()
             }
             """
         // MARK: - Encode
         let encodable = coding.filter { !$0.isTransient }
         let encodeBody = encodable.map { prop in
-            let accessor = prop.isStatic ? "Self" : "self"
+            let accessor = prop.isStatic ? "Self" : "copy"
             if prop.isOptional {
                 return "try container.encodeIfPresent(\(accessor).\(prop.name), forKey: .\(prop.name))"
             } else {
@@ -71,6 +71,9 @@ struct BaseModelNoWithExtraMacro: ExtensionMacro {
         """
         let encodeDecl = members.contains("encode(to:)") ? "// Customized By you" : """
             \(access)func encode(to encoder: any Encoder) throws {
+                var copy = self
+                try copy.beforeEncode()
+
                 \(encodeContainer)
             }
             """
