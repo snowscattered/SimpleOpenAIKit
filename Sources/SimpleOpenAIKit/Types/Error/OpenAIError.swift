@@ -27,8 +27,9 @@ public enum OpenAIAPIError: Error {
     case conflict(OpenAIErrorResponse?, URLRequest, HTTPURLResponse)
     case unprocessableEntity(OpenAIErrorResponse?, URLRequest, HTTPURLResponse)
     case rateLimit(OpenAIErrorResponse?, URLRequest, HTTPURLResponse)
-    case internalServer(statusCode: Int, payload: OpenAIErrorResponse?, URLRequest, HTTPURLResponse)
-    case unexpectedStatusCode(statusCode: Int, payload: OpenAIErrorResponse?, URLRequest, HTTPURLResponse)
+    case internalServer(statusCode: Int, payload: OpenAIErrorResponse?, URLRequest, HTTPURLResponse)    
+    case timeOut(payload: OpenAIErrorResponse?, URLRequest)
+    case connection(any Error, payload: OpenAIErrorResponse?, URLRequest)
 }
 
 public enum OpenAIError: Error {

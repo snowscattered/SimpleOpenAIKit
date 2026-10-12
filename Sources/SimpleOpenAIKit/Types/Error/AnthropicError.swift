@@ -32,7 +32,8 @@ public enum AnthropicAPIError: Error {
     case deadlineExceeded(AnthropicErrorResponse?, URLRequest, HTTPURLResponse)
     case overloaded(AnthropicErrorResponse?, URLRequest, HTTPURLResponse)
     case internalServer(statusCode: Int, payload: AnthropicErrorResponse?, URLRequest, HTTPURLResponse)
-    case unexpectedStatusCode(statusCode: Int, payload: AnthropicErrorResponse?, URLRequest, HTTPURLResponse)
+    case timeOut(payload: AnthropicErrorResponse?, URLRequest)
+    case connection(any Error, payload: AnthropicErrorResponse?, URLRequest)
 }
 
 public enum AnthropicError: Error {

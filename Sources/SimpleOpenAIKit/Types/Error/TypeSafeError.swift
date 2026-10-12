@@ -20,5 +20,6 @@ public enum TypeSafeAPIError: Error {
     case rateLimit(TypeSafeErrorResponse?, URLRequest, HTTPURLResponse)
     case overloaded(TypeSafeErrorResponse?, URLRequest, HTTPURLResponse)
     case internalServer(statusCode: Int, payload: TypeSafeErrorResponse?, URLRequest, HTTPURLResponse)
-    case unexpectedStatusCode(statusCode: Int, payload: TypeSafeErrorResponse?, URLRequest, HTTPURLResponse)
+    case timeOut(payload: TypeSafeErrorResponse?, URLRequest)
+    case connection(any Error, payload: TypeSafeErrorResponse?, URLRequest)
 }

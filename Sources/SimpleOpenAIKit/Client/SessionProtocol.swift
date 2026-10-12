@@ -18,11 +18,14 @@ public enum HTTPMethod: String {
 /// The transport layer between an API resource and the network.
 ///
 /// A session owns nothing but behaviour: it builds the `URLRequest`, runs it with the retry
-/// policy the provider wants, and converts a raw `NetworkError` into the provider's public
+/// policy the provider wants, and converts a raw error into the provider's public
 /// error type. One stateless `shared` value serves every resource of that provider.
 public protocol SessionProtocol {
     /// The option bag the resources pass down on each call.
     associatedtype ClientOption: APIClientOption, ~Copyable
+    /// The provider's public error type; `wrapError` maps every failure onto it.
+    /// Defaults to `any Error`, which keeps the passthrough policy.
+    associatedtype APIError: Error = any Error
     /// The single instance used by all resources of this provider.
     static var shared: Self { get }
     /// Build a `URLRequest` from a URL, payload and per-call overrides.
@@ -45,14 +48,17 @@ public protocol SessionProtocol {
     ) throws -> URLRequest
     /// Decide whether a thrown error is worth retrying; also used as the retry predicate.
     func retryErrorHandler(error: any Error) -> Bool
-    /// Convert a raw `NetworkError` into the provider's public error type.
-    func wrapError(error: any Error) -> any Error
+    /// Convert a raw error into the provider's public error type, with the request that produced it.
+    func wrapError(error: any Error, request: URLRequest) -> APIError
+}
+/// Providers that leave `APIError` as `any Error` get the passthrough policy for free.
+public extension SessionProtocol where APIError == any Error {
+    /// Default policy: surface the error unchanged.
+    func wrapError(error: any Error, request: URLRequest) -> APIError { return error }
 }
 public extension SessionProtocol {
     /// Default policy: retry every error.
     func retryErrorHandler(error: any Error) -> Bool { return true }
-    /// Default policy: surface the error unchanged.
-    func wrapError(error: any Error) -> any Error { return error }
     /// Merge client defaults with per-call overrides, then encode the body.
     ///
     /// Query items come from `clientOption.query` plus `extra_query`, and for a GET the payload's
@@ -144,7 +150,7 @@ public extension SessionProtocol {
         )
         do {
             return try syncResponse(request: request, maxRetries: clientOption.max_retries, shouldRetry: retryErrorHandler)
-        } catch { throw wrapError(error: error) }
+        } catch { throw wrapError(error: error, request: request) }
     }
     /// Blocking call that returns a stream of decoded chunks.
     ///
@@ -168,7 +174,7 @@ public extension SessionProtocol {
         )
         do {
             return try syncStreamResponse(request: request, maxRetries: clientOption.max_retries, shouldRetry: retryErrorHandler)
-        } catch { throw wrapError(error: error) }
+        } catch { throw wrapError(error: error, request: request) }
     }
     
     /// Awaitable call that decodes a single response, retrying as allowed by the session.
@@ -193,7 +199,7 @@ public extension SessionProtocol {
         )
         do {
             return try await asyncResponse(request: request, maxRetries: clientOption.max_retries, shouldRetry: retryErrorHandler)
-        } catch { throw wrapError(error: error) }
+        } catch { throw wrapError(error: error, request: request) }
     }
     /// Awaitable call that returns a stream of decoded chunks.
     ///
@@ -217,7 +223,7 @@ public extension SessionProtocol {
         )
         do {
             return try await asyncStreamResponse(request: request, maxRetries: clientOption.max_retries, shouldRetry: retryErrorHandler)
-        } catch { throw wrapError(error: error) }
+        } catch { throw wrapError(error: error, request: request) }
     }
     
     /// Open a websocket task against `url`; the payload is not sent as a body.

@@ -65,14 +65,17 @@ struct AnthropicSession: Sendable, SessionProtocol {
         case 504: return .deadlineExceeded(payload, request, response)
         case 529: return .overloaded(payload, request, response)
         case 500...599: return .internalServer(statusCode: statusCode, payload: payload, request, response)
-        default: return .unexpectedStatusCode(statusCode: statusCode, payload: payload, request, response)
+        default: return .connection(URLError(.badServerResponse), payload: payload, request)
         }
     }
-    /// Rewrite `NetworkError.statusError` as an Anthropic error, leaving others untouched.
-    func wrapError(error: any Error) -> any Error {
+    func wrapError(error: any Error, request: URLRequest) -> AnthropicAPIError {
         if case let NetworkError.statusError(data, request, response) = error {
             return AnthropicStatusError(data: data, request: request, response: response)
         }
-        return error
+        if let apiError = error as? AnthropicAPIError { return apiError }
+        if let urlError = error as? URLError, urlError.code == .timedOut {
+            return AnthropicAPIError.timeOut(payload: nil, request)
+        }
+        return AnthropicAPIError.connection(error, payload: nil, request)
     }
 }
