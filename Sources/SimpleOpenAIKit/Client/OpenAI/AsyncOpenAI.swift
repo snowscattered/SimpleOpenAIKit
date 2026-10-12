@@ -51,27 +51,28 @@ public class AsyncOpenAI: @unchecked Sendable {
     /// Create a client; every resource below shares the resulting options.
     public init(
         api_key: String,
+        base_url: URL? = nil,
+        websocket_base_url: URL? = nil,
+        
         organization: String? = nil,
         project: String? = nil,
         webhook_secret: String? = nil,
-        base_url: URL = URL(string: "https://api.openai.com/v1")!,
+
+        timeout: TimeInterval? = nil,
+        max_retries: Int? = nil,
         
-        websocket_base_url: URL = URL(string: "wss://api.openai.com/v1")!,
-        timeout: TimeInterval = 600,
-        max_retries: Int = 2,
-        
-        default_headers: Header = [:],
-        default_query: Query = [:]
+        default_headers: Header? = nil,
+        default_query: Query? = nil
     ) {
         let clientOption: OpenAIClientOption = .init(
             api_key: api_key,
+            base_url: base_url,
+            websocket_base_url: websocket_base_url,
+
             organization: organization,
             project: project,
             webhook_secret: webhook_secret,
-            
-            base_url: base_url,
-            websocket_base_url: websocket_base_url,
-            
+
             timeout: timeout,
             max_retries: max_retries,
             

@@ -27,18 +27,18 @@ public class AsyncTypeSafeClient: @unchecked Sendable {
 
     public init(
         api_key: String,
-        model: String = "jev-latest",
-        base_url: URL = URL(string: "https://api.typesafe.ai")!,
-        timeout: TimeInterval = 600,
-        max_retries: Int = 2,
+        base_url: URL? = nil,
+        model: String? = nil,
+        timeout: TimeInterval? = nil,
+        max_retries: Int? = nil,
 
-        default_headers: Header = [:],
-        default_query: Query = [:]
+        default_headers: Header? = nil,
+        default_query: Query? = nil
     ) {
         let clientOption: TypeSafeClientOption = .init(
             api_key: api_key,
-            model: model,
             base_url: base_url,
+            model: model,
             timeout: timeout,
             max_retries: max_retries,
 

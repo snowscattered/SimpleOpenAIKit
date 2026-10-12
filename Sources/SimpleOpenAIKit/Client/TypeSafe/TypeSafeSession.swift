@@ -13,13 +13,11 @@ struct TypeSafeSession: Sendable, SessionProtocol {
     static let shared: TypeSafeSession = TypeSafeSession()
     init() { }
 
-    /// Retries rate limits, overload, 5xx, 408 and client timeouts.
+    /// Retries rate limits, overload, 5xx and client timeouts.
     func retryErrorHandler(error: any Error) -> Bool {
         if let error = error as? TypeSafeAPIError {
             switch error {
             case .rateLimit, .overloaded, .internalServer: return true
-            case .unexpectedStatusCode(statusCode: let statusCode, payload: _, _, _):
-                return statusCode == 408
             default: return false
             }
         } else if let error = error as? URLError {
@@ -49,14 +47,17 @@ struct TypeSafeSession: Sendable, SessionProtocol {
         case 429: return .rateLimit(payload, request, response)
         case 529: return .overloaded(payload, request, response)
         case 500...599: return .internalServer(statusCode: statusCode, payload: payload, request, response)
-        default: return .unexpectedStatusCode(statusCode: statusCode, payload: payload, request, response)
+        default: return .connection(URLError(.badServerResponse), payload: payload, request)
         }
     }
-    /// Rewrite `NetworkError.statusError` as a TypeSafe error, leaving others untouched.
-    func wrapError(error: any Error) -> any Error {
+    func wrapError(error: any Error, request: URLRequest) -> TypeSafeAPIError {
         if case let NetworkError.statusError(data, request, response) = error {
             return TypeSafeStatusError(data: data, request: request, response: response)
         }
-        return error
+        if let apiError = error as? TypeSafeAPIError { return apiError  }
+        if let urlError = error as? URLError, urlError.code == .timedOut {
+            return TypeSafeAPIError.timeOut(payload: nil, request)
+        }
+        return TypeSafeAPIError.connection(error, payload: nil, request)
     }
 }

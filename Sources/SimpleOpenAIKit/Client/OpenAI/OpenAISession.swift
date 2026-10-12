@@ -58,14 +58,17 @@ struct OpenAISession: Sendable, SessionProtocol {
         case 422: return .unprocessableEntity(payload, request, response)
         case 429: return .rateLimit(payload, request, response)
         case 500...599: return .internalServer(statusCode: statusCode, payload: payload, request, response)
-        default: return .unexpectedStatusCode(statusCode: statusCode, payload: payload, request, response)
+        default: return .connection(URLError(.badServerResponse), payload: payload, request)
         }
     }
-    /// Rewrite `NetworkError.statusError` as an OpenAI error, leaving others untouched.
-    func wrapError(error: any Error) -> any Error {
+    func wrapError(error: any Error, request: URLRequest) -> OpenAIAPIError {
         if case let NetworkError.statusError(data, request, response) = error {
             return OpenAIStatusError(data: data, request: request, response: response)
         }
-        return error
+        if let apiError = error as? OpenAIAPIError { return apiError }
+        if let urlError = error as? URLError, urlError.code == .timedOut {
+            return OpenAIAPIError.timeOut(payload: nil, request)
+        }
+        return OpenAIAPIError.connection(error, payload: nil, request)
     }
 }

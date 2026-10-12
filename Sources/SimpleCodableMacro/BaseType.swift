@@ -108,7 +108,9 @@ extension BaseType {
 public protocol BaseModel: Codable & Sendable { }
 public extension BaseModel {
     /// Hook for generated models to run after decoding; the default does nothing.
-    func after() throws -> Void { }
+    mutating func afterDecode() throws { }
+    mutating func beforeEncode() throws { }
+    
     /// Encode to a sorted, pretty-printed JSON string.
     func json() throws -> String {
         let encoder = JSONEncoder()

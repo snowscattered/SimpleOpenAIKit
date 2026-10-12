@@ -28,19 +28,19 @@ public class AsyncAnthropic: @unchecked Sendable {
 
     public init(
         api_key: String,
+        base_url: URL? = nil,
         auth_token: String? = nil,
-        base_url: URL = URL(string: "https://api.anthropic.com")!,
 
-        timeout: TimeInterval = 600,
-        max_retries: Int = 2,
+        timeout: TimeInterval? = nil,
+        max_retries: Int? = nil,
 
-        default_headers: Header = [:],
-        default_query: Query = [:]
+        default_headers: Header? = nil,
+        default_query: Query? = nil
     ) {
         let clientOption: AnthropicClientOption = .init(
             api_key: api_key,
-            auth_token: auth_token,
             base_url: base_url,
+            auth_token: auth_token,
             timeout: timeout,
             max_retries: max_retries,
             default_headers: default_headers,

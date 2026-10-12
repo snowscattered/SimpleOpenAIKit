@@ -26,11 +26,11 @@ let openAI = AsyncOpenAI(api_key: "YOUR_API_KEY")
 
 let gateway = AsyncOpenAI(
     api_key: "YOUR_API_KEY",
+    base_url: URL(string: "https://your-gateway.example.com/v1")!,
+    websocket_base_url: URL(string: "wss://your-gateway.example.com/v1")!,
     organization: "org_...",
     project: "proj_...",
     webhook_secret: "whsec_...",
-    base_url: URL(string: "https://your-gateway.example.com/v1")!,
-    websocket_base_url: URL(string: "wss://your-gateway.example.com/v1")!,
     timeout: 600,
     max_retries: 2,
     default_headers: ["User-Agent": "my-app/2.0"],
@@ -102,6 +102,8 @@ and backs off exponentially, capped at 8 seconds.
 
 Transport failures arrive as `NetworkError.statusError`, and each session maps the status code onto its own
 error enum carrying the request, the response, and an error payload whose `message` is the raw body text.
+Client timeouts and every other failure become the provider's `timeOut` and `connection` cases, which carry
+the request and payload but no response.
 `max_retries` counts extra attempts after the first one, so `max_retries: 2` means up to three calls.
 
 ```swift
@@ -111,7 +113,7 @@ do {
     )
 } catch let error as OpenAIAPIError {
     // badRequest / authentication / permissionDenied / notFound / conflict /
-    // unprocessableEntity / rateLimit / internalServer / unexpectedStatusCode
+    // unprocessableEntity / rateLimit / internalServer / timeOut / connection
     print(error)
 }
 ```
@@ -122,7 +124,7 @@ do {
 - Sessions are stateless `static let shared` values; all configuration travels in `ClientOption`,
   which is `~Copyable` and borrowed per call.
 - `<Provider>Session` owns two decisions only: which errors retry (`retryErrorHandler`) and how a
-  status code becomes a provider error (`wrapError`). Everything else is the protocol default.
+  failure becomes a provider error (`wrapError`). Everything else is the protocol default.
 - `ClientOption.headers` rebuilds per call; see the merge order above.
 - Streaming calls retry the connection attempt only. Chunks already handed to a consumer are never
   replayed, so a mid-stream failure surfaces once and iteration ends.

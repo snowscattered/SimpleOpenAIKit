@@ -42,28 +42,29 @@ struct OpenAIClientOption: APIClientOption, Sendable {
     
     init(
         api_key: String,
+        base_url: URL? = nil,
+        websocket_base_url: URL? = nil,
+        
         organization: String? = nil,
         project: String? = nil,
         webhook_secret: String? = nil,
-        base_url: URL = URL(string: "https://api.openai.com/v1")!,
-        
-        websocket_base_url: URL = URL(string: "wss://api.openai.com/v1")!,
-        timeout: TimeInterval = 600,
-        max_retries: Int = 2,
-        
-        default_headers: Header = [:],
-        default_query: Query = [:]
+
+        timeout: TimeInterval? = nil,
+        max_retries: Int? = nil,
+
+        default_headers: Header? = nil,
+        default_query: Query? = nil
     ) {
         self.api_key = api_key
-        self.organization = organization
-        self.project = project
-        self.webhook_secret = webhook_secret
-        self.base_url = base_url
-        self.websocket_base_url = websocket_base_url
-        self.timeout = timeout
-        self.max_retries = max_retries
-        self.default_headers = default_headers
-        self.default_query = default_query
+        self.organization = organization ?? nil
+        self.project = project ?? nil
+        self.webhook_secret = webhook_secret ?? nil
+        self.base_url = base_url ?? URL(string: "https://api.openai.com/v1")!
+        self.websocket_base_url = websocket_base_url ?? URL(string: "wss://api.openai.com/v1")!
+        self.timeout = timeout ?? 600
+        self.max_retries = max_retries ?? 2
+        self.default_headers = default_headers ?? [:]
+        self.default_query = default_query ?? [:]
     }
     
     /// Append `path` to the HTTP base URL.
