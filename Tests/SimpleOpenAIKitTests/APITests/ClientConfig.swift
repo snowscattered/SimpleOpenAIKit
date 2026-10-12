@@ -10,7 +10,7 @@ import Foundation
 
 let client = OpenAI(
     api_key: "NoKey",
-    base_url: URL(string: "abclsa")!,
+    base_url: URL(string: "https://localhost:8000")!,
     max_retries: 1
 )
 let asyncClient = AsyncOpenAI(
