@@ -8,22 +8,32 @@
 import Foundation
 import SimpleCodableMacro
 
+@CodableLiteral
+public enum SystemOneImageFormat: String {
+    case png, jpg, jpeg
+}
+
 @BaseModelNoWithExtra
 public struct TypeSafeImage {
     public static let type: String = "image"
+    public internal(set) var part: String?
+    public private(set) var format: SystemOneImageFormat?
+    public private(set) var data_base64: String?
     public private(set) var reference: String = Self.makeReference()
-    public internal(set) var part: String = ""
     public private(set) var file: FileParameters?
 
     private enum CodingKeys: String, CodingKey {
         case type
+        case format
+        case data_base64
         case part
     }
-    public init( file: FileParameters? = nil) {
-        self.file = file
-    }
     public init(url: URL) throws {
-        self.init(file: try .init(url: url))
+        self.file = try .init(url: url)
+    }
+    public init(base64: String, format: SystemOneImageFormat) {
+        self.format = format
+        self.data_base64 = base64
     }
     public static func makeReference() -> String {
         let id = UUID().uuidString
@@ -64,9 +74,12 @@ public struct SystemOneParameters {
                 into: &collected
             )
         }
-        // Assign multipart part names in sorted key order
-        for (offset, reference) in collected.keys.sorted().enumerated() {
-            collected[reference]?.part = "asset-\(offset)"
+        // Assign multipart part names only to file-backed assets
+        var partIndex = 0
+        for reference in collected.keys.sorted() {
+            guard collected[reference]?.file != nil else { continue }
+            collected[reference]?.part = "asset-\(partIndex)"
+            partIndex += 1
         }
         // Store the resolved values
         self.model = model
@@ -87,12 +100,11 @@ public struct SystemOneParameters {
 
         try encoder.encoder.encodeJSON(name: "request", value: self)
         for asset in (assets ?? [:]).values.sorted(by: {
-            $0.part.localizedStandardCompare($1.part) == .orderedAscending
+            ($0.part ?? "").localizedStandardCompare($1.part ?? "") == .orderedAscending
         }) {
-            guard var file = asset.file else { continue }
-            file.name = asset.part
-            encoder.encoder.encodeFile(name: asset.part, file: file)
+            guard var file = asset.file, let part = asset.part else { continue }
+            file.name = part
+            encoder.encoder.encodeFile(name: part, file: file)
         }
     }
 }
-

@@ -25,6 +25,45 @@ struct TypeSafeAsyncTests {
             ),
         ]
     )
+    @Test func base64ImageUsesJSON() throws {
+        let url = try #require(bundle.url(forResource: "cup1", withExtension: "jpeg"))
+        let image = TypeSafeImage(
+            base64: try Data(contentsOf: url).base64EncodedString(),
+            format: .jpeg
+        )
+        let parameters = SystemOneParameters(
+            state: ["photo", .image(image)],
+            questions: ["damaged": .noul(instructions: "Is the cup damaged?")]
+        )
+        let body = try JSONEncoder().encode(parameters)
+        print(String(data: body, encoding: .utf8) as Any)
+    }
+
+    @Test func fileImageUsesMultipartPart() throws {
+        let url = try #require(bundle.url(forResource: "cup1", withExtension: "jpeg"))
+        let data = try Data(contentsOf: url)
+        let image = try TypeSafeImage(url: url)
+        let parameters = SystemOneParameters(
+            state: [
+                "photo": .image(image),
+                "encoded": "encoded-photo",
+            ],
+            questions: ["damaged": .noul(instructions: "Is the cup damaged?")],
+            assets: [
+                "encoded-photo": TypeSafeImage(
+                    base64: data.base64EncodedString(),
+                    format: .jpeg
+                )
+            ]
+        )
+
+        let encoder = MultipartFormDataEncodeContainer()
+        try encoder.encode(parameters)
+        let stream = encoder.serialize
+        stream.with {
+            print(multipartDebugText(stream.read(), boundary: encoder.boundary))
+        }
+    }
     @Test func asyncSystemOnePinsModel() async throws {
         let res = try await asyncTypeSafeClient.system_one(
             parameters: .init(
