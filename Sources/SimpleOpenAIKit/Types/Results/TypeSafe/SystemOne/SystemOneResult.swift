@@ -45,4 +45,11 @@ public extension SystemOneResult {
         }
         return grouped
     }
+    var boxes: [String: SystemOneAnswerBox] {
+        var grouped: [String: SystemOneAnswerBox] = [:]
+        for (name, answer) in answers {
+            if case .box(let value) = answer { grouped[name] = value }
+        }
+        return grouped
+    }
 }

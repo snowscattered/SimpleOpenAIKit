@@ -25,6 +25,7 @@ public enum SystemOneQuestion {
     case noul(SystemOneQuestionNoul)
     case choice(SystemOneQuestionChoice)
     case score(SystemOneQuestionScore)
+    case box(SystemOneQuestionBox)
     case unkowned(SystemOneUnknownQuestion)
 }
 
@@ -34,6 +35,7 @@ public extension SystemOneQuestion {
         case .noul:            return SystemOneQuestionNoul.type
         case .choice:          return SystemOneQuestionChoice.type
         case .score:           return SystemOneQuestionScore.type
+        case .box:             return SystemOneQuestionBox.type
         case .unkowned(let v): return v.type
         }
     }
@@ -55,5 +57,62 @@ public extension SystemOneQuestion {
         criteria: [SystemOneJSONConent]
     ) -> SystemOneQuestion {
         .score(.init(instructions: instructions, criteria: criteria))
+    }
+    static func box(
+        instructions: SystemOneJSONConent? = nil
+    ) -> SystemOneQuestion {
+        .box(.init(instructions: instructions))
+    }
+}
+
+extension SystemOneQuestion {
+    func resolved(
+        _ aliases: [String: String],
+        into assets: inout [String: TypeSafeImage]
+    ) -> Self {
+        switch self {
+        case .noul(var question):
+            question.instructions = question.instructions?.resolved(
+                aliases,
+                into: &assets
+            )
+            if var criteria = question.criteria {
+                criteria.`true` = criteria.`true`?.resolved(
+                    aliases,
+                    into: &assets
+                )
+                criteria.`false` = criteria.`false`?.resolved(
+                    aliases,
+                    into: &assets
+                )
+                question.criteria = criteria
+            }
+            return .noul(question)
+        case .choice(var question):
+            question.instructions = question.instructions?.resolved(
+                aliases,
+                into: &assets
+            )
+            question.criteria = question.criteria.mapValues {
+                $0?.resolved(aliases, into: &assets)
+            }
+            return .choice(question)
+        case .score(var question):
+            question.instructions = question.instructions?.resolved(
+                aliases,
+                into: &assets
+            )
+            question.criteria = question.criteria.map {
+                $0.resolved(aliases, into: &assets)
+            }
+            return .score(question)
+        case .box(var question):
+            question.instructions = question.instructions?.resolved(
+                aliases,
+                into: &assets
+            )
+            return .box(question)
+        default: return self
+        }
     }
 }

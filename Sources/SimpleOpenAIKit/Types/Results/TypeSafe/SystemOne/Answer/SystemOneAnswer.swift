@@ -23,6 +23,7 @@ public enum SystemOneAnswer {
     case noul(SystemOneAnswerNoul)
     case choice(SystemOneAnswerChoice)
     case score(SystemOneAnswerScore)
+    case box(SystemOneAnswerBox)
     case unknown(SystemOneUnknownAnswer)
 }
 
@@ -32,6 +33,7 @@ public extension SystemOneAnswer {
         case .noul:              return SystemOneAnswerNoul.type
         case .choice:            return SystemOneAnswerChoice.type
         case .score:             return SystemOneAnswerScore.type
+        case .box:               return SystemOneAnswerBox.type
         case .unknown(let v):    return v.type
         }
     }
@@ -40,6 +42,7 @@ public extension SystemOneAnswer {
         case .noul:              return nil
         case .choice(let v):     return v.confidence
         case .score(let v):      return v.confidence
+        case .box(let v):        return v.confidence
         case .unknown:           return nil
         }
     }

@@ -25,12 +25,6 @@ struct TypeSafeAsyncTests {
             ),
         ]
     )
-    @Test func asyncSystemOneEvaluate() async throws {
-        let res = try await asyncTypeSafeClient.system_one(parameters: param)
-        print(res.nouls["billing"]?.noul ?? "None")
-        print(res.choices["tone"]?.choice ?? "None")
-        print(res.scores["urgency"]?.score ?? "None")
-    }
     @Test func asyncSystemOnePinsModel() async throws {
         let res = try await asyncTypeSafeClient.system_one(
             parameters: .init(
@@ -49,4 +43,47 @@ struct TypeSafeAsyncTests {
             print(i.name, i.release_date, i.description)
         }
     }
+    @Test func asyncSystemOneWithImages() async throws {
+        let cup1URL = try #require(bundle.url(forResource: "cup1", withExtension: "jpeg"))
+        let cup2URL = try #require(bundle.url(forResource: "cup2", withExtension: "jpeg"))
+
+        let cup1Damage = try await damageProbability(forImageAt: cup1URL)
+        let cup2Damage = try await damageProbability(forImageAt: cup2URL)
+
+        print("cup1 damaged probability: \(cup1Damage)")
+        print("cup2 damaged probability: \(cup2Damage)")
+
+        #expect(cup1Damage < 0.5)
+        #expect(cup2Damage > 0.5)
+    }
+    private func damageProbability(forImageAt url: URL) async throws -> Double {
+        let image = try TypeSafeImage(url: url)
+        let parameters = SystemOneParameters(
+            model: "jev-1.14.0",
+            state: [
+                "Inspect the cup shown in this image.",
+                .image(image),
+            ],
+            questions: [
+                "damaged": .noul(
+                    instructions: "Is the cup broken or damaged?"
+                )
+            ]
+        )
+
+        let response = try await asyncTypeSafeClient.system_one(
+            parameters: parameters,
+            response_model: ImageDamageResponse.self,
+            requestOptions: .init(extra_headers: ["TypeSafe-Danger-Zone-Images": "true"])
+        )
+        return response.answers.damaged.noul
+    }
+}
+
+private struct ImageDamageAnswers: Decodable, Sendable {
+    let damaged: SystemOneAnswerNoul
+}
+
+private struct ImageDamageResponse: Decodable, Sendable {
+    let answers: ImageDamageAnswers
 }
