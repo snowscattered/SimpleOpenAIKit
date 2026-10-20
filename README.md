@@ -15,6 +15,7 @@ English | [中文](README.zh-CN.md)
     - [Tool](#tool)
     - [Request Option](#request-option)
   - [Async Response](#async-response)
+  - [Decision](#decision)
   - [Stream](#stream)
   - [Chat](#chat)
   - [Embedding](#embedding)
@@ -33,6 +34,7 @@ English | [中文](README.zh-CN.md)
 - [TypeSafe](#typesafe)
   - [Supported Resources](#typesafe-supported-resources)
   - [System One](#system-one)
+    - [System One Images](#system-one-images)
 - [License](#license)
 
 ## Introduction
@@ -270,8 +272,9 @@ func openAIAsyncResponse() async throws {
 
 ### Decision
 
-`decisions.create` returns answers in the same order as the request's questions. Where a question
-supports a `name`, it is the first initializer parameter.
+`decisions.create` accepts text or user-message input and returns answers in the same order as the request's questions. 
+Where a question supports a `name`, it is the first initializer parameter. Predicate answers contain a probability;
+ Choice and Score answers also include confidence and the probability distribution across their criteria.
 
 ```swift
 func openAIAsyncDecision() async throws {
@@ -295,7 +298,18 @@ func openAIAsyncDecision() async throws {
 
     let result = try await openAIAsyncClient.decisions.create(parameters: parameters)
     for (question, answer) in zip(parameters.questions, result.answers) {
-        print(question.type, answer.type)
+        switch (question, answer) {
+        case (.predicate, .predicate(let predicate)):
+            print(predicate.name as Any, predicate.probability)
+        case (.choice, .choice(let choice)):
+            print(choice.name as Any, choice.choice.value, choice.confidence)
+        case (.score, .score(let score)):
+            print(score.name as Any, score.score, score.confidence)
+        case (_, .refusal(let refusal)):
+            print("refused:", refusal.name as Any)
+        default:
+            print("unexpected answer:", question.type, answer.type)
+        }
     }
 }
 ```
@@ -677,10 +691,47 @@ func typeSafeSystemOne() async throws {
         )
     )
 
-    print(response.nouls["billing"]?.noul ?? "None")
+    print(response.nouls["billing"]?.noul as Any)
     print(response.choices["tone"]?.choice ?? "None")
-    print(response.scores["urgency"]?.score ?? "None")
+    print(response.scores["urgency"]?.score as Any)
 }
 ```
 
 `nouls`, `choices` and `scores` group the answers by question kind, `answers` keeps every answer under its question key, and `usage` carries the token counts. A Score answer also exposes `probability(forLevel:)`, `legend(forLevel:)` and `levels`; Choice and Score answers carry `confidence`, a Noul answer carries none because its probability already holds the uncertainty.
+
+#### System One Images
+
+System One image requests require the `TypeSafe-Danger-Zone-Images: true` header. Add it to
+`default_headers` when creating the client so every call uses the same configuration:
+
+```swift
+func typeSafeSystemOneImage(imageURL: URL) async throws {
+    let client = AsyncTypeSafeClient(
+        api_key: "YOUR_TYPESAFE_API_KEY",
+        default_headers: [
+            "TypeSafe-Danger-Zone-Images": "true"
+        ]
+    )
+
+    let image = try TypeSafeImage(url: imageURL)
+    let response = try await client.system_one(
+        parameters: .init(
+            model: "jev-1.14.0",
+            state: [
+                "Inspect the cup shown in this image.",
+                .image(image),
+            ],
+            questions: [
+                "damaged": .noul(
+                    instructions: "Is the cup broken or damaged?"
+                ),
+            ]
+        )
+    )
+
+    print(response.nouls["damaged"]?.noul as Any)
+}
+```
+
+`TypeSafeImage(url:)` uploads the image as a multipart file. 
+To send image data directly in JSON,use `TypeSafeImage(base64:format:)`; the same required header applies.
