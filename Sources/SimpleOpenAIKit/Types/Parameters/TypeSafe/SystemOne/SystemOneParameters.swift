@@ -8,9 +8,10 @@
 import Foundation
 import SimpleCodableMacro
 
-@CodableLiteral
-public enum SystemOneImageFormat: String {
+@CodableStringLiteralWithOther
+public enum SystemOneImageFormat {
     case png, jpg, jpeg
+    case other(String)
 }
 
 @BaseModelNoWithExtra
