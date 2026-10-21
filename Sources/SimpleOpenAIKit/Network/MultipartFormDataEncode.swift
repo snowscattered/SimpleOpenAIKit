@@ -34,20 +34,27 @@ private extension Array where Element == any CodingKey {
     }
 }
 
-/// One entry of the form: a text field or a file part.
+/// One entry of the form: inline content or a file part.
 private enum MultipartFormPart {
-    case field(String)
+    case content(Data, contentType: String?)
     case file(FileParameters)
 }
+
+private struct MultipartPart {
+    let name: String
+    let part: MultipartFormPart
+}
+
 // MARK: - MultipartFormDataEncoder
 /// Collects the fields and files of a single `multipart/form-data` body.
 ///
 /// `encode(_:)` walks any `Encodable` payload and flattens it into bracketed names, so upload
-/// endpoints get the shape they expect without a bespoke encoder per request. Parts are keyed by
-/// name, which means a later write to the same name replaces an earlier one.
+/// endpoints get the shape they expect without a bespoke encoder per request. Use
+/// `encodeJSON(name:value:)` when one part must contain a complete JSON document. Parts stay ordered,
+/// and repeated names are kept as separate parts as required for multi-file fields.
 public class MultipartFormDataEncodeContainer {
     private var codingPath: [any CodingKey] = []
-    private var parts: [String: MultipartFormPart] = [:]
+    private var parts: [MultipartPart] = []
 
     let boundary: String
     public init(boundary: String = "Boundary-\(UUID().uuidString)") {
@@ -55,11 +62,16 @@ public class MultipartFormDataEncodeContainer {
     }
     /// Attach `file` as the part named `name`.
     public func encodeFile(name: String, file: FileParameters) {
-        self.parts[name] = .file(file)
+        self.parts.append(.init(name: name, part: .file(file)))
     }
     /// Attach `value` as the text field named `name`.
     public func encodeField(name: String, value: String) {
-        self.parts[name] = .field(value)
+        self.parts.append(.init(name: name, part: .content(Data(value.utf8), contentType: nil)))
+    }
+    /// Attach `value` as one JSON document with an `application/json` content type.
+    public func encodeJSON<Value: Encodable>(name: String, value: Value) throws {
+        let data = try JSONEncoder().encode(value)
+        self.parts.append(.init(name: name, part: .content(data, contentType: "application/json")))
     }
     /// Walk `value` and turn each leaf into a field or file part.
     public func encode<T: Encodable>(_ value: T) throws {
@@ -74,19 +86,23 @@ extension MultipartFormDataEncodeContainer {
     public var serialize: InputStream {
         var inputStreams: [InputStream] = []
         
-        self.parts.forEach { (field, value) in
-            switch value {
-            case .field(let fieldValue):
-                let content = (
+        self.parts.forEach { entry in
+            switch entry.part {
+            case .content(let data, let contentType):
+                let contentTypeHeader = contentType.map { "Content-Type: \($0)\r\n" } ?? ""
+                let header = (
                     "--\(boundary)\r\n" +
-                    "Content-Disposition: form-data; name=\"\(field)\"\r\n\r\n" +
-                    "\(fieldValue)\r\n"
+                    "Content-Disposition: form-data; name=\"\(entry.name)\"\r\n" +
+                    contentTypeHeader +
+                    "\r\n"
                 ).data(using: .utf8)!
-                inputStreams.append(InputStream(data: content))
+                inputStreams.append(InputStream(data: header))
+                inputStreams.append(InputStream(data: data))
+                inputStreams.append(InputStream(data: "\r\n".data(using: .utf8)!))
             case .file(let file):
                 let header = (
                     "--\(boundary)\r\n" +
-                    "Content-Disposition: form-data; name=\"\(field)\"; filename=\"\(file.name)\"\r\n" +
+                    "Content-Disposition: form-data; name=\"\(entry.name)\"; filename=\"\(file.name)\"\r\n" +
                     "Content-Type: \(file.mimeType)\r\n\r\n"
                 ).data(using: .utf8)!
                 inputStreams.append(InputStream(data: header))
@@ -104,14 +120,19 @@ extension MultipartFormDataEncodeContainer {
     /// The body assembled into one in-memory `InputStream`.
     public var serialize: InputStream {
         var body = Data()
-        self.parts.forEach { (field, v) in
+        self.parts.forEach { entry in
             body.append("--\(self.boundary)\r\n")
-            switch v {
-            case .field(let value):
-                body.append("Content-Disposition: form-data; name=\"\(field)\"\r\n\r\n")
-                body.append("\(value)\r\n")
+            switch entry.part {
+            case .content(let data, let contentType):
+                body.append("Content-Disposition: form-data; name=\"\(entry.name)\"\r\n")
+                if let contentType {
+                    body.append("Content-Type: \(contentType)\r\n")
+                }
+                body.append("\r\n")
+                body.append(data)
+                body.append("\r\n")
             case .file(let file):
-                body.append("Content-Disposition: form-data; name=\"\(field)\"; filename=\"\(file.name)\"\r\n")
+                body.append("Content-Disposition: form-data; name=\"\(entry.name)\"; filename=\"\(file.name)\"\r\n")
                 body.append("Content-Type: \(file.mimeType)\r\n\r\n")
                 body.append(file.raw)
                 body.append("\r\n")
@@ -123,28 +144,28 @@ extension MultipartFormDataEncodeContainer {
 }
 #endif
  
-// MARK: - Internal Encoder Proxy
+// MARK: - Multipart Encoder
 /// `Encoder` that routes scalars to the container instead of producing JSON.
-private class MultipartEncoder: Encoder {
-    var codingPath: [any CodingKey]
-    var userInfo: [CodingUserInfoKey : Any] = [:]
-    let encoder: MultipartFormDataEncodeContainer
+public class MultipartEncoder: Encoder {
+    public var codingPath: [any CodingKey]
+    public var userInfo: [CodingUserInfoKey : Any] = [:]
+    public let encoder: MultipartFormDataEncodeContainer
     
-    init(codingPath: [any CodingKey], encoder: MultipartFormDataEncodeContainer) {
+    public init(codingPath: [any CodingKey], encoder: MultipartFormDataEncodeContainer) {
         self.codingPath = codingPath
         self.encoder = encoder
     }
     
-    func container<Key>(keyedBy keyType: Key.Type) -> KeyedEncodingContainer<Key> {
+    public func container<Key>(keyedBy keyType: Key.Type) -> KeyedEncodingContainer<Key> {
         let container = MultipartKeyedEncodingContainer<Key>(codingPath: codingPath, encoder: encoder)
         return KeyedEncodingContainer(container)
     }
     
-    func unkeyedContainer() -> any UnkeyedEncodingContainer {
+    public func unkeyedContainer() -> any UnkeyedEncodingContainer {
         return MultipartUnkeyedEncodingContainer(codingPath: codingPath, encoder: encoder)
     }
     
-    func singleValueContainer() -> any SingleValueEncodingContainer {
+    public func singleValueContainer() -> any SingleValueEncodingContainer {
         return MultipartSingleValueEncodingContainer(codingPath: codingPath, encoder: encoder)
     }
 }

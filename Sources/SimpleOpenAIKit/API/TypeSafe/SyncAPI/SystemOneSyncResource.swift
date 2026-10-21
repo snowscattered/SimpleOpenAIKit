@@ -8,32 +8,40 @@
 import Foundation
 
 public extension TypeSafeSyncAPIResource.SystemOneSyncResource {
-    /// Ask System One for its judgements, defaulting the model to the client's configured one.
-    func system_one(
+    /// Ask System One for its judgements and decode the response into a caller-defined model.
+    func system_one<Response: Decodable & Sendable>(
         parameters: SystemOneParameters,
+        response_model: Response.Type = SystemOneResult.self,
         requestOptions: RequestOptions? = nil
-    ) throws -> SystemOneResult {
+    ) throws -> Response {
         var parameters = parameters
         if parameters.model == nil {
             parameters.model = clientOption.model
         }
         let url = try clientOption.getServerUrl(path: "/v1/systemone")
+        let hasFile = parameters.assets?.values.contains { $0.file != nil } ?? false
         return try TypeSafeSession.shared.SyncResponse(
             url,
             payload: parameters,
             requestOptions: requestOptions,
             clientOption: self.clientOption,
-            method: .post
+            method: .post,
+            hasFile: hasFile
         )
     }
 }
 
 public extension TypeSafeClient {
-    /// Convenience wrapper around the client's internal `systemOne` resource.
-    func system_one(
+    /// Convenience wrapper for decoding into a caller-defined response model.
+    func system_one<Response: Decodable & Sendable>(
         parameters: SystemOneParameters,
+        response_model: Response.Type = SystemOneResult.self,
         requestOptions: RequestOptions? = nil
-    ) throws -> SystemOneResult {
-        try systemOne.system_one(parameters: parameters, requestOptions: requestOptions)
+    ) throws -> Response {
+        try systemOne.system_one(
+            parameters: parameters,
+            response_model: response_model,
+            requestOptions: requestOptions
+        )
     }
 }

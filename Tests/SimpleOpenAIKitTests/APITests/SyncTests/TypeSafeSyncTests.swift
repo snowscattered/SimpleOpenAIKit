@@ -25,12 +25,6 @@ struct TypeSafeSyncTests {
             ),
         ]
     )
-    @Test func syncSystemOneEvaluate() throws {
-        let res = try typeSafeClient.system_one(parameters: param)
-        print(res.nouls["billing"]?.noul ?? "None")
-        print(res.choices["tone"]?.choice ?? "None")
-        print(res.scores["urgency"]?.score ?? "None")
-    }
     @Test func syncSystemOnePinsModel() throws {
         let res = try typeSafeClient.system_one(
             parameters: .init(

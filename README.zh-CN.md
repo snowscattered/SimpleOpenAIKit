@@ -15,6 +15,7 @@
     - [Tool](#tool)
     - [Request Option](#request-option)
   - [Async Response](#async-response)
+  - [Decision](#decision)
   - [Stream](#stream)
   - [Chat](#chat)
   - [Embedding](#embedding)
@@ -33,6 +34,7 @@
 - [TypeSafe](#typesafe)
   - [支持列表](#typesafe-支持列表)
   - [System One](#system-one)
+    - [System One 图片](#system-one-图片)
 - [License](#license)
 
 ## 简介
@@ -270,8 +272,8 @@ func openAIAsyncResponse() async throws {
 
 ### Decision
 
-`decisions.create` 返回的 Answers 与请求中的 Questions 顺序一致。支持名称的 Question，其 `name`
-都是初始化参数的第一个参数。
+`decisions.create` 接受文本或用户消息输入，返回的 Answers 与请求中的 Questions 顺序一致。
+支持名称的 Question，其 `name` 都是初始化参数的第一个参数。Predicate 答案包含概率；Choice 和 Score 答案还包含置信度，以及各个 criteria 上的概率分布。
 
 ```swift
 func openAIAsyncDecision() async throws {
@@ -295,7 +297,18 @@ func openAIAsyncDecision() async throws {
 
     let result = try await openAIAsyncClient.decisions.create(parameters: parameters)
     for (question, answer) in zip(parameters.questions, result.answers) {
-        print(question.type, answer.type)
+        switch (question, answer) {
+        case (.predicate, .predicate(let predicate)):
+            print(predicate.name as Any, predicate.probability)
+        case (.choice, .choice(let choice)):
+            print(choice.name as Any, choice.choice.value, choice.confidence)
+        case (.score, .score(let score)):
+            print(score.name as Any, score.score, score.confidence)
+        case (_, .refusal(let refusal)):
+            print("refused:", refusal.name as Any)
+        default:
+            print("unexpected answer:", question.type, answer.type)
+        }
     }
 }
 ```
@@ -677,10 +690,47 @@ func typeSafeSystemOne() async throws {
         )
     )
 
-    print(response.nouls["billing"]?.noul ?? "None")
+    print(response.nouls["billing"]?.noul as Any)
     print(response.choices["tone"]?.choice ?? "None")
-    print(response.scores["urgency"]?.score ?? "None")
+    print(response.scores["urgency"]?.score as Any)
 }
 ```
 
 `nouls`、`choices`、`scores` 按问题类型分组取答案，`answers` 保留每个提问 key 的原始答案，`usage` 给出 token 用量。Score 答案另有 `probability(forLevel:)`、`legend(forLevel:)` 与 `levels`；Choice 和 Score 答案带 `confidence`，Noul 答案没有单独的置信度，因为它的概率本身就已经说明了不确定性。
+
+#### System One 图片
+
+System One 图片请求必须携带 `TypeSafe-Danger-Zone-Images: true` 请求头。请在创建 client 时
+将它加入 `default_headers`，确保每个调用都使用同一份必需配置：
+
+```swift
+func typeSafeSystemOneImage(imageURL: URL) async throws {
+    let client = AsyncTypeSafeClient(
+        api_key: "YOUR_TYPESAFE_API_KEY",
+        default_headers: [
+            "TypeSafe-Danger-Zone-Images": "true"
+        ]
+    )
+
+    let image = try TypeSafeImage(url: imageURL)
+    let response = try await client.system_one(
+        parameters: .init(
+            model: "jev-1.14.0",
+            state: [
+                "Inspect the cup shown in this image.",
+                .image(image),
+            ],
+            questions: [
+                "damaged": .noul(
+                    instructions: "Is the cup broken or damaged?"
+                ),
+            ]
+        )
+    )
+
+    print(response.nouls["damaged"]?.noul as Any)
+}
+```
+
+`TypeSafeImage(url:)` 会把图片作为 multipart 文件上传。
+如果需要直接把图片数据放进 JSON，请使用`TypeSafeImage(base64:format:)`；同样必须携带上述请求头。
