@@ -56,9 +56,7 @@ final class ConcatenatedInputStream: InputStream {
             return
         }
         _status = .open
-        if streams[currentIndex].streamStatus == .notOpen {
-            streams[currentIndex].open()
-        }
+        _ = currentUsableStream()
     }
     override func close() {
         guard _status != .closed else { return }
@@ -76,9 +74,43 @@ final class ConcatenatedInputStream: InputStream {
             stream.remove(from: aRunLoop, forMode: mode)
         }
     }
+
+    /// Open the current stream and skip members that have already ended.
+    ///
+    /// Returns `nil` after setting the parent to `.atEnd` or `.error`.
+    private func currentUsableStream() -> InputStream? {
+        while currentIndex < streams.count {
+            let stream = streams[currentIndex]
+            if stream.streamStatus == .notOpen {
+                stream.open()
+            }
+
+            switch stream.streamStatus {
+            case .error:
+                return fail(with: stream.streamError)
+            case .atEnd, .closed:
+                if stream.streamStatus != .closed {
+                    stream.close()
+                }
+                currentIndex += 1
+            default:
+                return stream
+            }
+        }
+
+        _status = .atEnd
+        return nil
+    }
+
+    /// Record a terminal member-stream failure without converting it into EOF.
+    private func fail(with error: (any Error)?) -> InputStream? {
+        currentError = error ?? IOStreamError.readFailed
+        _status = .error
+        return nil
+    }
     
     /// Fill `buffer` with up to `len` bytes, moving to the next member stream whenever the current one
-    /// runs dry. Returns `0` only after the last stream is exhausted, `-1` if the stream is not open.
+    /// runs dry. Returns `0` only after the last stream is exhausted; failures return `-1`.
     override func read(_ buffer: UnsafeMutablePointer<UInt8>, maxLength len: Int) -> Int {
         guard len > 0 else { return 0 }
         if _status == .atEnd || _status == .closed { return 0 }
@@ -86,11 +118,14 @@ final class ConcatenatedInputStream: InputStream {
         
         var totalBytesRead = 0
         let targetLength = len
-        while totalBytesRead < targetLength && currentIndex < streams.count {
-            let stream = streams[currentIndex]
-            if stream.streamStatus == .notOpen {
-                stream.open()
+        while totalBytesRead < targetLength {
+            guard let stream = currentUsableStream() else {
+                if _status == .atEnd {
+                    return totalBytesRead
+                }
+                return totalBytesRead > 0 ? totalBytesRead : -1
             }
+
             let remaining = targetLength - totalBytesRead
             let bytesRead = stream.read(buffer + totalBytesRead, maxLength: remaining)
             
@@ -98,37 +133,32 @@ final class ConcatenatedInputStream: InputStream {
                 totalBytesRead += bytesRead
             } else if bytesRead == 0 {
                 if stream.streamStatus == .atEnd || stream.streamStatus == .closed {
-                    stream.close()
-                    currentIndex += 1
                     continue
                 }
-                break
+                _ = fail(with: stream.streamError)
+                return totalBytesRead > 0 ? totalBytesRead : -1
             } else {
-                currentError = stream.streamError
-                _status = .error
-                return -1
+                _ = fail(with: stream.streamError)
+                return totalBytesRead > 0 ? totalBytesRead : -1
             }
-        }
-        if currentIndex >= streams.count {
-            _status = .atEnd
         }
         return totalBytesRead
     }
     /// True if any remaining member stream still has bytes, opening them as needed.
     override var hasBytesAvailable: Bool {
         guard _status == .open else { return false }
-        while currentIndex < streams.count {
-            let stream = streams[currentIndex]
-            if stream.streamStatus == .notOpen { stream.open() }
+        while true {
+            guard let stream = currentUsableStream() else { return false }
             if stream.hasBytesAvailable { return true }
+
+            if stream.streamStatus == .error {
+                _ = fail(with: stream.streamError)
+                return false
+            }
             if stream.streamStatus == .atEnd || stream.streamStatus == .closed {
-                stream.close()
-                currentIndex += 1
                 continue
             }
             return false
         }
-        _status = .atEnd
-        return false
     }
 }

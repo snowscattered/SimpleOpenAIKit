@@ -55,6 +55,35 @@ struct AsyncSessionTests {
         print(string)
         
     }
+
+    @Test func multipartRequestSetsExactContentLength() throws {
+        let payload = FilesCreateParameters(
+            file: .init(
+                data: Data("uploaded file bytes".utf8),
+                name: "sample.txt",
+                mimeType: "text/plain"
+            ),
+            purpose: .other("file-extract")
+        )
+        let request = try OpenAISession.shared.getRequest(
+            url,
+            payload: payload,
+            requestOptions: nil,
+            clientOption: client,
+            method: .post,
+            hasFile: true
+        )
+
+        let contentLength = try #require(
+            request.value(forHTTPHeaderField: "Content-Length").flatMap(Int.init)
+        )
+        let stream = try #require(request.httpBodyStream)
+        stream.open()
+        defer { stream.close() }
+
+        #expect(contentLength == stream.read().count)
+    }
+
     @Test mutating func asyncData() async throws {
         payload.stream = false
         let response: BaseType = try await OpenAISession.shared.AsyncResponse(
