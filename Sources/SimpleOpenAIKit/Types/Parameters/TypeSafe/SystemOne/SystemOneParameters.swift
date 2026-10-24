@@ -32,6 +32,9 @@ public struct TypeSafeImage {
     public init(url: URL) throws {
         self.file = try .init(url: url)
     }
+    public init(file: FileParameters) {
+        self.file = file
+    }
     public init(base64: String, format: SystemOneImageFormat) {
         self.format = format
         self.data_base64 = base64
@@ -88,14 +91,64 @@ public struct SystemOneParameters {
         self.questions = questions
         self.assets = collected.isEmpty ? nil : collected
     }
+    private struct SystemOneDynamicCodingKey: CodingKey {
+        let stringValue: String
+        var intValue: Int? { nil }
+        init(_ stringValue: String) { self.stringValue = stringValue }
+        init?(stringValue: String) { self.init(stringValue) }
+        init?(intValue: Int) { self.init(String(intValue)) }
+        static let request = Self("request")
+    }
+    private static let keys = Set(CodingKeys.allCases.map { $0.stringValue })
+    public init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: SystemOneDynamicCodingKey.self)
+        guard let request = try container.decodeIfPresent(String.self, forKey: .request) else {
+            let standard = try decoder.container(keyedBy: CodingKeys.self)
+            self.init(
+                model: try standard.decodeIfPresent(String.self, forKey: .model),
+                state: try standard.decode(SystemOneJSONConent.self, forKey: .state),
+                questions: try standard.decode([String: SystemOneQuestion].self, forKey: .questions),
+                assets: try standard.decodeIfPresent([String: TypeSafeImage].self, forKey: .assets)
+            )
+            let c = try decoder.singleValueContainer()
+            let dict = try c.decode([String: BaseType].self)
+            self.extra = dict.filter { !Self.keys.contains($0.key) }
+            return
+        }
+        let payload = try JSONDecoder().decode(Self.self, from: Data(request.utf8))
+        let assets = try payload.assets?.mapValues { image -> TypeSafeImage in
+            guard let part = image.part else { return image }
+            let key = SystemOneDynamicCodingKey(part)
+            guard container.contains(key) else {
+                throw DecodingError.keyNotFound(
+                    key,
+                    .init(codingPath: container.codingPath, debugDescription: "SystemOne asset \(part) is missing")
+                )
+            }
+            return TypeSafeImage(file: try container.decode(FileParameters.self, forKey: key))
+        }
+        self.init(
+            model: payload.model,
+            state: payload.state,
+            questions: payload.questions,
+            assets: assets.flatMap { $0.isEmpty ? nil : $0 }
+        )
+        self.extra = payload.extra
+        try afterDecode()
+    }
 
     public func encode(to encoder: any Encoder) throws {
+        var copy = self
+        try copy.beforeEncode()
         guard let encoder = encoder as? MultipartEncoder else {
             var container = encoder.container(keyedBy: CodingKeys.self)
             try container.encodeIfPresent(model, forKey: .model)
             try container.encode(state, forKey: .state)
             try container.encode(questions, forKey: .questions)
             try container.encodeIfPresent(assets, forKey: .assets)
+            var c = encoder.singleValueContainer()
+            let dict = copy.extra
+            try c.encode(dict)
             return
         }
 

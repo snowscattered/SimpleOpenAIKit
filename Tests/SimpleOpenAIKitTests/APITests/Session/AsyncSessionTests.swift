@@ -55,6 +55,7 @@ struct AsyncSessionTests {
         print(string)
         
     }
+
     @Test mutating func asyncData() async throws {
         payload.stream = false
         let response: BaseType = try await OpenAISession.shared.AsyncResponse(

@@ -82,9 +82,14 @@ public class MultipartFormDataEncodeContainer {
 
 #if SelectInputStream
 extension MultipartFormDataEncodeContainer {
-    /// The body as a stream of parts, so a file is read from disk lazily instead of copied into memory.
-    public var serialize: InputStream {
+    private var serializedBody: (streams: [InputStream], contentLength: Int) {
         var inputStreams: [InputStream] = []
+        var contentLength = 0
+
+        func append(_ data: Data) {
+            inputStreams.append(InputStream(data: data))
+            contentLength += data.count
+        }
         
         self.parts.forEach { entry in
             switch entry.part {
@@ -96,29 +101,35 @@ extension MultipartFormDataEncodeContainer {
                     contentTypeHeader +
                     "\r\n"
                 ).data(using: .utf8)!
-                inputStreams.append(InputStream(data: header))
-                inputStreams.append(InputStream(data: data))
-                inputStreams.append(InputStream(data: "\r\n".data(using: .utf8)!))
+                append(header)
+                append(data)
+                append("\r\n".data(using: .utf8)!)
             case .file(let file):
                 let header = (
                     "--\(boundary)\r\n" +
                     "Content-Disposition: form-data; name=\"\(entry.name)\"; filename=\"\(file.name)\"\r\n" +
                     "Content-Type: \(file.mimeType)\r\n\r\n"
                 ).data(using: .utf8)!
-                inputStreams.append(InputStream(data: header))
+                append(header)
                 inputStreams.append(file.raw)
-                inputStreams.append(InputStream(data: "\r\n".data(using: .utf8)!))
+                contentLength += file.size
+                append("\r\n".data(using: .utf8)!)
             }
         }
         let ending = "--\(boundary)--\r\n".data(using: .utf8)!
-        inputStreams.append(InputStream(data: ending))
-        return ConcatenatedInputStream(streams: inputStreams)
+        append(ending)
+        return (inputStreams, contentLength)
+    }
+    var contentLength: Int {
+        return serializedBody.contentLength
+    }
+    public var serialize: InputStream {
+        return ConcatenatedInputStream(streams: serializedBody.streams)
     }
 }
 #else
 extension MultipartFormDataEncodeContainer {
-    /// The body assembled into one in-memory `InputStream`.
-    public var serialize: InputStream {
+    private var serializedBody: Data {
         var body = Data()
         self.parts.forEach { entry in
             body.append("--\(self.boundary)\r\n")
@@ -139,7 +150,17 @@ extension MultipartFormDataEncodeContainer {
             }
         }
         body.append("--\(self.boundary)--\r\n")
-        return InputStream(data: body)
+        return body
+    }
+
+    /// The exact byte count of the in-memory multipart body.
+    var contentLength: Int {
+        return serializedBody.count
+    }
+
+    /// The body assembled into one in-memory `InputStream`.
+    public var serialize: InputStream {
+        return InputStream(data: serializedBody)
     }
 }
 #endif
