@@ -14,11 +14,14 @@ public extension TypeSafeAsyncAPIResource.SystemOneAsyncResource {
         requestOptions: RequestOptions? = nil
     ) async throws -> Response {
         var parameters = parameters
+        var requestOptions = requestOptions
         if parameters.model == nil {
             parameters.model = clientOption.model
         }
         let url = try clientOption.getServerUrl(path: "/v1/systemone")
         let hasFile = parameters.assets?.values.contains { $0.file != nil } ?? false
+        parameters.extra = parameters.extra | (requestOptions?.extra_body ?? [:])
+        requestOptions?.extra_body = [:]
         return try await TypeSafeSession.shared.AsyncResponse(
             url,
             payload: parameters,

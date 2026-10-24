@@ -102,15 +102,6 @@ public struct SystemOneParameters {
     private static let keys = Set(CodingKeys.allCases.map { $0.stringValue })
     public init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: SystemOneDynamicCodingKey.self)
-        var extra: [String: BaseType] = [:]
-        for key in container.allKeys {
-            let name = key.stringValue
-            guard name != "request",
-                  !name.hasPrefix("asset-"),
-                  !Self.keys.contains(name)
-            else { continue }
-            extra[name] = try container.decode(BaseType.self, forKey: key)
-        }
         guard let request = try container.decodeIfPresent(String.self, forKey: .request) else {
             let standard = try decoder.container(keyedBy: CodingKeys.self)
             self.init(
@@ -119,7 +110,9 @@ public struct SystemOneParameters {
                 questions: try standard.decode([String: SystemOneQuestion].self, forKey: .questions),
                 assets: try standard.decodeIfPresent([String: TypeSafeImage].self, forKey: .assets)
             )
-            self.extra = extra
+            let c = try decoder.singleValueContainer()
+            let dict = try c.decode([String: BaseType].self)
+            self.extra = dict.filter { !Self.keys.contains($0.key) }
             return
         }
         let payload = try JSONDecoder().decode(Self.self, from: Data(request.utf8))
@@ -129,10 +122,7 @@ public struct SystemOneParameters {
             guard container.contains(key) else {
                 throw DecodingError.keyNotFound(
                     key,
-                    .init(
-                        codingPath: container.codingPath,
-                        debugDescription: "SystemOne asset \(part) is missing"
-                    )
+                    .init(codingPath: container.codingPath, debugDescription: "SystemOne asset \(part) is missing")
                 )
             }
             return TypeSafeImage(file: try container.decode(FileParameters.self, forKey: key))
@@ -143,7 +133,7 @@ public struct SystemOneParameters {
             questions: payload.questions,
             assets: assets.flatMap { $0.isEmpty ? nil : $0 }
         )
-        self.extra = extra.merging(payload.extra) { _, new in new }
+        self.extra = payload.extra
         try afterDecode()
     }
 
@@ -156,9 +146,9 @@ public struct SystemOneParameters {
             try container.encode(state, forKey: .state)
             try container.encode(questions, forKey: .questions)
             try container.encodeIfPresent(assets, forKey: .assets)
-//            var c = encoder.singleValueContainer()
-//            let dict = copy.extra
-//            try c.encode(dict)
+            var c = encoder.singleValueContainer()
+            let dict = copy.extra
+            try c.encode(dict)
             return
         }
 
