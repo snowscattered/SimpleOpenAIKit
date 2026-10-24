@@ -54,7 +54,8 @@ public extension OpenAISyncAPIResource.ImagesSyncResource {
             payload: nostreamingParameters,
             requestOptions: requestOptions,
             clientOption: self.clientOption,
-            method: .post
+            method: .post,
+            hasFile: true
         )
     }
     /// Edit or vary existing images and iterate the partial results.
@@ -70,7 +71,8 @@ public extension OpenAISyncAPIResource.ImagesSyncResource {
             payload: streamingParameters,
             requestOptions: requestOptions,
             clientOption: self.clientOption,
-            method: .post
+            method: .post,
+            hasFile: true
         )
     }
 }

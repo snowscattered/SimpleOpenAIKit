@@ -55,7 +55,8 @@ public extension OpenAIAsyncAPIResource.ImagesAsyncResource {
             payload: nostreamingParameters,
             requestOptions: requestOptions,
             clientOption: self.clientOption,
-            method: .post
+            method: .post,
+            hasFile: true
         )
     }
 
@@ -72,7 +73,8 @@ public extension OpenAIAsyncAPIResource.ImagesAsyncResource {
             payload: streamingParameters,
             requestOptions: requestOptions,
             clientOption: self.clientOption,
-            method: .post
+            method: .post,
+            hasFile: true
         )
     }
 }
