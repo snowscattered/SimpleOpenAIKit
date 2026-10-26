@@ -16,4 +16,5 @@ public struct ResponseFileContent {
     public var file_url: String
     public var filename: String
     public var file_id: String?
+    public var prompt_cache_breakpoint: ResponsePromptCacheBreakpoint?
 }

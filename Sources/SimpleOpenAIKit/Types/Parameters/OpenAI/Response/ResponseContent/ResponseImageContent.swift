@@ -10,7 +10,7 @@ import SimpleCodableMacro
 
 @CodableLiteral
 public enum ResponseImageDetailLiteral: String {
-    case low, high, auto
+    case auto, low, high, original
 }
 
 @BaseModelNoWithExtra
@@ -20,6 +20,7 @@ public struct ResponseImageContent {
     public var image_url: String
     public var detail: ResponseImageDetailLiteral?
     public var file_id: String?
+    public var prompt_cache_breakpoint: ResponsePromptCacheBreakpoint?
 }
 extension ResponseImageContent: ExpressibleByStringLiteral {
     public init(stringLiteral value: String) { self = .init(image_url: value) }

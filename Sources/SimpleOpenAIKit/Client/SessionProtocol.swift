@@ -110,13 +110,11 @@ public extension SessionProtocol {
                 if let extraBody = requestOptions?.extra_body, !extraBody.isEmpty {
                     payloadMap = payloadMap | extraBody
                 }
-                let body = try JSONEncoder().encode(payloadMap)
-                request.httpBody = body
+                request.httpBody = try JSONEncoder().encode(payloadMap)
             }
         } else {
             if let extraBody = requestOptions?.extra_body, !extraBody.isEmpty {
-                let body = try JSONEncoder().encode(extraBody)
-                request.httpBody = body
+                request.httpBody = try JSONEncoder().encode(extraBody)
             }
         }
         // Other

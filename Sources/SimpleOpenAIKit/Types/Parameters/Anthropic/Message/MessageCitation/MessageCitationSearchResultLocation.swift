@@ -12,10 +12,10 @@ import SimpleCodableMacro
 @PublicInit
 public struct MessageCitationSearchResultLocation {
     public static let type: String = "search_result_location"
-    public var cited_text: String
-    public var end_block_index: Int
-    public var search_result_index: Int
     public var source: String
-    public var start_block_index: Int
     public var title: String?
+    public var cited_text: String
+    public var search_result_index: Int
+    public var start_block_index: Int
+    public var end_block_index: Int
 }

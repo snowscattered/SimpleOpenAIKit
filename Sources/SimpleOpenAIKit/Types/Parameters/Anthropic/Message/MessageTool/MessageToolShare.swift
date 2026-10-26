@@ -10,9 +10,10 @@ import SimpleCodableMacro
 
 @CodableLiteral
 public enum MessageAllowedCaller: String {
-   case direct
-   case code_execution_20250825
-   case code_execution_20260120
+    case direct
+    case code_execution_20250825
+    case code_execution_20260120
+    case code_execution_20260521
 }
 @BaseModelNoWithExtra
 @PublicInit
