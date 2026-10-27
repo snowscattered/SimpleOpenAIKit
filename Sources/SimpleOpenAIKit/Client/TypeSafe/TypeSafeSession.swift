@@ -17,12 +17,7 @@ struct TypeSafeSession: Sendable, SessionProtocol {
     func retryErrorHandler(error: any Error) -> Bool {
         if let error = error as? TypeSafeAPIError {
             switch error {
-            case .rateLimit, .overloaded, .internalServer: return true
-            default: return false
-            }
-        } else if let error = error as? URLError {
-            switch error.code {
-            case .timedOut: return true
+            case .rateLimit, .overloaded, .internalServer, .timeOut: return true
             default: return false
             }
         }

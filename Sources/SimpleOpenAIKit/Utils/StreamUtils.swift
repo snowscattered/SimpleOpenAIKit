@@ -24,37 +24,31 @@ private func EventConversion<T: Decodable & Sendable>(
     return .yield(try decodeNetworkData(T.self, from: data))
 }
 
-/// Issue `request` and stream the reply as decoded events, retrying the connection up to `maxRetries`.
+/// Issue `request` once and stream the reply as decoded events.
 ///
 /// When `T` is `Data` the SSE framing is skipped and raw chunks are yielded, which is what binary
 /// downloads such as speech or video use.
 func syncStreamResponse<T: Decodable & Sendable>(
     _ type: T.Type = T.self,
-    request: URLRequest,
-    maxRetries: Int = 2,
-    shouldRetry: (any Error) -> Bool = { error in true }
+    request: URLRequest
 ) throws -> SyncThrowingStream<T, any Error> {
-    return try retry(maxRetries: maxRetries, shouldRetry: shouldRetry) {
-        if T.self == Data.self {
-            return try URLSession.shared.syncStreamData(request)
-                .conversion { chunk throws in .yield(chunk as! T) }
+    if T.self == Data.self {
+        return try URLSession.shared.syncStreamData(request).conversion {
+            chunk throws in .yield(chunk as! T)
         }
-        return try URLSession.shared.syncSSE(request).conversion(EventConversion)
     }
+    return try URLSession.shared.syncSSE(request).conversion(EventConversion)
 }
 
 /// Awaitable counterpart of `syncStreamResponse`.
 func asyncStreamResponse<T: Decodable & Sendable>(
     _ type: T.Type = T.self,
-    request: URLRequest,
-    maxRetries: Int = 2,
-    shouldRetry: (any Error) -> Bool = { error in true }
+    request: URLRequest
 ) async throws -> AsyncThrowingStream<T, any Error> {
-    return try await retry(maxRetries: maxRetries, shouldRetry: shouldRetry) {
-        if T.self == Data.self {
-            return try await URLSession.shared.asyncStreamData(request)
-                .conversion { chunk throws in .yield(chunk as! T) }
+    if T.self == Data.self {
+        return try await URLSession.shared.asyncStreamData(request).conversion {
+            chunk throws in .yield(chunk as! T)
         }
-        return try await URLSession.shared.asyncSSE(request).conversion(EventConversion)
     }
+    return try await URLSession.shared.asyncSSE(request).conversion(EventConversion)
 }
