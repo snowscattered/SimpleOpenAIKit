@@ -74,7 +74,7 @@ public extension OpenAIAsyncAPIResource.RealtimeAsyncResource {
 /// Base for the sub-resources that share one realtime connection.
 public class AsyncRealtimeResource {
     let connection: AsyncRealtimeConnection
-    init(_ connection: AsyncRealtimeConnection) {
+    public init(_ connection: AsyncRealtimeConnection) {
         self.connection = connection
     }
 }

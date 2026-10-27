@@ -8,7 +8,7 @@
 import Foundation
 
 /// Synchronous OpenAI client; each API group is exposed as a stored resource namespace.
-public class OpenAI: @unchecked Sendable {
+open class OpenAI: @unchecked Sendable {
     private let clientOption: OpenAIClientOption
     public var api_key: String { clientOption.api_key }
     public var organization: String? { clientOption.organization }
@@ -48,6 +48,22 @@ public class OpenAI: @unchecked Sendable {
 //    public let evals: OpenAISyncAPIResource.EvalsSyncResource
     public let beta: OpenAISyncAPIResource.BetaSyncResource
 
+    public init(clientOption: OpenAIClientOption) {
+        self.models      = .init(clientOption)
+        self.completions = .init(clientOption)
+        self.chat        = .init(clientOption)
+        self.embeddings  = .init(clientOption)
+        self.images      = .init(clientOption)
+        self.audio       = .init(clientOption)
+        self.responses   = .init(clientOption)
+        self.files       = .init(clientOption)
+        self.uploads     = .init(clientOption)
+        self.videos      = .init(clientOption)
+        self.realtime    = .init(clientOption)
+        self.decisions   = .init(clientOption)
+        self.beta        = .init(clientOption)
+        self.clientOption = clientOption
+    }
     /// Create a client; every resource below shares the resulting options.
     public init(
         api_key: String,

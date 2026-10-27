@@ -8,17 +8,17 @@
 import Foundation
 
 /// TypeSafe credentials plus the default model name used when a call does not specify one.
-struct TypeSafeClientOption: APIClientOption, Sendable {
-    let api_key: String
-    let model: String
-    let base_url: URL
-    let timeout: TimeInterval
-    let max_retries: Int
+public struct TypeSafeClientOption: APIClientOption, Sendable {
+    public let api_key: String
+    public let model: String
+    public let base_url: URL
+    public let timeout: TimeInterval
+    public let max_retries: Int
 
-    let default_headers: Header
-    let default_query: Query
+    public let default_headers: Header
+    public let default_query: Query
 
-    var headers: Header {
+    public var headers: Header {
         var headers: [String: String] = [:]
         headers["User-Agent"] = "Simple-LLM-APIKit/Swift/1.0"
         headers = headers | self.default_headers
@@ -27,9 +27,9 @@ struct TypeSafeClientOption: APIClientOption, Sendable {
         headers["Authorization"] = "Bearer \(api_key)"
         return headers
     }
-    var query: Query { default_query }
+    public var query: Query { default_query }
 
-    init(
+    public init(
         api_key: String,
         base_url: URL? = nil,
         model: String? = nil,

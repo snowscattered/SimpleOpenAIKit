@@ -8,19 +8,19 @@
 import Foundation
 
 /// Anthropic credentials and endpoint defaults, resolved into request headers on each call.
-struct AnthropicClientOption: APIClientOption, Sendable {
-    let api_key: String
-    let auth_token: String?
+public struct AnthropicClientOption: APIClientOption, Sendable {
+    public let api_key: String
+    public let auth_token: String?
 
-    let base_url: URL
+    public let base_url: URL
 
-    let timeout: TimeInterval
-    let max_retries: Int
+    public let timeout: TimeInterval
+    public let max_retries: Int
 
-    let default_headers: Header
-    let default_query: Query
+    public let default_headers: Header
+    public let default_query: Query
 
-    var headers: Header {
+    public var headers: Header {
         var headers: [String: String] = [:]
         headers["User-Agent"] = "Simple-LLM-APIKit/Swift/1.0"
         headers = headers | self.default_headers
@@ -29,9 +29,9 @@ struct AnthropicClientOption: APIClientOption, Sendable {
         headers["Authorization"] = "Bearer \(api_key)"
         return headers
     }
-    var query: Query { default_query }
+    public var query: Query { default_query }
 
-    init(
+    public init(
         api_key: String,
         base_url: URL? = nil,
         auth_token: String? = nil,

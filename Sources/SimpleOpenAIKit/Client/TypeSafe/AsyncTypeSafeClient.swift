@@ -8,7 +8,7 @@
 import Foundation
 
 /// Awaitable TypeSafe client, holding the `models` resource and the internal `systemOne` resource.
-public class AsyncTypeSafeClient: @unchecked Sendable {
+open class AsyncTypeSafeClient: @unchecked Sendable {
     private let clientOption: TypeSafeClientOption
     public var api_key: String { clientOption.api_key }
     public var model: String { clientOption.model }
@@ -25,6 +25,11 @@ public class AsyncTypeSafeClient: @unchecked Sendable {
     let systemOne: TypeSafeAsyncAPIResource.SystemOneAsyncResource
     public let models: TypeSafeAsyncAPIResource.ModelsAsyncResource
 
+    public init(clientOption: TypeSafeClientOption) {
+        self.systemOne = .init(clientOption)
+        self.models    = .init(clientOption)
+        self.clientOption = clientOption
+    }
     public init(
         api_key: String,
         base_url: URL? = nil,
