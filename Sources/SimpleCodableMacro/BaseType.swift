@@ -11,7 +11,7 @@ import Foundation
 ///
 /// Tool schemas and the `extra` passthrough fields are built from this, so unknown keys survive a
 /// decode and re-encode round trip.
-public indirect enum BaseType: Codable & Sendable {
+public indirect enum BaseType: Codable & Sendable & Hashable {
     case null
     case bool(Bool)
     case int(Int)
@@ -105,7 +105,7 @@ extension BaseType {
 }
 // MARK: - BaseModel
 /// Marker for a generated API model: `Codable`, `Sendable`, and able to dump itself as JSON.
-public protocol BaseModel: Codable & Sendable { }
+public protocol BaseModel: Codable & Sendable & Hashable { }
 public extension BaseModel {
     /// Hook for generated models to run after decoding; the default does nothing.
     mutating func afterDecode() throws { }

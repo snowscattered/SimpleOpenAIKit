@@ -25,7 +25,7 @@ public struct ResponseLogprob {
 }
 @BaseModelNoWithExtra
 @PublicInit
-public struct ResponseOutputText: Sendable {
+public struct ResponseOutputText {
     public static let type: String = "output_text"
     public var text: String
     public var logprobs: [ResponseLogprob]?
