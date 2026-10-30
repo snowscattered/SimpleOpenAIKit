@@ -13,6 +13,7 @@ import SimpleCodableMacro
 public struct ResponseTextContent {
     public static let type: String = "input_text"
     public var text: String
+    public var prompt_cache_breakpoint: ResponsePromptCacheBreakpoint?
 }
 extension ResponseTextContent: ExpressibleByStringLiteral {
     public init(stringLiteral value: String) { self = .init(text: value) }

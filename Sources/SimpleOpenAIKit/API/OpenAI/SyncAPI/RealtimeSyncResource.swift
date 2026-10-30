@@ -73,7 +73,7 @@ public extension OpenAISyncAPIResource.RealtimeSyncResource {
 /// Base for the sub-resources that share one realtime connection.
 public class SyncRealtimeResource {
     let connection: SyncRealtimeConnection
-    init(_ connection: SyncRealtimeConnection) {
+    public init(_ connection: SyncRealtimeConnection) {
         self.connection = connection
     }
 }

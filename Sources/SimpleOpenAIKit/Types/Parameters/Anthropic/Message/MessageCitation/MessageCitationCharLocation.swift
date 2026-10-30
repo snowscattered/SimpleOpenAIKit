@@ -12,9 +12,9 @@ import SimpleCodableMacro
 @PublicInit
 public struct MessageCitationCharLocation {
     public static let type: String = "char_location"
-    public var cited_text: String
     public var document_index: Int
     public var document_title: String?
-    public var end_char_index: Int
+    public var cited_text: String
     public var start_char_index: Int
+    public var end_char_index: Int
 }

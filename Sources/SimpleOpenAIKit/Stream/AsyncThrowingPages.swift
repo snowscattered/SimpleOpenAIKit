@@ -7,7 +7,7 @@
 
 /// Awaitable page iterator: calls `fetch` again for every element until a page reports `has_more` false
 /// or arrives empty.
-public struct AsyncThrowingPages<T: Codable & Sendable>: AsyncSequence {
+public struct AsyncThrowingPages<T: Codable & Sendable & Hashable>: AsyncSequence {
     public typealias Element = PageStruct<T>
     
     private let fetch: () async throws -> PageStruct<T>

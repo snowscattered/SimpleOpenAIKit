@@ -64,3 +64,10 @@ func retry<T>(
         }
     }
 }
+
+public func Base64ForURL(url: URL) throws -> String {
+    guard url.isFileURL else { throw IOStreamError.invalidURL }
+    let data = try Data(contentsOf: url)
+    guard let mime = getMimeType(for: url) else { throw IOStreamError.creationFailed }
+    return "data:\(mime);base64,\(data.base64EncodedString())"
+}

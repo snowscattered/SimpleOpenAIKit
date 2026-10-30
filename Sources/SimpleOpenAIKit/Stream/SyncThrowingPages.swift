@@ -7,7 +7,7 @@
 
 /// Blocking page iterator: calls `fetch` again for every element until a page reports `has_more` false
 /// or arrives empty.
-public struct SyncThrowingPages<T: Codable & Sendable>: SyncSequence {
+public struct SyncThrowingPages<T: Codable & Sendable & Hashable>: SyncSequence {
     public typealias Element = PageStruct<T>
     
     private let fetch: () throws -> PageStruct<T>

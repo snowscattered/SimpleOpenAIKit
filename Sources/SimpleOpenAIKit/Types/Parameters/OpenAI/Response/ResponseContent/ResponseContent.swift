@@ -8,6 +8,16 @@
 import Foundation
 import SimpleCodableMacro
 
+@CodableLiteral
+public enum ResponsePromptCacheBreakpointLiteral: String {
+    case explicit
+}
+@BaseModelNoWithExtra
+@PublicInit
+public struct ResponsePromptCacheBreakpoint {
+    public var model: ResponsePromptCacheBreakpointLiteral
+}
+
 @CodableByConstant
 @nonexhaustive
 public enum ResponseContent {

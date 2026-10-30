@@ -31,6 +31,7 @@ public struct ResponseCreateParameters {
     public var stream_options: ResponseStreamOptions?
     public var text: ResponseTextConfig?
     public var background: Bool?
+    public var access_programs: ResponseAccessPrograms?
     public var metadata: ResponseMetaData?
     public var moderation: ResponseModeration?
     public var prompt: ResponsePrompt?

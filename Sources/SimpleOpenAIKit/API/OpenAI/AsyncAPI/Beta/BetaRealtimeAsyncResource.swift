@@ -74,7 +74,7 @@ public extension OpenAIAsyncAPIResource.BetaRealtimeAsyncResource {
 /// Base for the sub-resources that share one beta realtime connection.
 public class BetaAsyncRealtimeResource {
     let connection: BetaAsyncRealtimeConnection
-    init(_ connection: BetaAsyncRealtimeConnection) {
+    public init(_ connection: BetaAsyncRealtimeConnection) {
         self.connection = connection
     }
 }

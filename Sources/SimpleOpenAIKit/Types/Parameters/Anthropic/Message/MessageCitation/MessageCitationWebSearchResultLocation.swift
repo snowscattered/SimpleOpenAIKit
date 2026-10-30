@@ -12,8 +12,8 @@ import SimpleCodableMacro
 @PublicInit
 public struct MessageCitationWebSearchResultLocation {
     public static let type: String = "web_search_result_location"
-    public var cited_text: String
-    public var encrypted_index: String
-    public var title: String?
     public var url: String
+    public var title: String?
+    public var encrypted_index: String
+    public var cited_text: String
 }

@@ -38,6 +38,7 @@ public enum MessageToolResultContent {
 public struct MessageToolResultBlock {
     public static let type: String = "tool_result"
     public var tool_use_id: String
+    public var toolset_name: String?
     public var content: MessageToolResultContent
     public var is_error: Bool?
 }

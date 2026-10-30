@@ -17,16 +17,7 @@ struct AnthropicSession: Sendable, SessionProtocol {
     func retryErrorHandler(error: any Error) -> Bool {
         if let error = error as? AnthropicAPIError {
             switch error {
-            case .rateLimit: return true
-            case .internalServer: return true
-            // Transient 5xx that are mapped to their own cases must keep retrying,
-            // otherwise they would lose the retry they had through internalServer.
-            case .serviceUnavailable, .deadlineExceeded, .overloaded: return true
-            default: return false
-            }
-        } else if let error = error as? URLError {
-            switch error.code {
-            case .timedOut: return true
+            case .rateLimit, .internalServer, .serviceUnavailable, .deadlineExceeded, .overloaded, .timeOut: return true
             default: return false
             }
         }

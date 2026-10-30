@@ -17,18 +17,12 @@ public enum SystemOneImageFormat {
 @BaseModelNoWithExtra
 public struct TypeSafeImage {
     public static let type: String = "image"
+    @transient public let reference: String = Self.makeReference()
     public internal(set) var part: String?
     public private(set) var format: SystemOneImageFormat?
     public private(set) var data_base64: String?
-    public private(set) var reference: String = Self.makeReference()
-    public private(set) var file: FileParameters?
-
-    private enum CodingKeys: String, CodingKey {
-        case type
-        case format
-        case data_base64
-        case part
-    }
+    @transient public private(set) var file: FileParameters?
+    
     public init(url: URL) throws {
         self.file = try .init(url: url)
     }

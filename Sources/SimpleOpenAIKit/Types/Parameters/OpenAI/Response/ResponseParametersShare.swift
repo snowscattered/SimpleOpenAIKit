@@ -201,6 +201,12 @@ public struct ResponseTextConfig {
     public var verbosity: ResponseVerbosityLiteral?
 }
 
+// MARK:
+@CodableLiteral
+public enum ResponseAccessPrograms: String {
+    case standard, daybreak_blue, daybreak_red
+}
+
 // MARK: - Moderation
 @CodableLiteral
 public enum ResponseModerationMode: String {
@@ -259,7 +265,9 @@ public enum ResponsePromptCacheTTL: String {
 @BaseModelNoWithExtra
 @PublicInit
 public struct ResponsePromptCacheOption {
+    public var comparison_response_id: String?
     public var mode: ResponsePromptCacheMode?
+    public var prewarm: Bool?
     public var ttl: ResponsePromptCacheTTL?
 }
 

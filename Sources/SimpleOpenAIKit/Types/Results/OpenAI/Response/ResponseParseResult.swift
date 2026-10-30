@@ -21,8 +21,8 @@ public struct ResponseParseOutputMessage<T> {
 public enum ResponseParseOutputItem<T> {
     case message(ResponseParseOutputMessage<T>)
     case reasoning(ResponseReasoningItem)
-    case function_call(ResponseFunctionCallItem)
-    case function_call_output(ResponseFunctionCallOutputItem)
+    case function_call(ResponseFunctionToolCallItem)
+    case function_call_output(ResponseFunctionToolCallOutputItem)
     case custom_tool_call(ResponseCustomToolCallItem)
     case custom_tool_call_output(ResponseCustomToolCallOutputItem)
     case web_search(ResponseWebSearchItem)

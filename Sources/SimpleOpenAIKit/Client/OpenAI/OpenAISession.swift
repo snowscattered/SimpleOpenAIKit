@@ -17,13 +17,7 @@ struct OpenAISession: Sendable, SessionProtocol {
     func retryErrorHandler(error: any Error) -> Bool {
         if let error = error as? OpenAIAPIError {
             switch error {
-            case .rateLimit: return true
-            case .internalServer: return true
-            default: return false
-            }
-        } else if let error = error as? URLError {
-            switch error.code {
-            case .timedOut: return true
+            case .rateLimit, .internalServer, .timeOut: return true
             default: return false
             }
         }

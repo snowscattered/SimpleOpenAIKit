@@ -73,7 +73,7 @@ public extension OpenAISyncAPIResource.BetaRealtimeSyncResource {
 /// Base for the sub-resources that share one beta realtime connection.
 public class BetaSyncRealtimeResource {
     let connection: BetaSyncRealtimeConnection
-    init(_ connection: BetaSyncRealtimeConnection) {
+    public init(_ connection: BetaSyncRealtimeConnection) {
         self.connection = connection
     }
 }

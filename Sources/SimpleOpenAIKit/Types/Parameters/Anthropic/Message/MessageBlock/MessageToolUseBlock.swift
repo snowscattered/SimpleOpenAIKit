@@ -13,6 +13,7 @@ import SimpleCodableMacro
 public struct MessageToolUseBlock {
     public static let type: String = "tool_use"
     public var id: String
+    public var toolset_name: String?
     public var name: String
     public var input: [String: BaseType]
     public var cache_control: MessageCacheControlEphemeral?

@@ -10,7 +10,7 @@ import SimpleCodableMacro
 
 @BaseModelWithExtra
 @PublicInit
-public struct PageStruct<T: Codable & Sendable> {
+public struct PageStruct<T: Codable & Sendable & Hashable> {
     public let data: [T]
     public let has_more: Bool?
 }

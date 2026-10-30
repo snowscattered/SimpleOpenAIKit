@@ -110,13 +110,11 @@ public extension SessionProtocol {
                 if let extraBody = requestOptions?.extra_body, !extraBody.isEmpty {
                     payloadMap = payloadMap | extraBody
                 }
-                let body = try JSONEncoder().encode(payloadMap)
-                request.httpBody = body
+                request.httpBody = try JSONEncoder().encode(payloadMap)
             }
         } else {
             if let extraBody = requestOptions?.extra_body, !extraBody.isEmpty {
-                let body = try JSONEncoder().encode(extraBody)
-                request.httpBody = body
+                request.httpBody = try JSONEncoder().encode(extraBody)
             }
         }
         // Other
@@ -140,17 +138,15 @@ public extension SessionProtocol {
         method: HTTPMethod,
         hasFile: Bool = false,
     ) throws -> T {
-        let request = try getRequest(
+        return try retryRequest(
             url,
             payload: payload,
             requestOptions: requestOptions,
             clientOption: clientOption,
             method: method,
             hasFile: hasFile,
+            perform: { request in try syncResponse(request: request) }
         )
-        do {
-            return try syncResponse(request: request, maxRetries: clientOption.max_retries, shouldRetry: retryErrorHandler)
-        } catch { throw wrapError(error: error, request: request) }
     }
     /// Blocking call that returns a stream of decoded chunks.
     ///
@@ -164,17 +160,15 @@ public extension SessionProtocol {
         method: HTTPMethod,
         hasFile: Bool = false,
     ) throws -> SyncThrowingStream<T, any Error> {
-        let request = try getRequest(
+        return try retryRequest(
             url,
             payload: payload,
             requestOptions: requestOptions,
             clientOption: clientOption,
             method: method,
             hasFile: hasFile,
+            perform: { request in try syncStreamResponse(request: request) }
         )
-        do {
-            return try syncStreamResponse(request: request, maxRetries: clientOption.max_retries, shouldRetry: retryErrorHandler)
-        } catch { throw wrapError(error: error, request: request) }
     }
     
     /// Awaitable call that decodes a single response, retrying as allowed by the session.
@@ -189,17 +183,15 @@ public extension SessionProtocol {
         method: HTTPMethod,
         hasFile: Bool = false,
     ) async throws -> T {
-        let request = try getRequest(
+        return try await retryRequest(
             url,
             payload: payload,
             requestOptions: requestOptions,
             clientOption: clientOption,
             method: method,
             hasFile: hasFile,
+            perform: { request in try await asyncResponse(request: request) }
         )
-        do {
-            return try await asyncResponse(request: request, maxRetries: clientOption.max_retries, shouldRetry: retryErrorHandler)
-        } catch { throw wrapError(error: error, request: request) }
     }
     /// Awaitable call that returns a stream of decoded chunks.
     ///
@@ -213,17 +205,15 @@ public extension SessionProtocol {
         method: HTTPMethod,
         hasFile: Bool = false,
     ) async throws -> AsyncThrowingStream<T, any Error> {
-        let request = try getRequest(
+        return try await retryRequest(
             url,
             payload: payload,
             requestOptions: requestOptions,
             clientOption: clientOption,
             method: method,
             hasFile: hasFile,
+            perform: { request in try await asyncStreamResponse(request: request) }
         )
-        do {
-            return try await asyncStreamResponse(request: request, maxRetries: clientOption.max_retries, shouldRetry: retryErrorHandler)
-        } catch { throw wrapError(error: error, request: request) }
     }
     
     /// Open a websocket task against `url`; the payload is not sent as a body.
@@ -246,5 +236,53 @@ public extension SessionProtocol {
             method: .get,
         )
         return URLSession.shared.webSocketTask(with: request)
+    }
+}
+
+private extension SessionProtocol {
+    func retryRequest<T, Payload: Encodable>(
+        _ url: URL,
+        payload: Payload?,
+        requestOptions: RequestOptions?,
+        clientOption: borrowing ClientOption,
+        method: HTTPMethod,
+        hasFile: Bool,
+        perform: (URLRequest) throws -> T
+    ) throws -> T {
+        return try retry(maxRetries: clientOption.max_retries, shouldRetry: retryErrorHandler) {
+            let request = try getRequest(
+                url,
+                payload: payload,
+                requestOptions: requestOptions,
+                clientOption: clientOption,
+                method: method,
+                hasFile: hasFile
+            )
+            do { return try perform(request) }
+            catch { throw wrapError(error: error, request: request) }
+        }
+    }
+
+    func retryRequest<T, Payload: Encodable>(
+        _ url: URL,
+        payload: Payload?,
+        requestOptions: RequestOptions?,
+        clientOption: borrowing ClientOption,
+        method: HTTPMethod,
+        hasFile: Bool,
+        perform: (URLRequest) async throws -> T
+    ) async throws -> T {
+        return try await retry(maxRetries: clientOption.max_retries, shouldRetry: retryErrorHandler) {
+            let request = try getRequest(
+                url,
+                payload: payload,
+                requestOptions: requestOptions,
+                clientOption: clientOption,
+                method: method,
+                hasFile: hasFile
+            )
+            do { return try await perform(request) }
+            catch { throw wrapError(error: error, request: request) }
+        }
     }
 }
