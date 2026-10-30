@@ -19,8 +19,8 @@ public enum ResponseInputItem {
     case message(ResponseMessageItem)
     case reasoning(ResponseReasoningItem)
     
-    case function_call(ResponseFunctionCallItem)
-    case function_call_output(ResponseFunctionCallOutputItem)
+    case function_call(ResponseFunctionToolCallItem)
+    case function_call_output(ResponseFunctionToolCallOutputItem)
     case custom_tool_call(ResponseCustomToolCallItem)
     case custom_tool_call_output(ResponseCustomToolCallOutputItem)
     case web_search(ResponseWebSearchItem)
@@ -50,8 +50,8 @@ public extension ResponseInputItem {
         switch self {
         case .message:                 return ResponseMessageItem.type
         case .reasoning:               return ResponseReasoningItem.type
-        case .function_call:           return ResponseFunctionCallItem.type
-        case .function_call_output:    return ResponseFunctionCallOutputItem.type
+        case .function_call:           return ResponseFunctionToolCallItem.type
+        case .function_call_output:    return ResponseFunctionToolCallOutputItem.type
         case .custom_tool_call:        return ResponseCustomToolCallItem.type
         case .custom_tool_call_output: return ResponseCustomToolCallOutputItem.type
         case .web_search:              return ResponseWebSearchItem.type
