@@ -67,18 +67,18 @@ public enum ResponseStatus: String {
     case incomplete
 }
 // ResponseCreateResult.Usage
-@BaseModelNoWithExtra
+@BaseModelWithExtra
 @PublicInit
 public struct ResponseInputTokensDetails {
     public let cached_tokens: Int
     public var cache_write_tokens: Int = 0  // In OpenAI, is must
 }
-@BaseModelNoWithExtra
+@BaseModelWithExtra
 @PublicInit
 public struct ResponseOutputTokensDetails {
     public let reasoning_tokens: Int
 }
-@BaseModelNoWithExtra
+@BaseModelWithExtra
 @PublicInit
 public struct ResponseUsage {
     public let input_tokens: Int

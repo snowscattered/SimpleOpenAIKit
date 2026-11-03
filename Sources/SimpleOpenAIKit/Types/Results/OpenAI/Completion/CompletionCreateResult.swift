@@ -30,7 +30,7 @@ public struct CompletionResultChoice {
     public let text: String
 }
 // CompletionResult.Usage
-@BaseModelNoWithExtra
+@BaseModelWithExtra
 @PublicInit
 public struct CompletionTokensDetails {
     public let accepted_prediction_tokens: Int?
@@ -38,13 +38,13 @@ public struct CompletionTokensDetails {
     public let reasoning_tokens: Int?
     public let rejected_prediction_tokens: Int?
 }
-@BaseModelNoWithExtra
+@BaseModelWithExtra
 @PublicInit
 public struct CompletionPromptTokensDetails {
     public let audio_tokens: Int?
     public let cached_tokens: Int?
 }
-@BaseModelNoWithExtra
+@BaseModelWithExtra
 @PublicInit
 public struct CompletionUsage {
     public let completion_tokens: Int

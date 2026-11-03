@@ -15,7 +15,7 @@ public struct MessageDelta {
     public let stop_reason: MessageStopReason?
     public let stop_sequence: String?
 }
-@BaseModelNoWithExtra
+@BaseModelWithExtra
 @PublicInit
 public struct MessageDeltaUsage {
     public let cache_creation_input_tokens: Int?

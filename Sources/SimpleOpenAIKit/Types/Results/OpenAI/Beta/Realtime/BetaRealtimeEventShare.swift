@@ -31,13 +31,13 @@ public struct BetaRealtimeLogProbProperties {
     public let logprob: Double
 }
 // MARK: Usage
-@BaseModelNoWithExtra
+@BaseModelWithExtra
 @PublicInit
 public struct BetaRealtimeUsageTranscriptTextUsageTokensInputTokenDetails {
     public let audio_tokens: Int?
     public let text_tokens: Int?
 }
-@BaseModelNoWithExtra
+@BaseModelWithExtra
 @PublicInit
 public struct BetaRealtimeUsageTranscriptTextUsageTokens {
     public static let type: String = "tokens"
@@ -46,7 +46,7 @@ public struct BetaRealtimeUsageTranscriptTextUsageTokens {
     public let total_tokens: Int
     public let input_token_details: BetaRealtimeUsageTranscriptTextUsageTokensInputTokenDetails?
 }
-@BaseModelNoWithExtra
+@BaseModelWithExtra
 @PublicInit
 public struct BetaRealtimeUsageTranscriptTextUsageDuration {
     public static let type: String = "duration"

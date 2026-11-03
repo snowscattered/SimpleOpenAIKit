@@ -17,13 +17,13 @@ public struct AudioTranscriptionLogprob {
 }
 
 // AudioTranscriptionCreateResult.Usage
-@BaseModelNoWithExtra
+@BaseModelWithExtra
 @PublicInit
 public struct AudioTranscriptionUsageInputTokenDetails {
     public let audio_tokens: Int?
     public let text_tokens: Int?
 }
-@BaseModelNoWithExtra
+@BaseModelWithExtra
 @PublicInit
 public struct AudioTranscriptionUsageTokens {
     public static let type: String = "tokens"

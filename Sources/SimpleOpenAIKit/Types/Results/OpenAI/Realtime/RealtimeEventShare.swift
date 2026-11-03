@@ -31,31 +31,31 @@ public struct RealtimeLogProbProperties {
     public let logprob: Double
 }
 // MARK: Usage
-@BaseModelNoWithExtra
+@BaseModelWithExtra
 @PublicInit
-public struct RealtimeUsageTranscriptTextUsageTokensInputTokenDetails {
+public struct RealtimeTranscriptTextUsageTokensInputTokenDetails {
     public let audio_tokens: Int?
     public let text_tokens: Int?
 }
-@BaseModelNoWithExtra
+@BaseModelWithExtra
 @PublicInit
-public struct RealtimeUsageTranscriptTextUsageTokens {
+public struct RealtimeTranscriptTextUsageTokens {
     public static let type: String = "tokens"
     public let input_tokens: Int
     public let output_tokens: Int
     public let total_tokens: Int
-    public let input_token_details: RealtimeUsageTranscriptTextUsageTokensInputTokenDetails?
+    public let input_token_details: RealtimeTranscriptTextUsageTokensInputTokenDetails?
 }
 @BaseModelNoWithExtra
 @PublicInit
-public struct RealtimeUsageTranscriptTextUsageDuration {
+public struct RealtimeTranscriptTextUsageDuration {
     public static let type: String = "duration"
     public let seconds: Double
 }
 @CodableByConstant
 public enum RealtimeUsage: Codable {
-    case tokens(RealtimeUsageTranscriptTextUsageTokens)
-    case duration(RealtimeUsageTranscriptTextUsageDuration)
+    case tokens(RealtimeTranscriptTextUsageTokens)
+    case duration(RealtimeTranscriptTextUsageDuration)
 }
 // MARK: Error
 @BaseModelNoWithExtra

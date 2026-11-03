@@ -36,7 +36,7 @@ public enum MessageStopReason: String {
 }
 
 // MessageCreateResult.Usage (shared: MessageUsage, MessageDeltaUsage)
-@BaseModelNoWithExtra
+@BaseModelWithExtra
 @PublicInit
 public struct MessageServerToolUsage {
     public let web_fetch_requests: Int?

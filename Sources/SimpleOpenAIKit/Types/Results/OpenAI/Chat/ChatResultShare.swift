@@ -51,7 +51,7 @@ public enum ChatServiceTier: String {
 }
 
 // ChatResult.Usage
-@BaseModelNoWithExtra
+@BaseModelWithExtra
 @PublicInit
 public struct ChatCompletionTokensDetails {
     public let accepted_prediction_tokens: Int?
@@ -59,13 +59,13 @@ public struct ChatCompletionTokensDetails {
     public let reasoning_tokens: Int?
     public let rejected_prediction_tokens: Int?
 }
-@BaseModelNoWithExtra
+@BaseModelWithExtra
 @PublicInit
 public struct ChatPromptTokensDetails {
     public let audio_tokens: Int?
     public let cached_tokens: Int?
 }
-@BaseModelNoWithExtra
+@BaseModelWithExtra
 @PublicInit
 public struct ChatUsage {
     public let completion_tokens: Int
