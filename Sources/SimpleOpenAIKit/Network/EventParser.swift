@@ -7,7 +7,8 @@
 import Foundation
 
 /// Turns streamed bytes into `Event` values. Replace the default to read a non-SSE framing.
-public protocol CustomParser: Sendable & ~Copyable {
+public protocol EventParserProtocol {
+    init()
     /// Consume one chunk and return every event that chunk completes.
     func parse(_ data: Data) -> [Event]
 }
@@ -16,10 +17,11 @@ public protocol CustomParser: Sendable & ~Copyable {
 ///
 /// Events end at a blank line (`\r\n\r\n`, `\n\n` or `\r\r`) whose fields are read as `event`, `id`,
 /// `data` and `retry`. Keep one parser per stream: it buffers across calls and is not reentrant.
-public final class EventParser: CustomParser, @unchecked Sendable {
+public final class EventParser: EventParserProtocol {
     private var buffer = Data()
     private static let validNewlineCharacters = ["\r\n", "\n", "\r"]
     private static let delimiters: [Data] = validNewlineCharacters.map { Data("\($0)\($0)".utf8) }
+    public init() { }
     /// Append `data` to the buffer and emit the events it completes.
     public func parse(_ data: Data) -> [Event] {
         buffer.reserveCapacity(buffer.count + data.count)
