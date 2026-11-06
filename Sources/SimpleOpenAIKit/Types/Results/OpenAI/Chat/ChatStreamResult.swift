@@ -52,7 +52,7 @@ public struct ChatDelta{
 @PublicInit
 public struct ChatStreamChoice{
     public let delta: ChatDelta
-    public let finish_reason: ChatChoiceFinshReasonLiteral?
+    public let finish_reason: ChatChoiceFinshReason?
     public let index: Int
     public let logprobs: ChatLogprobs?
 }

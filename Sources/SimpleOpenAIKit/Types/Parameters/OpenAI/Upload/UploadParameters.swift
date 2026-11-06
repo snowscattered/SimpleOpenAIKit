@@ -20,7 +20,7 @@ public struct UploadFileParameters {
     public var bytes: Int?
     public var filename: String?
     public var mime_type: String
-//    public var purpose: FilesPurposeLiteral,
+//    public var purpose: FilesPurpose,
     public var purpose: String
     public var part_size: Int?
     public var md5: String?
@@ -32,7 +32,7 @@ public struct UploadCreateParameters {
     public var bytes: Int
     public var filename: String
     public var mime_type: String
-//    public var purpose: FilesPurposeLiteral,
+//    public var purpose: FilesPurpose,
     public var purpose: String
     public var expires_after: FilesExpiresAfter?
 }

@@ -31,14 +31,14 @@ public struct ChatContentPartRefusal: Codable {
 }
 /// Image Content
 @CodableLiteral
-public enum ChatImageDetailLiteral: String {
+public enum ChatImageDetail: String {
     case auto, low, high
 }
 @BaseModelNoWithExtra
 @PublicInit
 public struct ChatImageURL {
     public var url: String
-    public var detail: ChatImageDetailLiteral?
+    public var detail: ChatImageDetail?
 }
 @BaseModelNoWithExtra
 @PublicInit
@@ -62,14 +62,14 @@ public struct ChatContentPartVideo {
 }
 /// Audio Contant
 @CodableLiteral
-public enum ChatInputAudioFormatLiteral: String {
+public enum ChatInputAudioFormat: String {
    case wav, mp3
 }
 @BaseModelNoWithExtra
 @PublicInit
 public struct ChatInputAudio {
     public var data: String
-    public var format: ChatInputAudioFormatLiteral?
+    public var format: ChatInputAudioFormat?
 }
 @BaseModelNoWithExtra
 @PublicInit

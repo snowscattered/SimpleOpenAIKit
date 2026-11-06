@@ -28,7 +28,7 @@ public struct MessageParseParameters<T: SchemaProtocol> {
     public var cache_control: MessageCacheControlEphemeral?
     public var container: String?
     public var inference_geo: String?
-    public var service_tier: String?
+    public var service_tier: MessageServiceTier?
 }
 
 extension MessageParseParameters {
@@ -38,8 +38,8 @@ extension MessageParseParameters {
             system: self.system,
             messages: self.messages,
             stream: self.stream,
-            tools: self.tools,
             max_tokens: self.max_tokens,
+            tools: self.tools,
             tool_choice: self.tool_choice,
             thinking: self.thinking,
             metadata: self.metadata,

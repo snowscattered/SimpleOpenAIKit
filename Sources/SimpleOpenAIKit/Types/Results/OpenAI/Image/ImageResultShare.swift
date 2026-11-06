@@ -9,7 +9,7 @@ import SimpleCodableMacro
 
 // Shared Literals
 @CodableLiteral
-public enum ImageResultQualityLiteral: String {
+public enum ImageResultQuality: String {
     case low, medium, high, auto
 }
 
@@ -23,19 +23,19 @@ public struct ImageResultImage {
 }
 
 // Shared Token Details
-@BaseModelNoWithExtra
+@BaseModelWithExtra
 @PublicInit
 public struct ImageInputTokensDetails {
     public let image_tokens: Int
     public let text_tokens: Int
 }
-@BaseModelNoWithExtra
+@BaseModelWithExtra
 @PublicInit
 public struct ImageOutputTokensDetails {
     public let image_tokens: Int
     public let text_tokens: Int
 }
-@BaseModelNoWithExtra
+@BaseModelWithExtra
 @PublicInit
 public struct ImagesUsage {
     public let input_tokens: Int

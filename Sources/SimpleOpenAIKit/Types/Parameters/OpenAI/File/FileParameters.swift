@@ -197,7 +197,7 @@ extension FileParameters {
 
 // MARK: - Create
 @CodableStringLiteralWithOther
-public enum FilesPurposeLiteral {
+public enum FilesPurpose {
     case assistants
     case assistants_output
     case batch
@@ -218,7 +218,7 @@ public struct FilesExpiresAfter {
 @PublicInit
 public struct FilesCreateParameters {
     public var file: FileParameters
-    public var purpose: FilesPurposeLiteral?
+    public var purpose: FilesPurpose?
     public var expires_after: FilesExpiresAfter?
 }
 

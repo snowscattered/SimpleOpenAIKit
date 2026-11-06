@@ -104,10 +104,10 @@ public enum ResponseToolChoice {
     case shell(ResponseToolChoiceShell)
 }
 
-public typealias ResponseReasoningEffortLiteral = OpenAIReasoningEffortLiteral
+public typealias ResponseReasoningEffort = OpenAIReasoningEffort
 
 @CodableLiteral
-public enum ResponseReasoningSummaryLiteral: String {
+public enum ResponseReasoningGenerateSummary: String {
     case auto, concise, detailed
 }
 
@@ -118,16 +118,16 @@ public enum ResponseReasoningContext: String {
 @BaseModelNoWithExtra
 @PublicInit
 public struct ResponseReasoning {
-    public var effort: ResponseReasoningEffortLiteral? = ResponseReasoningEffortLiteral.none
+    public var effort: ResponseReasoningEffort? = ResponseReasoningEffort.none
     public var context: ResponseReasoningContext?
     public var mode: String?
-    public var generate_summary: ResponseReasoningSummaryLiteral?
-    public var summary: ResponseReasoningSummaryLiteral?
+    public var generate_summary: ResponseReasoningGenerateSummary?
+    public var summary: ResponseReasoningSummary?
 }
 
 // MARK: - Include
 @CodableLiteral
-public enum ResponseIncludeLiteral: String {
+public enum ResponseInclude: String {
     case file_search_call_results = "file_search_call.results"
     case web_search_call_results = "web_search_call.results"
     case web_search_call_action_sources = "web_search_call.action.sources"
@@ -190,7 +190,7 @@ public enum ResponseFormatTextConfig {
 }
 
 @CodableLiteral
-public enum ResponseVerbosityLiteral: String {
+public enum ResponseVerbosity: String {
     case low, medium, high
 }
 
@@ -198,7 +198,7 @@ public enum ResponseVerbosityLiteral: String {
 @PublicInit
 public struct ResponseTextConfig {
     public var format: ResponseFormatTextConfig?
-    public var verbosity: ResponseVerbosityLiteral?
+    public var verbosity: ResponseVerbosity?
 }
 
 // MARK:
@@ -272,19 +272,19 @@ public struct ResponsePromptCacheOption {
 }
 
 @CodableLiteral
-public enum ResponsePromptCacheRetentionLiteral: String {
+public enum ResponsePromptCacheRetention: String {
     case `in-memory`, `24h`
 }
 
 // MARK: - Servive Tier
 @CodableLiteral
-public enum ResponseServiceTierLiteral: String {
+public enum ResponseServiceTier: String {
     case auto, `default`, flex, scale, priority, fast, ultrafast
 }
 
 // MARK: - Truncation
 @CodableLiteral
-public enum ResponseTruncationLiteral: String {
+public enum ResponseTruncation: String {
     case auto, disabled
 }
 

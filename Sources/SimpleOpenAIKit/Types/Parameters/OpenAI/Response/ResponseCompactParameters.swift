@@ -17,6 +17,6 @@ public struct ResponseCompactParameters {
     public var previous_response_id: String?
     public var prompt_cache_key: String?
     public var prompt_cache_options: ResponsePromptCacheOption?
-    public var prompt_cache_retention: ResponsePromptCacheRetentionLiteral?
-    public var service_tier: ResponseServiceTierLiteral?
+    public var prompt_cache_retention: ResponsePromptCacheRetention?
+    public var service_tier: ResponseServiceTier?
 }

@@ -26,7 +26,7 @@ public struct ResponseParseParameters<T: SchemaProtocol> {
     public var temperature: Double?
     public var top_p: Double?
     public var store: Bool?
-    public var include: [ResponseIncludeLiteral]?
+    public var include: [ResponseInclude]?
     public var context_management: ResponseContextManagement?
     public var stream_options: ResponseStreamOptions?
     public var background: Bool?
@@ -35,11 +35,11 @@ public struct ResponseParseParameters<T: SchemaProtocol> {
     public var prompt: ResponsePrompt?
     public var prompt_cache_key: String?
     public var prompt_cache_options: ResponsePromptCacheOption?
-    public var prompt_cache_retention: ResponsePromptCacheRetentionLiteral?
+    public var prompt_cache_retention: ResponsePromptCacheRetention?
     public var safety_identifier: String?
-    public var service_tier: ResponseServiceTierLiteral?
+    public var service_tier: ResponseServiceTier?
     public var top_logprobs: Int?
-    public var truncation: ResponseTruncationLiteral?
+    public var truncation: ResponseTruncation?
     public var user: String?
 }
 

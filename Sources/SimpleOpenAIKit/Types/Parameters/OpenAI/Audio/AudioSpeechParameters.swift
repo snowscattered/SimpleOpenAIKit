@@ -9,13 +9,13 @@ import Foundation
 import SimpleCodableMacro
 
 @CodableStringLiteralWithOther
-public enum AudioSpeechResponseFormatLiteral {
+public enum AudioSpeechResponseFormat {
     case mp3, opus, aac, flac, wav, pcm
     case other(String)
 }
 
 @CodableLiteral
-public enum AudioSpeechStreamFormatLiteral: String {
+public enum AudioSpeechStreamFormat: String {
     case sse, audio
 }
 
@@ -27,7 +27,7 @@ public struct AudioSpeechParameters {
     // Extension OpenAI: In OpenAI, this is a must
     public var voice: String?
     public var instructions: String?
-    public var response_format: AudioSpeechResponseFormatLiteral?
+    public var response_format: AudioSpeechResponseFormat?
     public var speed: Double?
-    public var stream_format: AudioSpeechStreamFormatLiteral?
+    public var stream_format: AudioSpeechStreamFormat?
 }

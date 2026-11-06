@@ -20,7 +20,7 @@ public struct ChatStreamOptions {
 // MARK: - Audio
 
 @CodableLiteral
-public enum ChatAudioFormatLiteral: String {
+public enum ChatAudioFormat: String {
     case wav, aac, mp3, flac, opus, pcm16
 }
 
@@ -28,7 +28,7 @@ public enum ChatAudioFormatLiteral: String {
 @PublicInit
 public struct ChatAudio {
     public var voice: String
-    public var format: ChatAudioFormatLiteral
+    public var format: ChatAudioFormat
 }
 
 // MARK: - FuncionCall
@@ -117,13 +117,13 @@ public enum ChatToolChoiceLiteral: String {
     case none, auto, required
 }
 @CodableLiteral
-public enum ChatAllowedToolsModeLiteral: String {
+public enum ChatAllowedToolsMode: String {
     case all, required
 }
 @BaseModelNoWithExtra
 @PublicInit
 public struct ChatAllowedTools {
-    public var mode: ChatAllowedToolsModeLiteral
+    public var mode: ChatAllowedToolsMode
     public var tools: [String: BaseType]
 }
 @BaseModelNoWithExtra
@@ -228,38 +228,38 @@ public struct ChatWebSearchUserLocation {
 }
 
 @CodableLiteral
-public enum ChatSearchContextSizeLiteral: String {
+public enum ChatSearchContextSize: String {
     case low, medium, high
 }
 
 @BaseModelNoWithExtra
 @PublicInit
 public struct ChatWebSearchOption {
-    public var search_context_size: ChatSearchContextSizeLiteral?
+    public var search_context_size: ChatSearchContextSize?
     public var user_location: ChatWebSearchUserLocation?
 }
 
 // MARK: - Chat Parameters
 
-public typealias ChatReasoningEffortLiteral = OpenAIReasoningEffortLiteral
+public typealias ChatReasoningEffort = OpenAIReasoningEffort
 
 @CodableLiteral
-public enum ChatModalityLiteral: String {
+public enum ChatModality: String {
     case text, audio
 }
 
 @CodableLiteral
-public enum ChatPromptCacheRetentionLiteral: String {
+public enum ChatPromptCacheRetention: String {
     case `in-memory`, `24h`
 }
 
 @CodableLiteral
-public enum ChatServiceTierLiteral: String {
-    case auto, `default`, flex, scale, priority
+public enum ChatServiceTier: String {
+    case auto, `default`, flex, scale, priority, fast
 }
 
 @CodableLiteral
-public enum ChatVerbosityLiteral: String {
+public enum ChatVerbosity: String {
     case low, medium, high
 }
 
@@ -282,11 +282,11 @@ public struct ChatParameters {
     public var presence_penalty: Double?
     public var max_tokens: Int?
     public var parallel_tool_calls: Bool?
-    public var reasoning_effort: ChatReasoningEffortLiteral?
+    public var reasoning_effort: ChatReasoningEffort?
     public var stream_options: ChatStreamOptions?
     public var stop: [String]?
     public var response_format: ChatResponseFormat?
-    public var modalities: [ChatModalityLiteral]?
+    public var modalities: [ChatModality]?
     public var seed: Int?
     public var web_search_options: ChatWebSearchOption?
     public var metadata: ChatMetaData?
@@ -296,11 +296,11 @@ public struct ChatParameters {
     public var n: Int?
     public var prediction: ChatPredictionContent?
     public var prompt_cache_key: String?
-    public var prompt_cache_retention: ChatPromptCacheRetentionLiteral?
+    public var prompt_cache_retention: ChatPromptCacheRetention?
     public var safety_identifier: String?
-    public var service_tier: ChatServiceTierLiteral?
+    public var service_tier: ChatServiceTier?
     public var store: Bool?
     public var top_logprobs: Int?
-    public var verbosity: ChatVerbosityLiteral?
+    public var verbosity: ChatVerbosity?
     public var user: String?
 }

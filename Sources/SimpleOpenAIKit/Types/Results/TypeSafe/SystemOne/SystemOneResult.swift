@@ -8,7 +8,7 @@
 import Foundation
 import SimpleCodableMacro
 
-@BaseModelNoWithExtra
+@BaseModelWithExtra
 @PublicInit
 public struct SystemOneUsage {
     public let input_tokens: Int

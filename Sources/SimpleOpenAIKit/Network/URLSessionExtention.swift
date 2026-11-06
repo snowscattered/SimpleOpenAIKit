@@ -114,7 +114,8 @@ extension URLSession {
     }
     // MARK: - StreamSSE
     /// `asyncStreamData` with each chunk fed through `parser` to yield events instead of bytes.
-    func asyncSSE(_ request: URLRequest, parser: any CustomParser = EventParser()) async throws -> AsyncStream<Event> {
+    func asyncSSE(_ request: URLRequest, parser: any EventParserProtocol.Type = EventParser.self) async throws -> AsyncStream<Event> {
+        nonisolated(unsafe) let parser = parser.init()
         return try await self.asyncStreamData(request).conversion { chunk in
             let events = parser.parse(chunk)
             if events.isEmpty { return .skip }
@@ -122,7 +123,8 @@ extension URLSession {
         }
     }
     /// `syncStreamData` with each chunk fed through `parser` to yield events instead of bytes.
-    func syncSSE(_ request: URLRequest, parser: any CustomParser = EventParser()) throws -> SyncStream<Event> {
+    func syncSSE(_ request: URLRequest, parser: any EventParserProtocol.Type = EventParser.self) throws -> SyncStream<Event> {
+        nonisolated(unsafe) let parser = parser.init()
         return try self.syncStreamData(request).conversion { chunk in
             let events = parser.parse(chunk)
             if events.isEmpty { return .skip }

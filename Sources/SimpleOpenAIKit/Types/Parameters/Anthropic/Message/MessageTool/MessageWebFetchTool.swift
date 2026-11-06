@@ -9,7 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @CodableLiteral
-public enum MessageWebFetchToolTypeLiteral: String {
+public enum MessageWebFetchToolType: String {
     case web_fetch_20250910, web_fetch_20260209
 }
 
@@ -22,7 +22,7 @@ public enum MessageWebFetchType: String {
 @PublicInit
 public struct MessageWebFetchTool {
     public var name: MessageWebFetchType
-    public var type: MessageWebFetchToolTypeLiteral
+    public var type: MessageWebFetchToolType
     
     public var allowed_callers: [MessageAllowedCaller]?
     public var allowed_domains: [String]?

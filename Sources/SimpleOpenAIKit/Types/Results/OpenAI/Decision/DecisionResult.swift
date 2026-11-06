@@ -8,20 +8,20 @@
 import Foundation
 import SimpleCodableMacro
 
-@BaseModelNoWithExtra
+@BaseModelWithExtra
 @PublicInit
 public struct DecisionUsageInputTokensDetails {
     public let cache_write_tokens: Int
-    public let cached_tokens: Int
+    public var cached_tokens: Int = 0
 }
 
-@BaseModelNoWithExtra
+@BaseModelWithExtra
 @PublicInit
 public struct DecisionUsageOutputTokensDetails {
     public let reasoning_tokens: Int
 }
 
-@BaseModelNoWithExtra
+@BaseModelWithExtra
 @PublicInit
 public struct DecisionUsage {
     public let input_tokens: Int

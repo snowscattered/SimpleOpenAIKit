@@ -9,7 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @CodableLiteral
-public enum OpenAIReasoningEffortLiteral: String {
+public enum OpenAIReasoningEffort: String {
     case none, minimal, low, medium, high, xhigh, max
 }
 

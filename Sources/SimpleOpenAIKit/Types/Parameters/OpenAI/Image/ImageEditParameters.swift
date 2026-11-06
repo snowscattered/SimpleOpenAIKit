@@ -11,12 +11,12 @@ import SimpleCodableMacro
 // MARK: - Edit Literals
 
 @CodableLiteral
-public enum ImageEditQualityLiteral: String {
+public enum ImageEditQuality: String {
     case standard, low, medium, high, auto
 }
 
 @CodableLiteral
-public enum ImageInputFidelityLiteral: String {
+public enum ImageInputFidelity: String {
     case high, low
 }
 
@@ -37,13 +37,13 @@ public struct ImageEditParameters {
     public var prompt: String
     public var image: ImageFileInput
     public var size: String?
-    public var response_format: ImageResponseFormatLiteral?
+    public var response_format: ImageResponseFormat?
     public var n: Int?
-    public var quality: ImageEditQualityLiteral?
-    public var output_format: ImageOutputFormatLiteral?
+    public var quality: ImageEditQuality?
+    public var output_format: ImageOutputFormat?
     public var stream: Bool?
-    public var background: ImageBackgroundLiteral?
-    public var input_fidelity: ImageInputFidelityLiteral?
+    public var background: ImageBackground?
+    public var input_fidelity: ImageInputFidelity?
     public var output_compression: Int?
     public var partial_images: Int?
     public var user: String?

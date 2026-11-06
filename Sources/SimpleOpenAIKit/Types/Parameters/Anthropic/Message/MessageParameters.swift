@@ -17,8 +17,8 @@ public struct MessageParameters {
     public var system: MessageSystem?
     public var messages: [MessageMessages]
     public var stream: Bool?
-    public var tools: [MessageTool]?
     public var max_tokens: Int
+    public var tools: [MessageTool]?
     public var tool_choice: MessageToolChoice?
     public var thinking: MessageThinking?
     public var metadata: MessageMetadata?
@@ -27,5 +27,6 @@ public struct MessageParameters {
     public var container: String?
     public var inference_geo: String?
     public var output_config: MessageOutputConfig?
-    public var service_tier: String?
+    public var speed: MessageSpeed?
+    public var service_tier: MessageServiceTier?
 }

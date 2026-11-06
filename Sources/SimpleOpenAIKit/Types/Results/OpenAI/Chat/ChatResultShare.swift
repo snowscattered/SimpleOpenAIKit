@@ -32,7 +32,7 @@ public struct ChatLogprobs {
 
 // ChatResult.Choice.FinshReason
 @CodableLiteral
-public enum ChatChoiceFinshReasonLiteral: String {
+public enum ChatChoiceFinshReason: String {
     case stop
     case length
     case tool_calls
@@ -40,18 +40,8 @@ public enum ChatChoiceFinshReasonLiteral: String {
     case function_call
 }
 
-// ChatResult.ServiceTier
-@CodableLiteral
-public enum ChatServiceTier: String {
-    case auto
-    case `default`
-    case flex
-    case scale
-    case priority
-}
-
 // ChatResult.Usage
-@BaseModelNoWithExtra
+@BaseModelWithExtra
 @PublicInit
 public struct ChatCompletionTokensDetails {
     public let accepted_prediction_tokens: Int?
@@ -59,13 +49,13 @@ public struct ChatCompletionTokensDetails {
     public let reasoning_tokens: Int?
     public let rejected_prediction_tokens: Int?
 }
-@BaseModelNoWithExtra
+@BaseModelWithExtra
 @PublicInit
 public struct ChatPromptTokensDetails {
     public let audio_tokens: Int?
     public let cached_tokens: Int?
 }
-@BaseModelNoWithExtra
+@BaseModelWithExtra
 @PublicInit
 public struct ChatUsage {
     public let completion_tokens: Int

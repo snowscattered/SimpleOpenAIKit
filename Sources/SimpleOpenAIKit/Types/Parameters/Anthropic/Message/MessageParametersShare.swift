@@ -106,7 +106,7 @@ public struct MessageMetadata {
 
 // MARK: - Output Config
 @CodableLiteral
-public enum MessageEffortLiteral: String {
+public enum MessageReasoningEffort: String {
     case low, medium, high, xhigh, max
 }
 
@@ -120,7 +120,7 @@ public struct MessageJSONOutputFormat {
 @BaseModelNoWithExtra
 @PublicInit
 public struct MessageOutputConfig {
-    public let effort: MessageEffortLiteral?
+    public let effort: MessageReasoningEffort?
     public let format: MessageJSONOutputFormat?
 }
 
@@ -129,4 +129,16 @@ public struct MessageOutputConfig {
 @PublicInit
 public struct MessageCitationsConfig {
     public let enabled: Bool
+}
+
+// MARK: - Speed
+@CodableLiteral
+public enum MessageSpeed: String {
+    case standard, fast
+}
+
+// MARK: - ServiceTier
+@CodableLiteral
+public enum MessageServiceTier: String {
+    case auto, standard_only
 }

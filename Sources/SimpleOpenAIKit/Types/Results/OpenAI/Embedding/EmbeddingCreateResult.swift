@@ -14,7 +14,7 @@ public struct EmbeddingData {
     public let embedding: [Float]
     public let index: Int
 }
-@BaseModelNoWithExtra
+@BaseModelWithExtra
 @PublicInit
 public struct EmbeddingUsage {
     public let prompt_tokens: Int

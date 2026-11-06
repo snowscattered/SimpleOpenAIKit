@@ -9,14 +9,14 @@ import Foundation
 import SimpleCodableMacro
 
 @CodableLiteral
-public enum MessageImageTransformationsLiteral: String {
+public enum MessageImageTransformationsOversizedImage: String {
     case downsize, error
 }
 
 @BaseModelNoWithExtra
 @PublicInit
 public struct MessageImageTransformations {
-    public var oversized_image: MessageImageTransformationsLiteral
+    public var oversized_image: MessageImageTransformationsOversizedImage
 }
 
 @BaseModelNoWithExtra

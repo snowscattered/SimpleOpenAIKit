@@ -9,27 +9,27 @@ import Foundation
 import SimpleCodableMacro
 
 @CodableLiteral
-public enum ResponseImageGenBackgroundLiteral: String {
+public enum ResponseImageGenBackground: String {
     case transparent, opaque, auto
 }
 
 @CodableLiteral
-public enum ResponseImageGenInputFidelityLiteral: String {
+public enum ResponseImageGenInputFidelity: String {
     case high, low
 }
 
 @CodableLiteral
-public enum ResponseImageGenModerationLiteral: String {
+public enum ResponseImageGenModeration: String {
     case auto, low
 }
 
 @CodableLiteral
-public enum ResponseImageGenOutputFormatLiteral: String {
+public enum ResponseImageGenOutputFormat: String {
     case png, webp, jpeg
 }
 
 @CodableLiteral
-public enum ResponseImageGenQualityLiteral: String {
+public enum ResponseImageGenQuality: String {
     case low, medium, high, auto
 }
 
@@ -51,12 +51,12 @@ public struct ResponseImageGenerationTool {
     public var model: String?
     public var size: String?
     public var action: ResponseImageGenerationToolAction?
-    public var background: ResponseImageGenBackgroundLiteral?
-    public var input_fidelity: ResponseImageGenInputFidelityLiteral?
+    public var background: ResponseImageGenBackground?
+    public var input_fidelity: ResponseImageGenInputFidelity?
     public var input_image_mask: ResponseImageGenerationInputImageMask?
-    public var moderation: ResponseImageGenModerationLiteral?
+    public var moderation: ResponseImageGenModeration?
     public var output_compression: Int?
-    public var output_format: ResponseImageGenOutputFormatLiteral?
+    public var output_format: ResponseImageGenOutputFormat?
     public var partial_images: Int?
-    public var quality: ResponseImageGenQualityLiteral?
+    public var quality: ResponseImageGenQuality?
 }

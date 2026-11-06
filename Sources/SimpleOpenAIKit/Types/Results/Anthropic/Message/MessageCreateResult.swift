@@ -14,7 +14,7 @@ public struct MessageCacheCreation {
     public let ephemeral_1h_input_tokens: Int
     public let ephemeral_5m_input_tokens: Int
 }
-@BaseModelNoWithExtra
+@BaseModelWithExtra
 @PublicInit
 public struct MessageUsage {
     public let cache_creation: MessageCacheCreation?

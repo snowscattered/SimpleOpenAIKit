@@ -9,7 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @CodableLiteral
-public enum ResponseImageDetailLiteral: String {
+public enum ResponseImageDetail: String {
     case auto, low, high, original
 }
 
@@ -18,7 +18,7 @@ public enum ResponseImageDetailLiteral: String {
 public struct ResponseImageContent {
     public static let type: String = "input_image"
     public var image_url: String
-    public var detail: ResponseImageDetailLiteral?
+    public var detail: ResponseImageDetail?
     public var file_id: String?
     public var prompt_cache_breakpoint: ResponsePromptCacheBreakpoint?
 }

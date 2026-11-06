@@ -9,7 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @CodableLiteral
-public enum BetaRealtimeContentLiteral: String {
+public enum BetaRealtimeContentType: String {
     case input_text
     case input_audio
     case item_reference
@@ -17,7 +17,7 @@ public enum BetaRealtimeContentLiteral: String {
     case audio
 }
 @CodableLiteral
-public enum BetaRealtimeConversationItemLiteral: String {
+public enum BetaRealtimeConversationItemType: String {
     case message
     case function_call
     case function_call_output
@@ -39,14 +39,14 @@ public struct BetaRealtimeContent {
     public var audio: String?
     public var text: String?
     public var transcript: String?
-    public var type: BetaRealtimeContentLiteral?
+    public var type: BetaRealtimeContentType?
 }
 
 @BaseModelNoWithExtra
 @PublicInit
 public struct BetaRealtimeConversationItem {
     public static let object: String = "realtime.item"
-    public var type: BetaRealtimeConversationItemLiteral?
+    public var type: BetaRealtimeConversationItemType?
     public var id: String?
     public var content: [BetaRealtimeContent]?
     public var call_id: String?

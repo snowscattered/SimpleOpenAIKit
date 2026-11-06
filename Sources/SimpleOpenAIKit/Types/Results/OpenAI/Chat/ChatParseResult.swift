@@ -38,7 +38,7 @@ public struct ChatParseMessage<T> {
 public struct ChatParseChoice<T> {
     public let index: Int
     public let message: ChatParseMessage<T>
-    public let finish_reason: ChatChoiceFinshReasonLiteral
+    public let finish_reason: ChatChoiceFinshReason
     public let logprobs: ChatLogprobs?
 }
 

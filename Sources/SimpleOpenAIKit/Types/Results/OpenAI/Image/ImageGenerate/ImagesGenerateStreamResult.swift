@@ -12,11 +12,11 @@ import SimpleCodableMacro
 public struct ImageGeneratePartialImageEvent {
     public static let type: String = "image_generation.partial_image"
     public let b64_json: String
-    public let background: ImageBackgroundLiteral
+    public let background: ImageBackground
     public let created_at: Int
-    public let output_format: ImageOutputFormatLiteral
+    public let output_format: ImageOutputFormat
     public let partial_image_index: Int
-    public let quality: ImageResultQualityLiteral
+    public let quality: ImageResultQuality
     public let size: String
 }
 @BaseModelNoWithExtra
@@ -24,10 +24,10 @@ public struct ImageGeneratePartialImageEvent {
 public struct ImageGenerateCompletedEvent {
     public static let type: String = "image_generation.completed"
     public let b64_json: String
-    public let background: ImageBackgroundLiteral
+    public let background: ImageBackground
     public let created_at: Int
-    public let output_format: ImageOutputFormatLiteral
-    public let quality: ImageResultQualityLiteral
+    public let output_format: ImageOutputFormat
+    public let quality: ImageResultQuality
     public let size: String
     public let usage: ImagesUsage
 }
