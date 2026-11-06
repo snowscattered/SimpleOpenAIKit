@@ -15,7 +15,6 @@ struct CodableByConstantAndSingleMacro: ExtensionMacro {
             throw MacroError("@CodableByConstantAndSingle can only be applied to enums")
         }
 
-        let enumName = enumDecl.name.text
         let access = declAccessModifier(of: enumDecl)
 
         // Parse parameters
@@ -134,7 +133,7 @@ struct CodableByConstantAndSingleMacro: ExtensionMacro {
             }
             """
         let ext: DeclSyntax = """
-            nonisolated extension \(raw: enumName): BaseModel {
+            nonisolated extension \(raw: type.trimmedDescription): BaseModel {
             private enum CodingKeys: String, CodingKey { case \(raw: field) }
             \(raw: decodeDecl)
 

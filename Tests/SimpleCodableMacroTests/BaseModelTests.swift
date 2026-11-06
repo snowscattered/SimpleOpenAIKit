@@ -82,4 +82,14 @@ import SimpleCodableMacro
         #expect(try null.json().contains("\"d\"") == false)
         #expect(try present.json().contains("\"d\" : 7") == true)
     }
+
+    @Test("Nested extension macros") func nestedExtensionMacrosTest() throws {
+        let decoded = try JSONDecoder().decode(
+            NestedMacroFixtures.ExtraModel.self,
+            from: Data(#"{"value":7,"unknown":"kept"}"#.utf8)
+        )
+
+        #expect(decoded.value == 7)
+        #expect(decoded.extra["unknown"] != nil)
+    }
 }

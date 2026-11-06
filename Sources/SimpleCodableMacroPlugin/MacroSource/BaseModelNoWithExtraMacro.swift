@@ -15,13 +15,12 @@ struct BaseModelNoWithExtraMacro: ExtensionMacro {
             throw MacroError("@BaseModelNoWithExtra can only be applied to structs")
         }
 
-        let typeName = structDecl.name.text
         let stored = collectStoredProperties(of: structDecl)
         let access = declAccessModifier(of: structDecl)
 
         if stored.isEmpty {
             let ext: DeclSyntax = """
-                nonisolated extension \(raw: typeName): BaseModelNoWithExtra {
+                nonisolated extension \(raw: type.trimmedDescription): BaseModelNoWithExtra {
                 }
                 """
             guard let extensionDecl = ext.as(ExtensionDeclSyntax.self) else {
@@ -79,7 +78,7 @@ struct BaseModelNoWithExtraMacro: ExtensionMacro {
             """
         // MARK: - EXT
         let ext: DeclSyntax = """
-            nonisolated extension \(raw: typeName): BaseModelNoWithExtra {
+            nonisolated extension \(raw: type.trimmedDescription): BaseModelNoWithExtra {
             \(raw: codingKeysDecl)
 
             \(raw: decodeDecl)

@@ -77,7 +77,7 @@ struct CodableTraversalMacro: ExtensionMacro {
             }
             """
         let ext: DeclSyntax = """
-            nonisolated extension \(raw: enumName): BaseModel {
+            nonisolated extension \(raw: type.trimmedDescription): BaseModel {
             \(raw: decodeDecl)
 
             \(raw: encodeDecl)

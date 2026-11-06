@@ -32,7 +32,7 @@ enum Input {
     case array([Int])
 }
 
-struct NonLiteralSingleValue: Codable {}
+struct NonLiteralSingleValue: Codable, Hashable {}
 
 @SingleOrArray
 enum NonLiteralInput {
@@ -201,4 +201,50 @@ struct MultiBindingModel {
 struct EscapedPropertyModel {
     @BaseModelFieldAlias("legacy-default")
     var `default`: String?
+}
+
+enum NestedMacroFixtures {
+    @BaseModelWithExtra
+    struct ExtraModel {
+        let value: Int
+    }
+
+    @BaseModelNoWithExtra
+    struct FastModel {
+        let value: Int
+    }
+
+    @CodableLiteral
+    enum Literal: String {
+        case value
+    }
+
+    @CodableStringLiteralWithOther
+    enum StringWithOther {
+        case known
+        case other(String)
+    }
+
+    @SingleOrArray
+    enum OneOrMany {
+        case one(String)
+        case many([String])
+    }
+
+    @CodableTraversal
+    enum Traversal {
+        case int(Int)
+        case string(String)
+    }
+
+    @CodableByConstant(field: "role")
+    enum Constant {
+        case value(A)
+    }
+
+    @CodableByConstantAndSingle(field: "role", singleCase: "single")
+    enum ConstantOrSingle {
+        case value(A)
+        case single(A)
+    }
 }

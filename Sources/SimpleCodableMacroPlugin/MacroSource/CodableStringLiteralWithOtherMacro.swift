@@ -15,7 +15,6 @@ struct CodableStringLiteralWithOtherMacro: ExtensionMacro {
             throw MacroError("@CodableStringLiteralWithOther can only be applied to enums")
         }
         // Collect all case names
-        let enumName = enumDecl.name.text
         let access = declAccessModifier(of: enumDecl)
         
         let allElements = enumDecl.memberBlock.members
@@ -57,7 +56,7 @@ struct CodableStringLiteralWithOtherMacro: ExtensionMacro {
             }
             """
         let ext: DeclSyntax = """
-            extension \(raw: enumName): BaseModel {
+            extension \(raw: type.trimmedDescription): BaseModel {
             \(raw: access)var rawValue: String {
                 switch self {
                 \(raw: rawValueCases)

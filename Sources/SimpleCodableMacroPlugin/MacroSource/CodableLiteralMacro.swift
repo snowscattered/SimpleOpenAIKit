@@ -16,7 +16,6 @@ struct CodableLiteralMacro: ExtensionMacro {
             throw MacroError("@CodableLiteral can only be applied to enums")
         }
 
-        let enumName = enumDecl.name.text
         let access = declAccessModifier(of: enumDecl)
 
         // Extract the raw value type from the inheritance clause
@@ -52,7 +51,7 @@ struct CodableLiteralMacro: ExtensionMacro {
             }
             """
         let ext: DeclSyntax = """
-            extension \(raw: enumName): BaseModel {
+            extension \(raw: type.trimmedDescription): BaseModel {
             \(raw: decodeDecl)
             }
             """

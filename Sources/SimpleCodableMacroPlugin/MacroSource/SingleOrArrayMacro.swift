@@ -15,7 +15,6 @@ struct SingleOrArrayMacro: ExtensionMacro {
             throw MacroError("@SingleOrArray can only be applied to enums")
         }
 
-        let enumName = enumDecl.name.text
         let access = declAccessModifier(of: enumDecl)
 
         // Collect cases with associated values
@@ -108,7 +107,7 @@ struct SingleOrArrayMacro: ExtensionMacro {
             }
             """
         let ext: DeclSyntax = """
-            nonisolated extension \(raw: enumName): BaseModel {
+            nonisolated extension \(raw: type.trimmedDescription): BaseModel {
             \(raw: decodeDecl)
             \(raw: encodeDecl)
             }
@@ -121,7 +120,7 @@ struct SingleOrArrayMacro: ExtensionMacro {
 
         if !literalProtocols.isEmpty {
             let literalExt: DeclSyntax = """
-                nonisolated extension \(raw: enumName): \(raw: literalProtocols.joined(separator: ", ")) {
+                nonisolated extension \(raw: type.trimmedDescription): \(raw: literalProtocols.joined(separator: ", ")) {
                 \(raw: literalInitializers.joined(separator: "\n"))
                 }
                 """
