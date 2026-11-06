@@ -9,7 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @CodableLiteral
-public enum MessageWebSearchToolTypeLiteral: String {
+public enum MessageWebSearchToolType: String {
     case web_search_20250305, web_search_20260209
 }
 
@@ -22,7 +22,7 @@ public enum MessageWebSearchType: String {
 @PublicInit
 public struct MessageWebSearchTool {
     public var name: MessageWebSearchType
-    public var type: MessageWebSearchToolTypeLiteral
+    public var type: MessageWebSearchToolType
     
     public var allowed_callers: [MessageAllowedCaller]?
     public var allowed_domains: [String]?

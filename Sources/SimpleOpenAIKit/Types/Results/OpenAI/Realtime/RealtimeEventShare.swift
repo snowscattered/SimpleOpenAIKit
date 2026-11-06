@@ -10,7 +10,7 @@ import SimpleCodableMacro
 
 // MARK: Part
 @CodableLiteral
-public enum RealtimeContentPartLiteral: String {
+public enum RealtimeContentPartType: String {
     case text, audio
 }
 @BaseModelNoWithExtra
@@ -19,7 +19,7 @@ public struct RealtimePart {
     public let audio: String?
     public let text: String?
     public let transcript: String?
-    public let type: RealtimeContentPartLiteral?
+    public let type: RealtimeContentPartType?
 }
 
 // MARK: LogProbProperties

@@ -10,13 +10,13 @@ import SimpleCodableMacro
 
 // MARK: Input Config
 @CodableLiteral
-public enum RealtimeNoiseReductionLiteral: String {
+public enum RealtimeNoiseReductionType: String {
     case near_field, far_field
 }
 @BaseModelNoWithExtra
 @PublicInit
 public struct RealtimeNoiseReduction {
-    public var type: RealtimeNoiseReductionLiteral?
+    public var type: RealtimeNoiseReductionType?
 }
 @BaseModelNoWithExtra
 @PublicInit

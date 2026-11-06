@@ -38,7 +38,7 @@ public struct ResponseOutputRefusal {
     public var refusal: String
 }
 @CodableLiteral
-public enum ResponsePhaseLiteral: String {
+public enum ResponsePhase: String {
     case commentary
     case final_answer
 }
@@ -57,7 +57,7 @@ public enum ResponseEasyInputMessageRoleLiteral: String {
 }
 // MARK: - Message
 @CodableLiteral
-public enum ResponseMessageRoleLiteral: String {
+public enum ResponseMessageRole: String {
     case user, system, developer
 }
 // MARK: - OutputMessage
@@ -73,13 +73,13 @@ public struct ResponseEasyInputMessage {
     public static let type: String = "message"
     public var role: ResponseEasyInputMessageRoleLiteral
     public var content: ResponseMessageInputItemContent
-    public var phase: ResponsePhaseLiteral?
+    public var phase: ResponsePhase?
 }
 @BaseModelNoWithExtra
 @PublicInit
 public struct ResponseMessage {
     public static let type: String = "message"
-    public var role: ResponseMessageRoleLiteral // No Assistant
+    public var role: ResponseMessageRole // No Assistant
     public var content: [ResponseMessageInputContent]
     public var status: ResponseItemStatusLiteral?
 }
@@ -91,7 +91,7 @@ public struct ResponseOutputMessage {
     public var id: String
     public var content: [ResponseOutputMessageContent]
     public var status: ResponseItemStatusLiteral?
-    public var phase: ResponsePhaseLiteral?
+    public var phase: ResponsePhase?
 }
 // MARK: - MessageItem
 public enum ResponseMessageItem {

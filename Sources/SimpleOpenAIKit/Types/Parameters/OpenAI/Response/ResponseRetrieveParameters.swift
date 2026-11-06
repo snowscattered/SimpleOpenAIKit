@@ -13,7 +13,7 @@ import SimpleCodableMacro
 public struct ResponseRetrieveParameters {
     @transient public var response_id: String
     public var stream: Bool?
-    public var include: [ResponseIncludeLiteral]?
+    public var include: [ResponseInclude]?
     public var include_obfuscation: Bool?
     public var starting_after: Int?
 }

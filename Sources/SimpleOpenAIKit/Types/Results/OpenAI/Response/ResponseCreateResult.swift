@@ -145,14 +145,14 @@ public struct ResponseCreateResult {
     public let previous_response_id: String?
     public let prompt: ResponsePrompt?
     public let prompt_cache_key: String?
-    public let prompt_cache_retention: ResponsePromptCacheRetentionLiteral?
+    public let prompt_cache_retention: ResponsePromptCacheRetention?
     public let reasoning: ResponseReasoning?
     public let safety_identifier: String?
-    public let service_tier: ResponseServiceTierLiteral?
+    public let service_tier: ResponseServiceTier?
     public let status: ResponseStatus?
     public let text: ResponseTextConfig?
     public let top_logprobs: Int?
-    public let truncation: ResponseTruncationLiteral?
+    public let truncation: ResponseTruncation?
     public let usage: ResponseUsage?
     public let user: String?
 }

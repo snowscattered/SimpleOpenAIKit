@@ -10,25 +10,25 @@ import SimpleCodableMacro
 
 
 @CodableLiteral
-public enum ResponseComparisonTypeLiteral: String {
+public enum ResponseComparisonType: String {
     case eq, ne, gt, gte, lt, lte
 }
 @BaseModelNoWithExtra
 @PublicInit
 public struct ResponseComparisonFilter {
-    public var type: ResponseComparisonTypeLiteral
+    public var type: ResponseComparisonType
     public var key: String
     public var value: BaseType
 }
 
 @CodableLiteral
-public enum ResponseCompoundFilterTypeLiteral: String {
+public enum ResponseCompoundFilterType: String {
     case and, or
 }
 @BaseModelNoWithExtra
 @PublicInit
 public struct ResponseCompoundFilter {
-    public var type: ResponseCompoundFilterTypeLiteral
+    public var type: ResponseCompoundFilterType
     public var filters: [BaseType]
 }
 
@@ -47,7 +47,7 @@ public struct ResponseRankingOptionsHybridSearch {
     public var text_weight: Double?
 }
 @CodableLiteral
-public enum ResponseRankerLiteral: String {
+public enum ResponseRanker: String {
     case auto
     case default_2024_11_15 = "default-2024-11-15"
 }
@@ -55,7 +55,7 @@ public enum ResponseRankerLiteral: String {
 @PublicInit
 public struct ResponseRankingOptions {
     public var hybrid_search: ResponseRankingOptionsHybridSearch?
-    public var ranker: ResponseRankerLiteral?
+    public var ranker: ResponseRanker?
     public var score_threshold: Double?
 }
 

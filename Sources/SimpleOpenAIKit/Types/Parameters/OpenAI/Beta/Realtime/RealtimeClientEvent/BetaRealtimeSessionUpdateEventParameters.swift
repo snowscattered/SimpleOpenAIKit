@@ -20,13 +20,13 @@ public struct BetaRealtimeClientSecret {
     public var expires_after: BetaRealtimeClientSecretExpiresAfter?
 }
 @CodableLiteral
-public enum BetaRealtimeInputAudioNoiseReductionLiteral: String {
+public enum BetaRealtimeInputAudioNoiseReductionType: String {
     case near_field, far_field
 }
 @BaseModelNoWithExtra
 @PublicInit
 public struct BetaRealtimeInputAudioNoiseReduction {
-    public var type: BetaRealtimeInputAudioNoiseReductionLiteral?
+    public var type: BetaRealtimeInputAudioNoiseReductionType?
 }
 @BaseModelNoWithExtra
 @PublicInit

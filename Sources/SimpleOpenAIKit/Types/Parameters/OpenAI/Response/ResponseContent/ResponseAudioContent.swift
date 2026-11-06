@@ -9,7 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @CodableStringLiteralWithOther
-public enum ResponseAudioFormatLiteral {
+public enum ResponseAudioFormat {
     case wav, mp3
     case other(String)
 }
@@ -19,5 +19,5 @@ public enum ResponseAudioFormatLiteral {
 public struct ResponseAudioContent {
     public static let type: String = "input_audio"
     public var data: String
-    public var format: ResponseAudioFormatLiteral?
+    public var format: ResponseAudioFormat?
 }

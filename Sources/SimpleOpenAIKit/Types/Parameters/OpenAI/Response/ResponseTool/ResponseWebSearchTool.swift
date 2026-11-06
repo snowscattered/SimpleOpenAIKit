@@ -25,7 +25,7 @@ public struct ResponseWebSearchUserLocation {
 }
 
 @CodableLiteral
-public enum ResponseWebSearchContextSizeLiteral: String {
+public enum ResponseWebSearchContextSize: String {
     case low, medium, high
 }
 
@@ -35,6 +35,6 @@ public struct ResponseWebSearchTool {
     public static let type: String = "web_search"
     public var external_web_access: Bool?
     public var filters: ResponseWebSearchFilters?
-    public var search_context_size: ResponseWebSearchContextSizeLiteral?
+    public var search_context_size: ResponseWebSearchContextSize?
     public var user_location: ResponseWebSearchUserLocation?
 }

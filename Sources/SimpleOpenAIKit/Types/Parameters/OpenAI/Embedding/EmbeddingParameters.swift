@@ -15,7 +15,7 @@ public enum EmbeddingInput {
 }
 
 @CodableLiteral
-public enum EmbeddingEncoderFormatLiteral: String {
+public enum EmbeddingEncoderFormat: String {
     case float, base64
 }
 
@@ -25,6 +25,6 @@ public struct EmbeddingParameters {
     public var model: String
     public var input: EmbeddingInput
     public var dimensions: Int?
-    public var encoding_format: EmbeddingEncoderFormatLiteral?
+    public var encoding_format: EmbeddingEncoderFormat?
     public var user: String?
 }

@@ -9,7 +9,7 @@ import Foundation
 import SimpleCodableMacro
 
 @CodableLiteral
-public enum ResponseGrammarSyntaxLiteral: String {
+public enum ResponseGrammarSyntax: String {
     case lark, regex
 }
 
@@ -24,7 +24,7 @@ public struct ResponseCustomFormatText {
 public struct ResponseCustomFormatGrammar {
     public static let type: String = "grammar"
     public var definition: String
-    public var syntax: ResponseGrammarSyntaxLiteral
+    public var syntax: ResponseGrammarSyntax
 }
 
 @CodableByConstant

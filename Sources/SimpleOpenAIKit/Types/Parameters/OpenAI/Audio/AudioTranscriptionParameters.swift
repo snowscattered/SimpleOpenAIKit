@@ -22,17 +22,17 @@ public struct AudioTranscriptionChunkingStrategy {
 // MARK: - Audio Transcription Literals
 
 @CodableLiteral
-public enum AudioTranscriptionTimestampGranularityLiteral: String {
+public enum AudioTranscriptionTimestampGranularity: String {
     case word, segment
 }
 
 @CodableLiteral
-public enum AudioTranscriptionResponseFormatLiteral: String {
+public enum AudioTranscriptionResponseFormat: String {
     case json, text, srt, verbose_json, vtt, diarized_json
 }
 
 @CodableLiteral
-public enum AudioTranscriptionIncludeLiteral: String {
+public enum AudioTranscriptionInclude: String {
     case logprobs
 }
 
@@ -47,10 +47,10 @@ public struct AudioTranscriptionParameters {
     public var language: String?
     public var stream: Bool?
     public var temperature: Double?
-    public var response_format: AudioTranscriptionResponseFormatLiteral?
+    public var response_format: AudioTranscriptionResponseFormat?
     public var chunking_strategy: AudioTranscriptionChunkingStrategy?
-    public var include: [AudioTranscriptionIncludeLiteral]?
+    public var include: [AudioTranscriptionInclude]?
     public var known_speaker_names: [String]?
     public var known_speaker_references: [String]?
-    public var timestamp_granularities: [AudioTranscriptionTimestampGranularityLiteral]?
+    public var timestamp_granularities: [AudioTranscriptionTimestampGranularity]?
 }

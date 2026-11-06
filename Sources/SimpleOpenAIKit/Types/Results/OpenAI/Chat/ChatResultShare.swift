@@ -32,22 +32,12 @@ public struct ChatLogprobs {
 
 // ChatResult.Choice.FinshReason
 @CodableLiteral
-public enum ChatChoiceFinshReasonLiteral: String {
+public enum ChatChoiceFinshReason: String {
     case stop
     case length
     case tool_calls
     case content_filter
     case function_call
-}
-
-// ChatResult.ServiceTier
-@CodableLiteral
-public enum ChatServiceTier: String {
-    case auto
-    case `default`
-    case flex
-    case scale
-    case priority
 }
 
 // ChatResult.Usage

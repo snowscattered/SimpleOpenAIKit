@@ -24,10 +24,10 @@ public struct ChatParseParameters<T: SchemaProtocol> {
     public var presence_penalty: Double?
     public var max_tokens: Int?
     public var parallel_tool_calls: Bool?
-    public var reasoning_effort: ChatReasoningEffortLiteral?
+    public var reasoning_effort: ChatReasoningEffort?
     public var stream_options: ChatStreamOptions?
     public var stop: [String]?
-    public var modalities: [ChatModalityLiteral]?
+    public var modalities: [ChatModality]?
     public var seed: Int?
     public var web_search_options: ChatWebSearchOption?
     public var metadata: ChatMetaData?
@@ -37,12 +37,12 @@ public struct ChatParseParameters<T: SchemaProtocol> {
     public var n: Int?
     public var prediction: ChatPredictionContent?
     public var prompt_cache_key: String?
-    public var prompt_cache_retention: ChatPromptCacheRetentionLiteral?
+    public var prompt_cache_retention: ChatPromptCacheRetention?
     public var safety_identifier: String?
-    public var service_tier: ChatServiceTierLiteral?
+    public var service_tier: ChatServiceTier?
     public var store: Bool?
     public var top_logprobs: Int?
-    public var verbosity: ChatVerbosityLiteral?
+    public var verbosity: ChatVerbosity?
     public var user: String?
 }
 

@@ -16,8 +16,8 @@ struct MessageAsyncTests {
         messages: [
             .init(role: .user, content: "who are you？")
         ],
-        tools: [.web_search],
         max_tokens: 1024,
+        tools: [.web_search],
     )
     @Test func asyncCompletionData() async throws {
         let res = try await anthropicAsyncClient.messages.create(
