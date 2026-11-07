@@ -248,3 +248,41 @@ enum NestedMacroFixtures {
         case single(A)
     }
 }
+
+@PublicInit
+struct ConstantFunctionTool: Codable, Hashable, Sendable {
+    static let type = "function"
+}
+
+@PublicInit
+struct ConstantUnknownTool: Codable, Hashable, Sendable {
+    let type: String
+}
+
+@CodableByConstant(defaultCase: "unowned")
+enum ConstantTypeTool {
+    case function(ConstantFunctionTool)
+    case unowned(ConstantUnknownTool)
+}
+
+@CodableByConstant
+enum ConstantAliasType {
+    @MultiConstant("a", "alias")
+    case alternate(ConstantFunctionTool)
+}
+
+@PublicInit
+struct ConstantDeveloperMessage: Codable, Hashable, Sendable {
+    static let role = "developer"
+}
+
+@PublicInit
+struct ConstantCustomMessage: Codable, Hashable, Sendable {
+    let role: String
+}
+
+@CodableByConstant(field: "role", defaultCase: "custom")
+enum ConstantRoleMessage {
+    case developer(ConstantDeveloperMessage)
+    case custom(ConstantCustomMessage)
+}

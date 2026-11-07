@@ -28,4 +28,12 @@ import SimpleCodableMacro
         let y = try JSONEncoder().encode(x)
         print(String(data: y, encoding: .utf8)!)
     }
+
+    @Test("CodableByConstant type convenience") func codableByConstantTypeTest() {
+        #expect(ConstantTypeTool.function(.init()).type == "function")
+        #expect(ConstantTypeTool.unowned(.init(type: "future_tool")).type == "future_tool")
+        #expect(ConstantAliasType.alternate(.init()).type == "a")
+        #expect(ConstantRoleMessage.developer(.init()).role == "developer")
+        #expect(ConstantRoleMessage.custom(.init(role: "future_role")).role == "future_role")
+    }
 }

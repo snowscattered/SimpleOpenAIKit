@@ -39,20 +39,6 @@ public enum ResponseTool {
     case unowned(ResponseBaseTool)
 }
 
-public extension ResponseTool {
-    var type: String {
-        switch self {
-        case .function:           return ResponseFunctionTool.type
-        case .custom:             return ResponseCustomTool.type
-        case .namespace:          return ResponseNamespaceTool.type
-        case .file_search:        return ResponseFileSearchTool.type
-        case .image_generation:   return ResponseImageGenerationTool.type
-        case .web_search:         return ResponseWebSearchTool.type
-        case .unowned(let event): return event.type
-        }
-    }
-}
-
 // Add Simple Use
 extension ResponseTool {
     public static var image_generation: ResponseTool {

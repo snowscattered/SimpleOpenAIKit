@@ -76,6 +76,10 @@ struct CodableByConstantMacro: ExtensionMacro {
             }
         }
 
+        if let defaultCaseName, fallbackCase == nil {
+            throw MacroError("@CodableByConstant defaultCase '\(defaultCaseName)' does not match an enum case")
+        }
+
         guard !regularCases.isEmpty else {
             throw MacroError("@CodableByStaticType requires at least one case")
         }
@@ -111,6 +115,27 @@ struct CodableByConstantMacro: ExtensionMacro {
         }.joined(separator: "\n")
 
         let members = memberNames(of: enumDecl)
+        // MARK: - Convenience Feild
+        let fieldPropertyDecl: String
+        if !members.contains(field) {
+            var fieldCases = regularCases.map { Case in
+                let value = Case.constantValues?.first ?? "\(Case.typeName).\(field)"
+                return "case .\(Case.caseName): return \(value)"
+            }
+            if let nilC = nilCase, !nilCaseStill {
+                fieldCases.append("case .\(nilC.caseName): return \(nilC.typeName).\(field)")
+            }
+            if let fallback = fallbackCase, nilCaseName != defaultCaseName {
+                fieldCases.append("case .\(fallback.caseName)(let event): return event.\(field)")
+            }
+            fieldPropertyDecl = """
+                \(access)var \(field): String {
+                    switch self {
+                    \(fieldCases.joined(separator: "\n"))
+                    }
+                }
+                """
+        } else { fieldPropertyDecl = "// Customized By you" }
         let decodeDecl = members.contains("init(from:)") ? "// Customized By you" : """
             \(access)init(from decoder: any Decoder) throws {
                 let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -137,6 +162,8 @@ struct CodableByConstantMacro: ExtensionMacro {
             \(raw: decodeDecl)
 
             \(raw: encodeDecl)
+
+            \(raw: fieldPropertyDecl)
             }
             """
 

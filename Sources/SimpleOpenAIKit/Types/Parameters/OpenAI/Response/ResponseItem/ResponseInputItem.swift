@@ -44,20 +44,3 @@ extension ResponseInputItem {
         return .message(.EasyInputMessage(.init(role: .assistant, content: content)))
     }
 }
-
-public extension ResponseInputItem {
-    var type: String {
-        switch self {
-        case .message:                 return ResponseMessageItem.type
-        case .reasoning:               return ResponseReasoningItem.type
-        case .function_call:           return ResponseFunctionToolCallItem.type
-        case .function_call_output:    return ResponseFunctionToolCallOutputItem.type
-        case .custom_tool_call:        return ResponseCustomToolCallItem.type
-        case .custom_tool_call_output: return ResponseCustomToolCallOutputItem.type
-        case .web_search:              return ResponseWebSearchItem.type
-        // Codex Agent Message
-        case .agent_message:           return ResponseAgentMessageItem.type
-        case .unkowned(let event):     return event.type
-        }
-    }
-}

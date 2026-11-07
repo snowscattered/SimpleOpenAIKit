@@ -17,16 +17,3 @@ public enum MessageStreamResult {
     case content_block_delta(MessageContentBlockDeltaEvent)
     case content_block_stop(MessageContentBlockStopEvent)
 }
-
-public extension MessageStreamResult {
-    var type: String {
-        switch self {
-        case .message_start:       return MessageStartEvent.type
-        case .message_delta:       return MessageDeltaEvent.type
-        case .message_stop:        return MessageStopEvent.type
-        case .content_block_start: return MessageContentBlockStartEvent.type
-        case .content_block_delta: return MessageContentBlockDeltaEvent.type
-        case .content_block_stop:  return MessageContentBlockStopEvent.type
-        }
-    }
-}

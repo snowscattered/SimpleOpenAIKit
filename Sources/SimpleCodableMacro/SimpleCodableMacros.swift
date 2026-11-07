@@ -31,7 +31,8 @@ public macro CodableTraversal() = #externalMacro(module: "SimpleCodableMacroPlug
 
 /// A macro that generates Codable conformance for enums with associated values,
 /// dispatching on a `type` field to decode/encode the correct case.
-@attached(extension, conformances: BaseModel, names: named(CodingKeys), named(init(from:)), named(encode(to:)))
+/// It also generates a convenience property named after `field`.
+@attached(extension, conformances: BaseModel, names: arbitrary)
 public macro CodableByConstant(
     field: String = "type",
     nilCase: String? = nil,

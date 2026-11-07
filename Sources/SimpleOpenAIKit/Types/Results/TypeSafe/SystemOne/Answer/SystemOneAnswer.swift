@@ -28,15 +28,6 @@ public enum SystemOneAnswer {
 }
 
 public extension SystemOneAnswer {
-    var type: String {
-        switch self {
-        case .noul:              return SystemOneAnswerNoul.type
-        case .choice:            return SystemOneAnswerChoice.type
-        case .score:             return SystemOneAnswerScore.type
-        case .box:               return SystemOneAnswerBox.type
-        case .unknown(let v):    return v.type
-        }
-    }
     var confidence: Double? {
         switch self {
         case .noul:              return nil

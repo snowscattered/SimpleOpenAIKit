@@ -26,24 +26,6 @@ public enum MessageBlock {
     case web_search_result(MessageWebSearchToolResultBlock)
     case web_fetch_result(MessageWebFetchToolResultBlock)
 }
-public extension MessageBlock {
-    var type: String {
-        switch self {
-        case .text:              return MessageTextBlock.type
-        case .thinking:          return MessageThinkingBlock.type
-        case .image:             return MessageImageBlock.type
-        case .video:             return MessageVideoBlock.type
-        case .document:          return MessageDocumentBlock.type
-        
-        case .tool_use:          return MessageToolUseBlock.type
-        case .tool_result:       return MessageToolResultBlock.type
-        case .search_result:     return MessageSearchResultBlock.type
-        case .server_tool_use:   return MessageServerToolUseBlock.type
-        case .web_search_result: return MessageWebSearchToolResultBlock.type
-        case .web_fetch_result:  return MessageWebFetchToolResultBlock.type
-        }
-    }
-}
 
 // MARK: - Message Content Input
 @SingleOrArray
