@@ -1,25 +1,41 @@
-//
-//  CodableTraversalTests.swift
-//  SimpleCodableMacroTests
-//
-//  Created by snow on 9/10/26.
-//
-
 import Foundation
 import Testing
 import SimpleCodableMacro
 
-@Suite struct CodableTraversalTests {
-    @Test("CodableTraversal Using") func CodableTraversalMacroTest() throws {
-        let CodableByConstantJson = #"""
-        {
-            "role": "B",
-            "name": "N"
+@CodableTraversal
+enum TraversalValue {
+    case integer(Int)
+    case text(String)
+}
+
+@Suite
+struct CodableTraversalTests {
+    @Test
+    func decodingTriesCasesInDeclarationOrder() throws {
+        let integer = try TestJSON.decode(TraversalValue.self, from: "3")
+        let text = try TestJSON.decode(TraversalValue.self, from: #""hello""#)
+
+        #expect(integer == .integer(3))
+        #expect(text == .text("hello"))
+        print(integer)
+        print(text)
+    }
+
+    @Test
+    func encodingDelegatesToTheSelectedPayload() throws {
+        let integer = try TestJSON.string(from: TraversalValue.integer(4))
+        let text = try TestJSON.string(from: TraversalValue.text("world"))
+
+        #expect(integer == "4")
+        #expect(text == #""world""#)
+        print(integer)
+        print(text)
+    }
+
+    @Test
+    func decodingThrowsWhenNoPayloadMatches() {
+        #expect(throws: (any Error).self) {
+            try TestJSON.decode(TraversalValue.self, from: #"{"unknown":7}"#)
         }
-        """#
-        let x = try JSONDecoder().decode(CodableTraversalStruct.self, from: CodableByConstantJson.data(using: .utf8)!)
-        print(x)
-        let y = try JSONEncoder().encode(x)
-        print(String(data: y, encoding: .utf8)!)
     }
 }

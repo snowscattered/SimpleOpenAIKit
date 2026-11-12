@@ -38,7 +38,7 @@ struct CodableLiteralMacro: ExtensionMacro {
         let expectedValues = cases.map { #""\#($0)""# }.joined(separator: ", ")
         let members = memberNames(of: enumDecl)
         let decodeDecl = members.contains("init(from:)") ? "// Customized By you" : """
-            \(access)init(from decoder: any Decoder) throws {
+            init(from decoder: any Decoder) throws {
                 let container = try decoder.singleValueContainer()
                 let rawValue = try container.decode(\(rawTypeName).self)
                 guard let value = Self(rawValue: rawValue) else {
@@ -50,16 +50,22 @@ struct CodableLiteralMacro: ExtensionMacro {
                 self = value
             }
             """
-        let ext: DeclSyntax = """
-            extension \(raw: type.trimmedDescription): BaseModel {
+        let conformanceExt: DeclSyntax = """
+            nonisolated extension \(raw: type.trimmedDescription): BaseModel {
+            }
+            """
+        let implementationExt: DeclSyntax = """
+            nonisolated \(raw: access)extension \(raw: type.trimmedDescription) {
             \(raw: decodeDecl)
             }
             """
 
-        guard let extensionDecl = ext.as(ExtensionDeclSyntax.self) else {
+        guard let conformanceExtension = conformanceExt.as(ExtensionDeclSyntax.self),
+              let implementationExtension = implementationExt.as(ExtensionDeclSyntax.self)
+        else {
             return []
         }
 
-        return [extensionDecl]
+        return [conformanceExtension, implementationExtension]
     }
 }

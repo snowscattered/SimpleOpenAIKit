@@ -36,7 +36,7 @@ struct BaseModelNoWithExtraMacro: ExtensionMacro {
         let codingKeysCases = (plan?.caseLines ?? coding.map { "case \($0.name)" }).joined(separator: "\n")
         // MARK: - CodingKey
         let codingKeysDecl = customKeys.isEmpty && !coding.isEmpty ? """
-            enum CodingKeys: String, CodingKey, CaseIterable {
+            private enum CodingKeys: String, CodingKey, CaseIterable {
             \(codingKeysCases)
             }
             """ : "// Customized By you"
@@ -48,7 +48,7 @@ struct BaseModelNoWithExtraMacro: ExtensionMacro {
             \(decodeBody)
         """
         let decodeDecl = members.contains("init(from:)") ? "// Customized By you" : """
-            \(access)init(from decoder: any Decoder) throws {
+            init(from decoder: any Decoder) throws {
                 \(decodeContainer)
 
                 try self.afterDecode()
@@ -69,7 +69,7 @@ struct BaseModelNoWithExtraMacro: ExtensionMacro {
             \(encodeBody)
         """
         let encodeDecl = members.contains("encode(to:)") ? "// Customized By you" : """
-            \(access)func encode(to encoder: any Encoder) throws {
+            func encode(to encoder: any Encoder) throws {
                 var copy = self
                 try copy.beforeEncode()
 
@@ -77,8 +77,12 @@ struct BaseModelNoWithExtraMacro: ExtensionMacro {
             }
             """
         // MARK: - EXT
-        let ext: DeclSyntax = """
+        let conformanceExt: DeclSyntax = """
             nonisolated extension \(raw: type.trimmedDescription): BaseModelNoWithExtra {
+            }
+            """
+        let implementationExt: DeclSyntax = """
+            nonisolated \(raw: access)extension \(raw: type.trimmedDescription) {
             \(raw: codingKeysDecl)
 
             \(raw: decodeDecl)
@@ -87,9 +91,11 @@ struct BaseModelNoWithExtraMacro: ExtensionMacro {
             }
             """
 
-        guard let extensionDecl = ext.as(ExtensionDeclSyntax.self) else {
+        guard let conformanceExtension = conformanceExt.as(ExtensionDeclSyntax.self),
+              let implementationExtension = implementationExt.as(ExtensionDeclSyntax.self)
+        else {
             return []
         }
-        return [extensionDecl]
+        return [conformanceExtension, implementationExtension]
     }
 }

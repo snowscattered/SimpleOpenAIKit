@@ -1,24 +1,35 @@
-//
-//  CodableLiteralTests.swift
-//  SimpleCodableMacroTests
-//
-//  Created by snow on 9/10/26.
-//
-
 import Foundation
 import Testing
 import SimpleCodableMacro
 
-@Suite struct CodableLiteralTests {
-    @Test("CodableLiteral Using") func CodableLiteralMacroTest() async throws {
-        do {
-            let s = "150"
-            let literal: IntLiteral = try JSONDecoder().decode(IntLiteral.self ,from: s.data(using: .utf8)!)
-            print(literal)
-        } catch { print(error) }
+@CodableLiteral
+internal enum StringLiteralValue: String {
+    case alpha = "A"
+    case `func`
+    case `A-A`
+}
 
-        let S: StringLiteral = .`A-A`
-        try print(String(decoding: JSONEncoder().encode(S), as: UTF8.self))
-        try print(JSONDecoder().decode(StringLiteral.self, from: #""A-A""#.data(using: .utf8)!))
+@Suite
+struct CodableLiteralTests {
+    @Test
+    func decodesExplicitKeywordAndEscapedValues() throws {
+        let explicit = try TestJSON.decode(StringLiteralValue.self, from: #""A""#)
+        let keyword = try TestJSON.decode(StringLiteralValue.self, from: #""func""#)
+        let escaped = try TestJSON.decode(StringLiteralValue.self, from: #""A-A""#)
+
+        #expect(explicit == .alpha)
+        #expect(keyword == .func)
+        #expect(escaped == .`A-A`)
+        #expect(try TestJSON.string(from: escaped) == #""A-A""#)
+        print(explicit)
+        print(keyword)
+        print(escaped)
+    }
+
+    @Test
+    func rejectsUnknownRawValues() {
+        #expect(throws: (any Error).self) {
+            try TestJSON.decode(StringLiteralValue.self, from: #""unknown""#)
+        }
     }
 }

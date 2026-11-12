@@ -20,8 +20,13 @@ public macro SingleOrArray() = #externalMacro(module: "SimpleCodableMacroPlugin"
 public macro CodableLiteral() = #externalMacro(module: "SimpleCodableMacroPlugin", type: "CodableLiteralMacro")
 
 /// Generates `BaseModel` conformance for a string-literal enum that declares `case other(String)`.
+/// Also generates `ExpressibleByStringLiteral`; every string literal is stored in `.other(value)`.
 /// - Note: The enum must not have a raw type, and plain cases must have no associated values.
-@attached(extension, conformances: BaseModel, names: named(rawValue), named(init(from:)), named(encode(to:)))
+@attached(
+    extension,
+    conformances: BaseModel, ExpressibleByStringLiteral,
+    names: named(rawValue), named(init(from:)), named(encode(to:)), named(init(stringLiteral:))
+)
 public macro CodableStringLiteralWithOther() = #externalMacro(module: "SimpleCodableMacroPlugin", type: "CodableStringLiteralWithOtherMacro")
 
 /// A macro that generates Codable conformance for enums by trying to decode each case type in order.
