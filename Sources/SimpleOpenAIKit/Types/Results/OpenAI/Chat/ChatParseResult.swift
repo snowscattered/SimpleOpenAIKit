@@ -69,8 +69,8 @@ extension ChatParseMessage {
             audio: self.audio,
             content: self.content,
             function_call: self.function_call,
-            refusal: self.refusal,
             tool_calls: self.tool_calls?.map { $0.chatAssistantFunctionCall },
+            refusal: self.refusal,
             name: self.name,
             reasoning_content: self.reasoning_content,
             annotation: self.annotation

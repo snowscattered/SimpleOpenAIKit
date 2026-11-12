@@ -50,7 +50,7 @@ public extension ToolProtocol {
 public extension ChatTool {
     /// Build the OpenAI Chat Completions tool declaration from a `ToolProtocol` type.
     init<T: ToolProtocol>(_: T.Type) {
-        self = .function_tool(.init(function: .init(
+        self = .function(.init(function: .init(
             name: T.name,
             description: T.description,
             parameters: T.Arguments.ArgumentSchema,

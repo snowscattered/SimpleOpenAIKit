@@ -9,7 +9,7 @@ Blocking counterparts of Swift's async sequences, plus pagination iterators.
 | `SyncSequence`, `SyncIteratorProtocol` | The `AsyncSequence` shape without `await`, carrying an associated `Failure` |
 | `SyncStream` | Buffered queue fed by a detached task, drained by a blocking loop |
 | `SyncThrowingStream` | Same, with an error delivered to the consumer's `next()` |
-| `SyncThrowingPages`, `AsyncThrowingPages` | Iterate a paged endpoint one request per element |
+| `SyncThrowingPages`, `AsyncThrowingPages` | Iterate a paged endpoint, making one request per page and yielding its items |
 
 ## Rules
 
@@ -19,4 +19,5 @@ Blocking counterparts of Swift's async sequences, plus pagination iterators.
   its own; operators call it after cancelling the upstream task.
 - In `SyncThrowingStream` buffered elements drain before a failure surfaces, and the error is cleared
   once thrown so a second iteration does not repeat it.
-- Pages stop when a page reports `has_more == false` or comes back empty.
+- Pagination carries a parameters value. Each page returns the next parameters value for the following
+  request, and iteration stops when the page reports `has_more == false` or comes back empty.

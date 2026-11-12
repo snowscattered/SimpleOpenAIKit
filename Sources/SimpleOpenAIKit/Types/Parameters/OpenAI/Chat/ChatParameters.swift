@@ -106,8 +106,8 @@ public struct ChatCustomTool {
 }
 @CodableByConstant
 public enum ChatTool {
-    case function_tool(ChatFunctionTool)
-    case custom_tool(ChatCustomTool)
+    case function(ChatFunctionTool)
+    case custom(ChatCustomTool)
 }
 
 // MARK: - Tool Choice

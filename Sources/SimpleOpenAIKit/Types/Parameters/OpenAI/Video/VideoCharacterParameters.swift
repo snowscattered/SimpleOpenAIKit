@@ -10,7 +10,7 @@ import SimpleCodableMacro
 
 @BaseModelNoWithExtra
 @PublicInit
-public struct VideoCharacterCreateParameter {
+public struct VideoCharacterCreateParameters {
     public var name: String
     public var video: FileParameters
 }

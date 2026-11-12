@@ -25,25 +25,21 @@ public extension OpenAIAsyncAPIResource.VideosAsyncResource {
     }
     /// Iterate the videos under the account, one page per request.
     func list(
-        parameters: VideoListParameter? = nil,
+        parameters: VideoListParameters? = nil,
         requestOptions: RequestOptions? = nil
-    ) async throws -> AsyncThrowingPages<VideoResult> {
+    ) async throws -> AsyncThrowingPages<VideoListParameters, VideoResult> {
         let url = try clientOption.getServerUrl(path: "/videos")
-        var currentParams = parameters ?? VideoListParameter()
-        var nextAfter = parameters?.after
-        return AsyncThrowingPages { [clientOption] in
-            currentParams.after = nextAfter
-            let result: PageStruct<VideoResult> = try await OpenAISession.shared.AsyncResponse(
+        return try await AsyncThrowingPages(parameters: parameters ?? VideoListParameters()) { [clientOption] parameters in
+            let result: AsyncThrowingPages<VideoListParameters, VideoResult> = try await OpenAISession.shared.AsyncResponse(
                 url,
-                payload: currentParams,
+                payload: parameters,
                 requestOptions: requestOptions,
                 clientOption: clientOption,
                 method: .get
             )
-            if let last = result.data.last {
-                nextAfter = last.id
-            }
-            return result
+            var next = parameters
+            if let last = result.data.last { next.after = last.id }
+            return (page: result, next: next)
         }
     }
     /// Fetch one video's status and metadata.
@@ -76,7 +72,7 @@ public extension OpenAIAsyncAPIResource.VideosAsyncResource {
     }
     /// Rework an existing video.
     func edit(
-        parameters: VideoEditParameter,
+        parameters: VideoEditParameters,
         requestOptions: RequestOptions? = nil
     ) async throws -> VideoResult {
         let url = try clientOption.getServerUrl(path: "/videos/edits")
@@ -91,7 +87,7 @@ public extension OpenAIAsyncAPIResource.VideosAsyncResource {
     }
     /// Append generated footage to an existing video.
     func extend(
-        parameters: VideoExtendParameter,
+        parameters: VideoExtendParameters,
         requestOptions: RequestOptions? = nil
     ) async throws -> VideoResult {
         let url = try clientOption.getServerUrl(path: "/videos/extend")
@@ -111,7 +107,7 @@ public extension OpenAIAsyncAPIResource.VideosAsyncResource {
         requestOptions: RequestOptions? = nil
     ) async throws -> VideoResult {
         let url = try clientOption.getServerUrl(path: "/videos/\(video_id)")
-        let parameters = VideoRemixParameter(video_id: video_id, prompt: prompt)
+        let parameters = VideoRemixParameters(video_id: video_id, prompt: prompt)
         return try await OpenAISession.shared.AsyncResponse(
             url,
             payload: parameters,
@@ -123,7 +119,7 @@ public extension OpenAIAsyncAPIResource.VideosAsyncResource {
     // MARK: Character
     /// Register a reusable character for later generations.
     func create_character(
-        parameters: VideoCharacterCreateParameter,
+        parameters: VideoCharacterCreateParameters,
         requestOptions: RequestOptions? = nil
     ) async throws -> VideoCharacterResult {
         let url = try clientOption.getServerUrl(path: "/videos/characters")
@@ -193,7 +189,7 @@ public extension OpenAIAsyncAPIResource.VideosAsyncResource {
         requestOptions: RequestOptions? = nil
     ) async throws -> AsyncThrowingStream<Data, any Error> {
         let url = try clientOption.getServerUrl(path: "/videos/\(video_id)/content")
-        let parameters: VideoDownloadContentParameter = .init(video_id: video_id, variant: variant)
+        let parameters: VideoDownloadContentParameters = .init(video_id: video_id, variant: variant)
         var options = requestOptions ?? RequestOptions()
         if options.extra_headers["Accept"] == nil {
             options.extra_headers["Accept"] = "application/binary"

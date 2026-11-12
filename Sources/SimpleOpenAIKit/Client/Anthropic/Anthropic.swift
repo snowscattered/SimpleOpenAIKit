@@ -7,7 +7,7 @@
 
 import Foundation
 
-/// Synchronous Anthropic client, holding the `models`, `completions` and `messages` resources.
+/// Synchronous Anthropic client, holding the `models`, `completions`, `messages` and `files` resources.
 open class Anthropic: @unchecked Sendable {
     private let clientOption: AnthropicClientOption
     public var api_key: String { clientOption.api_key }
@@ -25,11 +25,13 @@ open class Anthropic: @unchecked Sendable {
     public let models: AnthropicSyncAPIResource.ModelsSyncResource
     public let completions: AnthropicSyncAPIResource.CompletionsSyncResource
     public let messages: AnthropicSyncAPIResource.MessagesSyncResource
+    public let files: AnthropicSyncAPIResource.FilesSyncResource
 
     public init(clientOption: AnthropicClientOption) {
         self.models      = .init(clientOption)
         self.completions = .init(clientOption)
         self.messages    = .init(clientOption)
+        self.files       = .init(clientOption)
         self.clientOption = clientOption
     }
     public init(
@@ -55,6 +57,7 @@ open class Anthropic: @unchecked Sendable {
         self.models      = .init(clientOption)
         self.completions = .init(clientOption)
         self.messages    = .init(clientOption)
+        self.files       = .init(clientOption)
         self.clientOption = clientOption
     }
 }

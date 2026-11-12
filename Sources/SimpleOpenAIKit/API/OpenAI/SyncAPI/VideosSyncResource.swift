@@ -25,26 +25,21 @@ public extension OpenAISyncAPIResource.VideosSyncResource {
     }
     /// Iterate the videos under the account, one page per request.
     func list(
-        parameters: VideoListParameter? = nil,
+        parameters: VideoListParameters? = nil,
         requestOptions: RequestOptions? = nil
-    ) throws -> SyncThrowingPages<VideoResult> {
+    ) throws -> SyncThrowingPages<VideoListParameters, VideoResult> {
         let url = try clientOption.getServerUrl(path: "/videos")
-        var nextAfter = parameters?.after
-        return SyncThrowingPages { [clientOption] in
-            var currentParams = parameters ?? VideoListParameter()
-            currentParams.after = nextAfter
-            
-            let result: PageStruct<VideoResult> = try OpenAISession.shared.SyncResponse(
+        return try SyncThrowingPages(parameters: parameters ?? VideoListParameters()) { [clientOption] parameters in
+            let result: SyncThrowingPages<VideoListParameters, VideoResult> = try OpenAISession.shared.SyncResponse(
                 url,
-                payload: currentParams,
+                payload: parameters,
                 requestOptions: requestOptions,
                 clientOption: clientOption,
                 method: .get
             )
-            if let last = result.data.last {
-                nextAfter = last.id
-            }
-            return result
+            var next = parameters
+            if let last = result.data.last { next.after = last.id }
+            return (page: result, next: next)
         }
     }
     /// Fetch one video's status and metadata.
@@ -77,7 +72,7 @@ public extension OpenAISyncAPIResource.VideosSyncResource {
     }
     /// Rework an existing video.
     func edit(
-        parameters: VideoEditParameter,
+        parameters: VideoEditParameters,
         requestOptions: RequestOptions? = nil
     ) throws -> VideoResult {
         let url = try clientOption.getServerUrl(path: "/videos/edits")
@@ -92,7 +87,7 @@ public extension OpenAISyncAPIResource.VideosSyncResource {
     }
     /// Append generated footage to an existing video.
     func extend(
-        parameters: VideoExtendParameter,
+        parameters: VideoExtendParameters,
         requestOptions: RequestOptions? = nil
     ) throws -> VideoResult {
         let url = try clientOption.getServerUrl(path: "/videos/extend")
@@ -112,7 +107,7 @@ public extension OpenAISyncAPIResource.VideosSyncResource {
         requestOptions: RequestOptions? = nil
     ) throws -> VideoResult {
         let url = try clientOption.getServerUrl(path: "/videos/\(video_id)")
-        let parameters = VideoRemixParameter(video_id: video_id, prompt: prompt)
+        let parameters = VideoRemixParameters(video_id: video_id, prompt: prompt)
         return try OpenAISession.shared.SyncResponse(
             url,
             payload: parameters,
@@ -124,7 +119,7 @@ public extension OpenAISyncAPIResource.VideosSyncResource {
     // MARK: Character
     /// Register a reusable character for later generations.
     func create_character(
-        parameters: VideoCharacterCreateParameter,
+        parameters: VideoCharacterCreateParameters,
         requestOptions: RequestOptions? = nil
     ) throws -> VideoCharacterResult {
         let url = try clientOption.getServerUrl(path: "/videos/characters")
@@ -194,7 +189,7 @@ public extension OpenAISyncAPIResource.VideosSyncResource {
         requestOptions: RequestOptions? = nil
     ) throws -> SyncThrowingStream<Data, any Error> {
         let url = try clientOption.getServerUrl(path: "/videos/\(video_id)/content")
-        let parameters: VideoDownloadContentParameter = .init(video_id: video_id, variant: variant)
+        let parameters: VideoDownloadContentParameters = .init(video_id: video_id, variant: variant)
         var options = requestOptions ?? RequestOptions()
         if options.extra_headers["Accept"] == nil {
             options.extra_headers["Accept"] = "application/binary"

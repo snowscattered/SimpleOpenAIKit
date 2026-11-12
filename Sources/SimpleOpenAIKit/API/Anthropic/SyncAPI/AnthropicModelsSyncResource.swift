@@ -10,29 +10,35 @@ import Foundation
 public extension AnthropicSyncAPIResource.ModelsSyncResource {
     /// Iterate the available models, requesting the next page with the `after_id` cursor.
     func list(
-        requestOptions: RequestOptions? = nil,
         after_id: String? = nil,
         before_id: String? = nil,
-        limit: Int? = nil
-    ) throws -> SyncThrowingPages<ModelResult> {
+        limit: Int? = nil,
+        requestOptions: RequestOptions? = nil
+    ) throws -> SyncThrowingPages<Query?, ModelResult> {
         let url = try clientOption.getServerUrl(path: "/models")
-        var currentAfter = after_id
-        return SyncThrowingPages { [clientOption] in
-            var payload: [String: Any] = [:]
-            if let currentAfter { payload["after_id"] = currentAfter }
-            if let before_id { payload["before_id"] = before_id }
-            if let limit { payload["limit"] = limit }
-            let result: PageStruct<ModelResult> = try AnthropicSession.shared.SyncResponse(
+        var parameters: Query = [:]
+        if let after_id { parameters["after_id"] = .string(after_id) }
+        if let before_id { parameters["before_id"] = .string(before_id) }
+        if let limit { parameters["limit"] = .int(limit) }
+        return try SyncThrowingPages(parameters: parameters) { [clientOption] parameters in
+            let result: SyncThrowingPages<Query?, ModelResult> = try AnthropicSession.shared.SyncResponse(
                 url,
-                payload: try JSONSerialization.data(withJSONObject: payload),
+                payload: parameters,
                 requestOptions: requestOptions,
                 clientOption: clientOption,
                 method: .get
             )
-            if let last = result.data.last {
-                currentAfter = last.id
+            guard var next = parameters else { return (page: result, next: nil) }
+            if parameters?["before_id"] != nil {
+                guard let before_id = result.extra["before_id"] else { return (page: result, next: nil) }
+                next["before_id"] = before_id
+                next["after_id"] = nil
+            } else {
+                guard let after_id = result.extra["after_id"] else { return (page: result, next: nil) }
+                next["after_id"] = after_id
+                next["before_id"] = nil
             }
-            return result
+            return (page: result, next: next)
         }
     }
     /// Fetch one model's metadata.

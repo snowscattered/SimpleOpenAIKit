@@ -27,23 +27,19 @@ public extension OpenAISyncAPIResource.FilesSyncResource {
     func list(
         parameters: FilesListParameters? = nil,
         requestOptions: RequestOptions? = nil
-    ) throws -> SyncThrowingPages<FileResult> {
+    ) throws -> SyncThrowingPages<FilesListParameters, FileResult> {
         let url = try clientOption.getServerUrl(path: "/files")
-        var nextAfter = parameters?.after
-        var currentParams = parameters ?? FilesListParameters()
-        return SyncThrowingPages { [clientOption] in
-            currentParams.after = nextAfter
-            let result: PageStruct<FileResult> = try OpenAISession.shared.SyncResponse(
+        return try SyncThrowingPages(parameters: parameters ?? FilesListParameters()) { [clientOption] parameters in
+            let result: SyncThrowingPages<FilesListParameters, FileResult> = try OpenAISession.shared.SyncResponse(
                 url,
-                payload: currentParams,
+                payload: parameters,
                 requestOptions: requestOptions,
                 clientOption: clientOption,
                 method: .get
             )
-            if let last = result.data.last {
-                nextAfter = last.id
-            }
-            return result
+            var next = parameters
+            if let last = result.data.last { next.after = last.id }
+            return (page: result, next: next)
         }
     }
     /// Fetch one file's metadata.

@@ -19,7 +19,7 @@ public struct WebSearchActionSearchSource {
 @PublicInit
 public struct WebSearchActionSearch {
     public static let type: String = "search"
-    public var query: String
+    public var query: String?
     public var queries: [String]?
     public var sources: [WebSearchActionSearchSource]?
 }

@@ -30,6 +30,7 @@
   - [Beta Realtime](#beta-realtime)
 - [Anthropic](#anthropic)
   - [支持列表](#anthropic-支持列表)
+  - [Anthropic Files](#anthropic-files)
   - [Message](#message)
 - [TypeSafe](#typesafe)
   - [支持列表](#typesafe-支持列表)
@@ -532,11 +533,11 @@ func openAIAsyncFiles() async throws {
     )
     print(file)
 
-    let pages = try await openAIAsyncClient.files.list(
+    let files = try await openAIAsyncClient.files.list(
         parameters: .init(limit: 5)
     )
-    for try await page in pages {
-        print(page.data)
+    for try await file in files {
+        print(file)
     }
 
     let retrieved = try await openAIAsyncClient.files.retrieve(file_id: file.id)
@@ -584,9 +585,9 @@ func openAIAsyncVideos() async throws {
     )
     print(video)
 
-    let pages = try await openAIAsyncClient.videos.list()
-    for try await page in pages {
-        print(page.data)
+    let videos = try await openAIAsyncClient.videos.list()
+    for try await video in videos {
+        print(video)
     }
 
     let detail = try await openAIAsyncClient.videos.retrieve(video_id: video.id)
@@ -631,6 +632,36 @@ func openAIAsyncBetaRealtime() async throws {
 | `models` | ✅ | `list`, `retrieve` |
 | `completions` | ✅ | `create`, `stream` |
 | `messages` | ✅ | `create`, `stream`, `count_tokens`, `parse` |
+| `files` | ✅ | `create`, `list`, `retrieve`, `delete`, `download` |
+
+### Anthropic Files
+
+`create` 使用 multipart form data 上传文件。`list` 会跨页逐个返回文件元数据，`download` 将原始响应
+内容作为 `Data` 返回。`workspace_id` 通过请求 Header 发送。
+
+```swift
+func anthropicFiles() async throws {
+    let anthropic = AsyncAnthropic(api_key: "YOUR_ANTHROPIC_API_KEY")
+    let file = try await anthropic.files.create(
+        parameters: .init(
+            file: try .init(url: URL(fileURLWithPath: "/path/to/file.pdf"))
+        )
+    )
+
+    let files = try await anthropic.files.list(
+        parameters: .init(limit: 20)
+    )
+    for try await item in files {
+        print(item)
+    }
+
+    let metadata = try await anthropic.files.retrieve(file_id: file.id)
+    let content: Data = try await anthropic.files.download(file_id: file.id)
+    print(metadata, content.count)
+
+    _ = try await anthropic.files.delete(file_id: file.id)
+}
+```
 
 ### Message
 

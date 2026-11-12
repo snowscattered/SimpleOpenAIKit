@@ -94,8 +94,8 @@ public struct ChatAssistantMessage {
     public var audio: ChatAssistantAudio?
     public var content: ChatStringOrContentAssistentPart?
     public var function_call: ChatAssistantFunctionCall?
-    public var refusal: String?
     public var tool_calls: [ChatToolCall]?
+    public var refusal: String?
     public var name: String?
     public var reasoning_content: String?
     /// Result Field

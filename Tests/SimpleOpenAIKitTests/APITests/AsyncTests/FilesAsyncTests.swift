@@ -38,12 +38,11 @@ struct FilesAsyncTests {
         print(res)
     }
     @Test func asyncFileList() async throws {
-        let res = try await asyncClient.files.list()
+        let res = try await asyncClient.files.list(parameters: .init(limit: 10))
         for try await value in res {
-            for i in value.data {
-                print(i)
-            }
+            print(value)
         }
+        print(res)
     }
     @Test func asyncFileRetrieve() async throws {
         let res = try await asyncClient.files.retrieve(file_id: "file-fe-0...")
