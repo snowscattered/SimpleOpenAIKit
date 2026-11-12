@@ -7,7 +7,7 @@
 
 import Foundation
 
-/// Awaitable Anthropic client, holding the `models`, `completions` and `messages` resources.
+/// Awaitable Anthropic client, holding the `models`, `completions`, `messages` and `files` resources.
 open class AsyncAnthropic: @unchecked Sendable {
     private let clientOption: AnthropicClientOption
     public var api_key: String { clientOption.api_key }
@@ -25,11 +25,13 @@ open class AsyncAnthropic: @unchecked Sendable {
     public let models: AnthropicAsyncAPIResource.ModelsAsyncResource
     public let completions: AnthropicAsyncAPIResource.CompletionsAsyncResource
     public let messages: AnthropicAsyncAPIResource.MessagesAsyncResource
+    public let files: AnthropicAsyncAPIResource.FilesAsyncResource
 
     public init(clientOption: AnthropicClientOption) {
         self.models      = .init(clientOption)
         self.completions = .init(clientOption)
         self.messages    = .init(clientOption)
+        self.files       = .init(clientOption)
         self.clientOption = clientOption
     }
     public init(
@@ -55,6 +57,7 @@ open class AsyncAnthropic: @unchecked Sendable {
         self.models      = .init(clientOption)
         self.completions = .init(clientOption)
         self.messages    = .init(clientOption)
+        self.files       = .init(clientOption)
         self.clientOption = clientOption
     }
 }

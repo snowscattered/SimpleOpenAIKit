@@ -239,13 +239,13 @@ public struct FilesListParameters {
 // MARK: - Retrieve
 @BaseModelWithExtra(encodeExtra: false)
 @PublicInit
-public struct FilesRetrieveParameter {
+public struct FilesRetrieveParameters {
     @transient public var file_id: String
 }
 
 // MARK: - Delete
 @BaseModelWithExtra(encodeExtra: false)
 @PublicInit
-public struct FilesDeleteParameter {
+public struct FilesDeleteParameters {
     @transient public var file_id: String
 }

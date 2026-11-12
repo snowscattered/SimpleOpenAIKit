@@ -11,15 +11,18 @@ public extension OpenAIAsyncAPIResource.ModelsAsyncResource {
     /// List every model the key can reach, in one page.
     func list(
         requestOptions: RequestOptions? = nil
-    ) async throws -> PageStruct<ModelResult> {
+    ) async throws -> AsyncThrowingPages<String?, ModelResult> {
         let url = try clientOption.getServerUrl(path: "/models")
-        return try await OpenAISession.shared.AsyncResponse(
-            url,
-            payload: nil as String?,
-            requestOptions: requestOptions,
-            clientOption: self.clientOption,
-            method: .get
-        )
+        return try await AsyncThrowingPages(parameters: nil) { [clientOption] parameters in
+            let result: AsyncThrowingPages<String?, ModelResult> = try await OpenAISession.shared.AsyncResponse(
+                url,
+                payload: nil as String?,
+                requestOptions: requestOptions,
+                clientOption: clientOption,
+                method: .get
+            )
+            return (page: result, next: nil)
+        }
     }
     /// Fetch one model's metadata.
     func retrieve(

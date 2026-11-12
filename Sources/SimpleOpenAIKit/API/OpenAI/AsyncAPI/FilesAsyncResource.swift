@@ -27,23 +27,19 @@ public extension OpenAIAsyncAPIResource.FilesAsyncResource {
     func list(
         parameters: FilesListParameters? = nil,
         requestOptions: RequestOptions? = nil
-    ) async throws -> AsyncThrowingPages<FileResult> {
+    ) async throws -> AsyncThrowingPages<FilesListParameters, FileResult> {
         let url = try clientOption.getServerUrl(path: "/files")
-        var currentParams = parameters ?? FilesListParameters()
-        var nextAfter = parameters?.after
-        return AsyncThrowingPages { [clientOption] in
-            currentParams.after = nextAfter
-            let result: PageStruct<FileResult> = try await OpenAISession.shared.AsyncResponse(
+        return try await AsyncThrowingPages(parameters: parameters ?? FilesListParameters()) { [clientOption] parameters in
+            let result: AsyncThrowingPages<FilesListParameters, FileResult> = try await OpenAISession.shared.AsyncResponse(
                 url,
-                payload: currentParams,
+                payload: parameters,
                 requestOptions: requestOptions,
                 clientOption: clientOption,
                 method: .get
             )
-            if let last = result.data.last {
-                nextAfter = last.id
-            }
-            return result
+            var next = parameters
+            if let last = result.data.last { next.after = last.id }
+            return (page: result, next: next)
         }
     }
     /// Fetch one file's metadata.

@@ -23,7 +23,7 @@ public struct ResponseAgentMessageItem {
     public var id: String?
     public var author: String?
     public var recipient: String?
-    public var content: [ ResponseAgentMessageContent ]
+    public var content: [ResponseAgentMessageContent]
     public var status: ResponseItemStatusLiteral?
 }
 extension ResponseAgentMessageItem {

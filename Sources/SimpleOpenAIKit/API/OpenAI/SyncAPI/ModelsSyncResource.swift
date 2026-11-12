@@ -11,31 +11,20 @@ public extension OpenAISyncAPIResource.ModelsSyncResource {
     /// List every model the key can reach, in one page.
     func list(
         requestOptions: RequestOptions? = nil
-    ) throws -> PageStruct<ModelResult> {
+    ) throws -> SyncThrowingPages<String?, ModelResult> {
         let url = try clientOption.getServerUrl(path: "/models")
-        return try OpenAISession.shared.SyncResponse(
-            url,
-            payload: nil as String?,
-            requestOptions: requestOptions,
-            clientOption: self.clientOption,
-            method: .get
-        )
+        return try SyncThrowingPages(parameters: nil) { [clientOption] parameters in
+            let result: SyncThrowingPages<String?, ModelResult> = try OpenAISession.shared.SyncResponse(
+                url,
+                payload: nil as String?,
+                requestOptions: requestOptions,
+                clientOption: clientOption,
+                method: .get
+            )
+            return (page: result, next: nil)
+        }
     }
-//    func list(
-//        requestOptions: RequestOptions? = nil
-//    ) throws -> SyncThrowingPages<ModelResult> {
-//        let url = try client.getServerUrl(path: "/models")
-//        return SyncThrowingPages {
-//            try OpenAISession.shared.SyncResponse(
-//                url,
-//                payload: nil as String?,
-//                requestOptions: requestOptions,
-//                client: self.client,
-//                method: .get
-//            )
-//        }
-//    }
-    
+
     /// Fetch one model's metadata.
     func retrieve(
         model: String,

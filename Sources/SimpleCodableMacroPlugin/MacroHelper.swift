@@ -59,8 +59,12 @@ fileprivate enum DecodingKeyPlan {
 package func declAccessModifier(of decl: some DeclGroupSyntax) -> String {
     for modifier in decl.modifiers {
         switch modifier.name.tokenKind {
-        case .keyword(.public):  return "public "
-        case .keyword(.package): return "package "
+        case .keyword(.open):        return "public "
+        case .keyword(.public):      return "public "
+        case .keyword(.package):     return "package "
+        case .keyword(.internal):    return "internal "
+        case .keyword(.fileprivate): return "fileprivate "
+        case .keyword(.private):     return "private "
         default: break
         }
     }

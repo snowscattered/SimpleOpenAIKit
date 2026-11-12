@@ -26,16 +26,18 @@ public enum ChatMessage {
     // Extension OpenAI
     case custom(CustomMessage)
 }
-extension ChatMessage {
-    var role: String {
-        switch self {
-        case .developer:         return ChatDeveloperMessage.role
-        case .system:            return ChatSystemMessage.role
-        case .user:              return ChatUserMessage.role
-        case .assistant:         return ChatAssistantMessage.role
-        case .tool:              return ChatToolMessage.role
-        case .function:          return ChatFunctionMessage.role
-        case .custom(let event): return event.role
-        }
+
+public extension ChatMessage {
+    static func developer(_ text: String) -> Self {
+        .developer(.init(content: .string(text)))
+    }
+    static func system(_ text: String) -> Self {
+        .system(.init(content: .string(text)))
+    }
+    static func user(_ text: String) -> Self {
+        .user(.init(content: .string(text)))
+    }
+    static func assistant(_ text: String, reason: String?) -> Self {
+        .assistant(.init(content: .string(text), reasoning_content: reason))
     }
 }

@@ -49,21 +49,21 @@ public struct VideoCreateParamerters {
 // MARK: - Retrieve
 @BaseModelWithExtra(encodeExtra: false)
 @PublicInit
-public struct VideoRetrieveParameter {
+public struct VideoRetrieveParameters {
     @transient public var video_id: String
 }
 
 // MARK: - Delete
 @BaseModelWithExtra(encodeExtra: false)
 @PublicInit
-public struct VideoDeleteParameter {
+public struct VideoDeleteParameters {
     @transient public var video_id: String
 }
 
 // MARK: - List
 @BaseModelWithExtra(encodeExtra: false)
 @PublicInit
-public struct VideoListParameter {
+public struct VideoListParameters {
     public var after: String?
     public var limit: Int?
     public var order: ListOrder?
@@ -74,7 +74,7 @@ public struct VideoListParameter {
 // MARK: - Edit
 @BaseModelWithExtra(encodeExtra: false)
 @PublicInit
-public struct VideoEditParameter {
+public struct VideoEditParameters {
     public var prompt: String
     public var video: VideoVideo
 }
@@ -82,7 +82,7 @@ public struct VideoEditParameter {
 // MARK: - Extend
 @BaseModelWithExtra(encodeExtra: false)
 @PublicInit
-public struct VideoExtendParameter {
+public struct VideoExtendParameters {
     public var prompt: String
     public var seconds: VideoSeconds
     public var video: VideoVideo
@@ -91,7 +91,7 @@ public struct VideoExtendParameter {
 // MARK: - Remix
 @BaseModelWithExtra(encodeExtra: false)
 @PublicInit
-public struct VideoRemixParameter {
+public struct VideoRemixParameters {
     @transient public var video_id: String
     public var prompt: String
 }
@@ -104,7 +104,7 @@ public enum VideoDownloadContentVariant: String {
 }
 @BaseModelWithExtra(encodeExtra: false)
 @PublicInit
-public struct VideoDownloadContentParameter {
+public struct VideoDownloadContentParameters {
     @transient public var video_id: String
     public var variant: VideoDownloadContentVariant?
 }

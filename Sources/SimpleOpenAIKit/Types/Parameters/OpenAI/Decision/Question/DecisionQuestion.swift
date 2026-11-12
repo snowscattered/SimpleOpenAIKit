@@ -17,14 +17,6 @@ public enum DecisionQuestion {
 }
 
 public extension DecisionQuestion {
-    var type: String {
-        switch self {
-        case .predicate: return DecisionQuestionPredicate.type
-        case .choice:    return DecisionQuestionChoice.type
-        case .score:     return DecisionQuestionScore.type
-        }
-    }
-
     static func predicate(
         name: String? = nil,
         instructions: String

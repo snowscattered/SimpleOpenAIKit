@@ -16,7 +16,7 @@ public enum MessageBlock {
     case text(MessageTextBlock)
     case thinking(MessageThinkingBlock)
     case image(MessageImageBlock)
-    case video(MessageVideoBlock)
+    case video(MessageVideoBlock)  // Extension Anthropic
     case document(MessageDocumentBlock)
     
     case tool_use(MessageToolUseBlock)
@@ -26,52 +26,25 @@ public enum MessageBlock {
     case web_search_result(MessageWebSearchToolResultBlock)
     case web_fetch_result(MessageWebFetchToolResultBlock)
 }
+
 public extension MessageBlock {
-    var type: String {
-        switch self {
-        case .text:              return MessageTextBlock.type
-        case .thinking:          return MessageThinkingBlock.type
-        case .image:             return MessageImageBlock.type
-        case .video:             return MessageVideoBlock.type
-        case .document:          return MessageDocumentBlock.type
-        
-        case .tool_use:          return MessageToolUseBlock.type
-        case .tool_result:       return MessageToolResultBlock.type
-        case .search_result:     return MessageSearchResultBlock.type
-        case .server_tool_use:   return MessageServerToolUseBlock.type
-        case .web_search_result: return MessageWebSearchToolResultBlock.type
-        case .web_fetch_result:  return MessageWebFetchToolResultBlock.type
-        }
+    static func text(_ text: String) -> Self {
+        .text(MessageTextBlock(text: text))
     }
-}
-
-// MARK: - Message Content Input
-@SingleOrArray
-public enum MessageContentInput {
-    case string(String)
-    case array([MessageBlock])
-}
-
-// MARK: - Message
-@CodableLiteral
-public enum MessageRole: String {
-    case user, assistant, system
-}
-
-@BaseModelNoWithExtra
-@PublicInit
-public struct MessageMessages {
-    public let role: MessageRole
-    public let content: MessageContentInput
-}
-extension MessageMessages {
-    public static func system(_ content: MessageContentInput) -> Self {
-        return MessageMessages(role: .system, content: content)
+    static func thinking(_ text: String) -> Self {
+        .thinking(MessageThinkingBlock(thinking: text))
     }
-    public static func user(_ content: MessageContentInput) -> Self {
-        return MessageMessages(role: .user, content: content)
+    static func image(_ data: String, miniType: MessageBase64ImageSourceMidiaType) -> Self {
+        .image(MessageImageBlock(source: .base64(.init(data: data, media_type: miniType))))
     }
-    public static func assistant(_ content: MessageContentInput) -> Self {
-        return MessageMessages(role: .assistant, content: content)
+    static func image(_ url: String) -> Self {
+        .image(MessageImageBlock(source: .url(.init(url: url))))
     }
+    static func video(_ url: String) -> Self {
+        .video(MessageVideoBlock(source: .url(.init(url: url))))
+    }
+    static func file(_ file_id: String) -> Self {
+        .document(MessageDocumentBlock(source: .file(.init(file_id: file_id))))
+    }
+    // ...
 }

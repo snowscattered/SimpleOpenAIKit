@@ -30,16 +30,6 @@ public enum SystemOneQuestion {
 }
 
 public extension SystemOneQuestion {
-    var type: String {
-        switch self {
-        case .noul:            return SystemOneQuestionNoul.type
-        case .choice:          return SystemOneQuestionChoice.type
-        case .score:           return SystemOneQuestionScore.type
-        case .box:             return SystemOneQuestionBox.type
-        case .unkowned(let v): return v.type
-        }
-    }
-
     static func noul(
         instructions: SystemOneJSONConent,
         criteria: SystemOneNoulCriteria? = nil

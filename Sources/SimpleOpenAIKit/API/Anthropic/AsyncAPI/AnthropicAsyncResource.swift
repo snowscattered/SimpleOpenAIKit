@@ -27,4 +27,11 @@ public enum AnthropicAsyncAPIResource {
         let clientOption: AnthropicClientOption
         public init(_ clientOption: AnthropicClientOption) { self.clientOption = clientOption }
     }
+
+    // MARK: Files
+    /// `/v1/files`: upload, list, inspect, delete and download files.
+    public struct FilesAsyncResource: ~Copyable, ResourceProtocol {
+        let clientOption: AnthropicClientOption
+        public init(_ clientOption: AnthropicClientOption) { self.clientOption = clientOption }
+    }
 }

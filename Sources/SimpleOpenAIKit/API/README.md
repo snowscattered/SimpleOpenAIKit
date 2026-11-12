@@ -29,7 +29,7 @@ Names follow the provider's REST path: `client.chat.completions` is `/chat/compl
 | --- | --- | --- |
 | one-shot | `throws -> Result` | `async throws -> Result` |
 | streaming | `SyncThrowingStream<Result, any Error>` | `AsyncThrowingStream<Result, any Error>` |
-| paged lists | `SyncThrowingPages<Item>` | `AsyncThrowingPages<Item>` |
+| paged lists | `SyncThrowingPages<Parameters, Item>` | `AsyncThrowingPages<Parameters, Item>` |
 | websocket | `connect(completion:)` | `conntent(completion:)` |
 
 The async websocket entry point is spelled `conntent` today, while the sync one is `connect`.
@@ -105,18 +105,18 @@ try stream.forEach { chunk in
 
 ## Paged lists
 
-`list` on a paged endpoint hands back pages, not items: one request per iteration, stopping when a page
-reports `has_more == false` or comes back empty. Each element is a `PageStruct<Item>` with `data` and
-`has_more`.
+`list` on a paged endpoint hands back an iterator of decoded items. Each request receives the current
+parameters value and returns a page plus the parameters for the next request. Iteration stops when a
+page reports `has_more == false` or comes back empty.
 
 ```swift
-let pages = try await openAIAsyncClient.files.list(parameters: .init(limit: 5))
-for try await page in pages {
-    print(page.data)
+let files = try await openAIAsyncClient.files.list(parameters: .init(limit: 5))
+for try await file in files {
+    print(file)
 }
 
-try openAISyncClient.videos.list().forEach { page in
-    print(page.data)
+try openAISyncClient.videos.list().forEach { video in
+    print(video)
 }
 ```
 

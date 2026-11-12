@@ -82,8 +82,8 @@ public struct ChatContentPartAudio {
 @BaseModelNoWithExtra
 @PublicInit
 public struct ChatFileFile {
-    public var file_data: String?
     public var file_id: String?
+    public var file_data: String?
     public var filename: String?
 }
 
@@ -113,7 +113,7 @@ public enum ChatContentPart {
     case custom(ChatCustomPart)
 }
 
-// MARK: - TextContent
+// MARK: - Text Content
 
 @SingleOrArray
 public enum ChatStringOrContentPartText {

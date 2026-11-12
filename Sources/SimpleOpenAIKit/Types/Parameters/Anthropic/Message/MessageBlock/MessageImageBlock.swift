@@ -25,5 +25,5 @@ public struct MessageImageBlock {
     public static let type: String = "image"
     public var source: MessageSource
     public var cache_control: MessageCacheControlEphemeral?
-    public var transformations: MessageImageTransformations
+    public var transformations: MessageImageTransformations?
 }

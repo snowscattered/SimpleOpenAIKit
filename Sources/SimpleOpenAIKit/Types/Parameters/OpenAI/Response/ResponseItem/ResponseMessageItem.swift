@@ -25,7 +25,8 @@ public struct ResponseLogprob {
 }
 @BaseModelNoWithExtra
 @PublicInit
-public struct ResponseOutputText {
+// Build Bug: Associated value 'output_text' of 'Sendable'-conforming enum 'ResponseContentPart' has non-Sendable type 'ResponseOutputText'
+public struct ResponseOutputText: Sendable, Hashable, Codable {
     public static let type: String = "output_text"
     public var text: String
     public var logprobs: [ResponseLogprob]?

@@ -42,13 +42,3 @@ public enum AudioTranscriptionStreamResult {
     case delta(AudioTranscriptionTextDeltaEvent)
     case done(AudioTranscriptionTextDoneEvent)
 }
-
-public extension AudioTranscriptionStreamResult {
-    var type: String {
-        switch self {
-        case .segment: return AudioTranscriptionTextSegmentEvent.type
-        case .delta:   return AudioTranscriptionTextDeltaEvent.type
-        case .done:    return AudioTranscriptionTextDoneEvent.type
-        }
-    }
-}

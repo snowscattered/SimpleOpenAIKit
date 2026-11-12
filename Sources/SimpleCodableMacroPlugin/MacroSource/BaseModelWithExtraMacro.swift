@@ -15,7 +15,7 @@ struct BaseModelWithExtraMacro: MemberMacro, ExtensionMacro {
         }
 
         let access = declAccessModifier(of: structDecl)
-        let extraProperty: DeclSyntax = "\(raw: access) var extra: [String : BaseType] = [:]"
+        let extraProperty: DeclSyntax = "\(raw: access)var extra: [String : BaseType] = [:]"
         return [extraProperty]
     }
     
@@ -30,7 +30,6 @@ struct BaseModelWithExtraMacro: MemberMacro, ExtensionMacro {
             throw MacroError("@BaseModelWithExtra can only be applied to structs")
         }
 
-        let typeName = structDecl.name.text
         let stored = collectStoredProperties(of: structDecl)
         let access = declAccessModifier(of: structDecl)
 
@@ -51,7 +50,7 @@ struct BaseModelWithExtraMacro: MemberMacro, ExtensionMacro {
         let codingKeysLiterals = wireKeys.map { "\"\($0)\"" }.joined(separator: ", ")
         // MARK: - CodingKey
         let codingKeysDecl = !customKeys.isEmpty || stored.isEmpty ? "// Customized By you" : """
-            enum CodingKeys: String, CodingKey, CaseIterable {
+            private enum CodingKeys: String, CodingKey, CaseIterable {
                 \(codingKeysCases)
             }
             """
@@ -67,7 +66,7 @@ struct BaseModelWithExtraMacro: MemberMacro, ExtensionMacro {
             self.extra = dict.filter { !keys.contains($0.key) }
             """
         let decodeDecl = members.contains("init(from:)") ? "// Customized By you" : """
-            \(access)init(from decoder: any Decoder) throws {
+            init(from decoder: any Decoder) throws {
                 \(decodeContainer)
 
                 let c = try decoder.singleValueContainer()
@@ -97,7 +96,7 @@ struct BaseModelWithExtraMacro: MemberMacro, ExtensionMacro {
         try c.encode(dict)
         """ : "// extra is not encoded"
         let encodeDecl = members.contains("encode(to:)") ? "// Customized By you" : """
-            \(access)func encode(to encoder: any Encoder) throws {
+            func encode(to encoder: any Encoder) throws {
                 var copy = self
                 try copy.beforeEncode()
 
@@ -107,8 +106,12 @@ struct BaseModelWithExtraMacro: MemberMacro, ExtensionMacro {
             }
             """
         // MARK: - EXT
-        let ext: DeclSyntax = """
-            nonisolated extension \(raw: typeName): BaseModelWithExtra {
+        let conformanceExt: DeclSyntax = """
+            nonisolated extension \(raw: type.trimmedDescription): BaseModelWithExtra {
+            }
+            """
+        let implementationExt: DeclSyntax = """
+            nonisolated \(raw: access)extension \(raw: type.trimmedDescription) {
             \(raw: codingKeysDecl)
 
             \(raw: decodeDecl)
@@ -117,9 +120,11 @@ struct BaseModelWithExtraMacro: MemberMacro, ExtensionMacro {
             }
             """
 
-        guard let extensionDecl = ext.as(ExtensionDeclSyntax.self) else {
+        guard let conformanceExtension = conformanceExt.as(ExtensionDeclSyntax.self),
+              let implementationExtension = implementationExt.as(ExtensionDeclSyntax.self)
+        else {
             return []
         }
-        return [extensionDecl]
+        return [conformanceExtension, implementationExtension]
     }
 }

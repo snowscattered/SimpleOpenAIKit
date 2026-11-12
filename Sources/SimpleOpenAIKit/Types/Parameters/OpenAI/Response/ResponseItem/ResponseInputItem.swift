@@ -30,34 +30,44 @@ public enum ResponseInputItem {
     case unkowned(ResponseBaseItem)
 }
 
-extension ResponseInputItem {
-    public static func developer(_ content: ResponseMessageInputItemContent) -> Self {
+public extension ResponseInputItem {
+    static func developer(_ content: ResponseMessageInputItemContent) -> Self {
         return .message(.EasyInputMessage(.init(role: .developer, content: content)))
     }
-    public static func system(_ content: ResponseMessageInputItemContent) -> Self {
+    static func system(_ content: ResponseMessageInputItemContent) -> Self {
         return .message(.EasyInputMessage(.init(role: .system, content: content)))
     }
-    public static func user(_ content: ResponseMessageInputItemContent) -> Self {
+    static func user(_ content: ResponseMessageInputItemContent) -> Self {
         return .message(.EasyInputMessage(.init(role: .user, content: content)))
     }
-    public static func assistant(_ content: ResponseMessageInputItemContent) -> Self {
+    static func assistant(_ content: ResponseMessageInputItemContent) -> Self {
         return .message(.EasyInputMessage(.init(role: .assistant, content: content)))
     }
 }
 
 public extension ResponseInputItem {
-    var type: String {
-        switch self {
-        case .message:                 return ResponseMessageItem.type
-        case .reasoning:               return ResponseReasoningItem.type
-        case .function_call:           return ResponseFunctionToolCallItem.type
-        case .function_call_output:    return ResponseFunctionToolCallOutputItem.type
-        case .custom_tool_call:        return ResponseCustomToolCallItem.type
-        case .custom_tool_call_output: return ResponseCustomToolCallOutputItem.type
-        case .web_search:              return ResponseWebSearchItem.type
-        // Codex Agent Message
-        case .agent_message:           return ResponseAgentMessageItem.type
-        case .unkowned(let event):     return event.type
-        }
+    static func developer(_ text: String) -> Self {
+        .developer(.string(text))
+    }
+    static func developer(_ content: [ResponseContent]) -> Self {
+        .developer(.array(content))
+    }
+    static func system(_ text: String) -> Self {
+        .system(.string(text))
+    }
+    static func system(_ content: [ResponseContent]) -> Self {
+        .system(.array(content))
+    }
+    static func user(_ text: String) -> Self {
+        .user(.string(text))
+    }
+    static func user(_ content: [ResponseContent]) -> Self {
+        .user(.array(content))
+    }
+    static func assistant(_ text: String) -> Self {
+        .assistant(.string(text))
+    }
+    static func assistant(_ content: [ResponseContent]) -> Self {
+        .assistant(.array(content))
     }
 }

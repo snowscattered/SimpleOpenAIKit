@@ -15,7 +15,6 @@ struct SingleOrArrayMacro: ExtensionMacro {
             throw MacroError("@SingleOrArray can only be applied to enums")
         }
 
-        let enumName = enumDecl.name.text
         let access = declAccessModifier(of: enumDecl)
 
         // Collect cases with associated values
@@ -66,7 +65,7 @@ struct SingleOrArrayMacro: ExtensionMacro {
            !members.contains("init(\(literal.initializerLabel):)") {
             literalProtocols.append(literal.protocolName)
             literalInitializers.append(
-                "\(access)init(\(literal.initializerLabel) value: \(literal.valueType)) { self = .\(single.name)(value) }"
+                "init(\(literal.initializerLabel) value: \(literal.valueType)) { self = .\(single.name)(value) }"
             )
         }
 
@@ -74,12 +73,12 @@ struct SingleOrArrayMacro: ExtensionMacro {
            !members.contains("init(arrayLiteral:)") {
             literalProtocols.append("ExpressibleByArrayLiteral")
             literalInitializers.append(
-                "\(access)init(arrayLiteral elements: \(array.elementType)...) { self = .\(array.name)(elements) }"
+                "init(arrayLiteral elements: \(array.elementType)...) { self = .\(array.name)(elements) }"
             )
         }
 
         let decodeDecl = members.contains("init(from:)") ? "// Customized By you" : """
-            \(access)init(from decoder: any Decoder) throws {
+            init(from decoder: any Decoder) throws {
                 let container = try decoder.singleValueContainer()
                 if (try? container.decode(\(single.typeName).self)) == nil &&
                     (try? container.decode([BaseType].self)) == nil {
@@ -99,7 +98,7 @@ struct SingleOrArrayMacro: ExtensionMacro {
             }
             """
         let encodeDecl = members.contains("encode(to:)") ? "// Customized By you" : """
-            \(access)func encode(to encoder: any Encoder) throws {
+            func encode(to encoder: any Encoder) throws {
                 var container = encoder.singleValueContainer()
                 switch self {
                 case .\(single.name)(let v): try container.encode(v)
@@ -107,26 +106,38 @@ struct SingleOrArrayMacro: ExtensionMacro {
                 }
             }
             """
-        let ext: DeclSyntax = """
-            nonisolated extension \(raw: enumName): BaseModel {
+        let conformanceExt: DeclSyntax = """
+            nonisolated extension \(raw: type.trimmedDescription): BaseModel {
+            }
+            """
+        let implementationExt: DeclSyntax = """
+            nonisolated \(raw: access)extension \(raw: type.trimmedDescription) {
             \(raw: decodeDecl)
             \(raw: encodeDecl)
             }
             """
 
         var extensions: [ExtensionDeclSyntax] = []
-        if let extensionDecl = ext.as(ExtensionDeclSyntax.self) {
-            extensions.append(extensionDecl)
+        if let conformanceExtension = conformanceExt.as(ExtensionDeclSyntax.self),
+           let implementationExtension = implementationExt.as(ExtensionDeclSyntax.self) {
+            extensions.append(conformanceExtension)
+            extensions.append(implementationExtension)
         }
 
         if !literalProtocols.isEmpty {
-            let literalExt: DeclSyntax = """
-                nonisolated extension \(raw: enumName): \(raw: literalProtocols.joined(separator: ", ")) {
+            let literalConformanceExt: DeclSyntax = """
+                nonisolated extension \(raw: type.trimmedDescription): \(raw: literalProtocols.joined(separator: ", ")) {
+                }
+                """
+            let literalImplementationExt: DeclSyntax = """
+                nonisolated \(raw: access)extension \(raw: type.trimmedDescription) {
                 \(raw: literalInitializers.joined(separator: "\n"))
                 }
                 """
-            if let literalExtensionDecl = literalExt.as(ExtensionDeclSyntax.self) {
-                extensions.append(literalExtensionDecl)
+            if let literalConformanceExtension = literalConformanceExt.as(ExtensionDeclSyntax.self),
+               let literalImplementationExtension = literalImplementationExt.as(ExtensionDeclSyntax.self) {
+                extensions.append(literalConformanceExtension)
+                extensions.append(literalImplementationExtension)
             }
         }
 

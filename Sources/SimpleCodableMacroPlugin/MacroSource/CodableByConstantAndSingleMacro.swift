@@ -15,7 +15,6 @@ struct CodableByConstantAndSingleMacro: ExtensionMacro {
             throw MacroError("@CodableByConstantAndSingle can only be applied to enums")
         }
 
-        let enumName = enumDecl.name.text
         let access = declAccessModifier(of: enumDecl)
 
         // Parse parameters
@@ -110,7 +109,7 @@ struct CodableByConstantAndSingleMacro: ExtensionMacro {
 
         let members = memberNames(of: enumDecl)
         let decodeDecl = members.contains("init(from:)") ? "// Customized By you" : """
-            \(access)init(from decoder: any Decoder) throws {
+            init(from decoder: any Decoder) throws {
                 if let singleValue = try? decoder.singleValueContainer(),
                    let value = try? singleValue.decode(\(singleType).self) {
                     self = .\(singleCaseName)(value)
@@ -126,15 +125,19 @@ struct CodableByConstantAndSingleMacro: ExtensionMacro {
             }
             """
         let encodeDecl = members.contains("encode(to:)") ? "// Customized By you" : """
-            \(access)func encode(to encoder: any Encoder) throws {
+            func encode(to encoder: any Encoder) throws {
                 var c = encoder.singleValueContainer()
                 switch self {
                 \(encodeCases)
                 }
             }
             """
-        let ext: DeclSyntax = """
-            nonisolated extension \(raw: enumName): BaseModel {
+        let conformanceExt: DeclSyntax = """
+            nonisolated extension \(raw: type.trimmedDescription): BaseModel {
+            }
+            """
+        let implementationExt: DeclSyntax = """
+            nonisolated \(raw: access)extension \(raw: type.trimmedDescription) {
             private enum CodingKeys: String, CodingKey { case \(raw: field) }
             \(raw: decodeDecl)
 
@@ -142,9 +145,11 @@ struct CodableByConstantAndSingleMacro: ExtensionMacro {
             }
             """
 
-        guard let extensionDecl = ext.as(ExtensionDeclSyntax.self) else {
+        guard let conformanceExtension = conformanceExt.as(ExtensionDeclSyntax.self),
+              let implementationExtension = implementationExt.as(ExtensionDeclSyntax.self)
+        else {
             return []
         }
-        return [extensionDecl]
+        return [conformanceExtension, implementationExtension]
     }
 }

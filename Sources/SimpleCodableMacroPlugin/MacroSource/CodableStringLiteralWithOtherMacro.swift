@@ -15,7 +15,6 @@ struct CodableStringLiteralWithOtherMacro: ExtensionMacro {
             throw MacroError("@CodableStringLiteralWithOther can only be applied to enums")
         }
         // Collect all case names
-        let enumName = enumDecl.name.text
         let access = declAccessModifier(of: enumDecl)
         
         let allElements = enumDecl.memberBlock.members
@@ -41,7 +40,7 @@ struct CodableStringLiteralWithOtherMacro: ExtensionMacro {
             .joined(separator: "\n")
         let members = memberNames(of: enumDecl)
         let decodeDecl = members.contains("init(from:)") ? "// Customized By you" : """
-            \(access)init(from decoder: any Decoder) throws {
+            init(from decoder: any Decoder) throws {
                 let container = try decoder.singleValueContainer()
                 let rawValue = try container.decode(String.self)
                 switch rawValue {
@@ -51,14 +50,18 @@ struct CodableStringLiteralWithOtherMacro: ExtensionMacro {
             }
             """
         let encodeDecl = members.contains("encode(to:)") ? "// Customized By you" : """
-            \(access)func encode(to encoder: any Encoder) throws {
+            func encode(to encoder: any Encoder) throws {
                 var container = encoder.singleValueContainer()
                 try container.encode(rawValue)
             }
             """
-        let ext: DeclSyntax = """
-            extension \(raw: enumName): BaseModel {
-            \(raw: access)var rawValue: String {
+        let conformanceExt: DeclSyntax = """
+            nonisolated extension \(raw: type.trimmedDescription): BaseModel {
+            }
+            """
+        let implementationExt: DeclSyntax = """
+            nonisolated \(raw: access)extension \(raw: type.trimmedDescription) {
+            var rawValue: String {
                 switch self {
                 \(raw: rawValueCases)
                 case .other(let s): return s
@@ -68,10 +71,30 @@ struct CodableStringLiteralWithOtherMacro: ExtensionMacro {
             \(raw: encodeDecl)
             }
             """
-        guard let extensionDecl = ext.as(ExtensionDeclSyntax.self) else {
+        let literalConformanceExt: DeclSyntax = """
+            nonisolated extension \(raw: type.trimmedDescription): ExpressibleByStringLiteral {
+            }
+            """
+        let literalImplementationExt: DeclSyntax = """
+            nonisolated \(raw: access)extension \(raw: type.trimmedDescription) {
+            init(stringLiteral value: String) {
+                self = .other(value)
+            }
+            }
+            """
+        guard let conformanceExtension = conformanceExt.as(ExtensionDeclSyntax.self),
+              let implementationExtension = implementationExt.as(ExtensionDeclSyntax.self),
+              let literalConformanceExtension = literalConformanceExt.as(ExtensionDeclSyntax.self),
+              let literalImplementationExtension = literalImplementationExt.as(ExtensionDeclSyntax.self)
+        else {
             return []
         }
         
-        return [extensionDecl]
+        return [
+            conformanceExtension,
+            implementationExtension,
+            literalConformanceExtension,
+            literalImplementationExtension,
+        ]
     }
 }

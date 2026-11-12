@@ -21,4 +21,5 @@ public enum MessageDocumentBlockSource {
     case plaintext(MessagePlainTextSource)
     case content_block(MessageContentBlockSource)
     case url_pdf(MessageURLPDFSource)
+    case file(MessageFileDoucumentSource)
 }

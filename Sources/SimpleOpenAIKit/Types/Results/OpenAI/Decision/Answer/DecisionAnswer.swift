@@ -18,15 +18,6 @@ public enum DecisionAnswer {
 }
 
 public extension DecisionAnswer {
-    var type: String {
-        switch self {
-        case .predicate: return DecisionAnswerPredicate.type
-        case .choice:    return DecisionAnswerChoice.type
-        case .score:     return DecisionAnswerScore.type
-        case .refusal:   return DecisionAnswerRefusal.type
-        }
-    }
-
     var confidence: Double? {
         switch self {
         case .choice(let value): return value.confidence

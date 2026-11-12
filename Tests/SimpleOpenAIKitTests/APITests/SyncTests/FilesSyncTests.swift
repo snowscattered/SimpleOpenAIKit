@@ -33,9 +33,7 @@ struct FilesSyncTests {
             parameters: .init(limit: 5)
         )
         try res.forEach { value in
-            for i in value.data {
-                print(i)
-            }
+            print(value)
         }
     }
     @Test func syncFileRetrieve() throws {
